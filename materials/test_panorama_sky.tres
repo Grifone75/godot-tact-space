@@ -1,0 +1,6 @@
+[gd_resource type="PanoramaSkyMaterial" load_steps=2 format=3 uid="uid://dp14xu10d7qi6"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_dx138"]
+
+[resource]
+panorama = SubResource("CanvasTexture_dx138")

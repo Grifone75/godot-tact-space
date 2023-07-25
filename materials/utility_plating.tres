@@ -1,0 +1,19 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://ca2toe8j45rj7"]
+
+[ext_resource type="Texture2D" uid="uid://lr18i8ax20n6" path="res://data/textures/large_panel1r.png" id="1_ws5n8"]
+[ext_resource type="Texture2D" uid="uid://ch3twdstu5ik4" path="res://data/textures/large_panel1n.png" id="2_eirup"]
+
+[resource]
+resource_name = "utility_plating"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.679138, 0.482666, 0.228888, 1)
+metallic = 1.0
+metallic_texture = ExtResource("1_ws5n8")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("1_ws5n8")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 5.6
+normal_texture = ExtResource("2_eirup")
+uv1_scale = Vector3(10, 10, 10)

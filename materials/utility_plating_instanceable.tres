@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://dkbmum0gfvxoi"]
+
+[ext_resource type="Shader" uid="uid://dmd64mlr4hgc3" path="res://shaders/utility_plates.tres" id="1_3y0hq"]
+[ext_resource type="Texture2D" uid="uid://lr18i8ax20n6" path="res://data/textures/large_panel1r.png" id="2_6xxno"]
+[ext_resource type="Texture2D" uid="uid://ch3twdstu5ik4" path="res://data/textures/large_panel1n.png" id="3_5f52r"]
+
+[resource]
+resource_name = "utility_plating"
+render_priority = 0
+shader = ExtResource("1_3y0hq")
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Plane(0, 0, 1, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 1.0
+shader_parameter/normal_scale = 5.6
+shader_parameter/uv1_scale = Vector3(10, 10, 10)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_metallic = ExtResource("2_6xxno")
+shader_parameter/texture_roughness = ExtResource("2_6xxno")
+shader_parameter/texture_normal = ExtResource("3_5f52r")

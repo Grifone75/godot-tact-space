@@ -1,0 +1,56 @@
+[gd_resource type="VisualShader" load_steps=5 format=3 uid="uid://c6bxadup8wbu6"]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_w8yub"]
+constant = Color(0.337461, 0.656338, 0.900241, 1)
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1g5y3"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_iatqy"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_3nyxx"]
+input_name = "time"
+
+[resource]
+code = "shader_type spatial;
+render_mode cull_disabled;
+
+
+
+
+void fragment() {
+// ColorConstant:2
+	vec4 n_out2p0 = vec4(0.337461, 0.656338, 0.900241, 1.000000);
+
+
+// Input:3
+	vec2 n_out3p0 = UV;
+
+
+// VectorDecompose:4
+	float n_out4p0 = n_out3p0.x;
+	float n_out4p1 = n_out3p0.y;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out4p1;
+	EMISSION = vec3(n_out2p0.xyz);
+
+
+}
+"
+graph_offset = Vector2(-168.001, -90.7443)
+modes/cull = 2
+nodes/fragment/0/position = Vector2(940, 80)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorConstant_w8yub")
+nodes/fragment/2/position = Vector2(580, 80)
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_1g5y3")
+nodes/fragment/3/position = Vector2(20, 120)
+nodes/fragment/4/node = SubResource("VisualShaderNodeVectorDecompose_iatqy")
+nodes/fragment/4/position = Vector2(300, 100)
+nodes/fragment/5/node = SubResource("VisualShaderNodeInput_3nyxx")
+nodes/fragment/5/position = Vector2(140, 320)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 4, 1, 0, 1, 2, 0, 0, 5, 2, 0, 0, 0)

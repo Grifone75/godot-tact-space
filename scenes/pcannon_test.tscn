@@ -1,0 +1,88 @@
+[gd_scene load_steps=13 format=3 uid="uid://cye5yabsitx7m"]
+
+[ext_resource type="Shader" uid="uid://bbnml8kx0gjoi" path="res://shaders/_testpcannon_test.tres" id="1_4lvwc"]
+[ext_resource type="CompressedTexture3D" uid="uid://rvrku6jemwvp" path="res://data/textures/sdf/pcannon_test.GPUParticlesCollisionSDF3D_data.exr" id="2_iqbcl"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kmklm"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_tmnt7"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d86sp"]
+direction = Vector3(0, 0, -1)
+spread = 1.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 52.63
+initial_velocity_max = 52.63
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.21
+
+[sub_resource type="SphereMesh" id="SphereMesh_ovl2g"]
+
+[sub_resource type="Skin" id="Skin_qm7os"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_eo7sy"]
+size = Vector3(3, 3, 1)
+
+[sub_resource type="Curve" id="Curve_55mnj"]
+_data = [Vector2(0, 0.00616038), 0.0, 2.6381, 0, 0, Vector2(0.990982, 0.0369612), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hwao3"]
+render_priority = 0
+shader = ExtResource("1_4lvwc")
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_mmnk8"]
+material = SubResource("ShaderMaterial_hwao3")
+section_length = 1.0
+curve = SubResource("Curve_55mnj")
+
+[sub_resource type="PrismMesh" id="PrismMesh_m0wpg"]
+size = Vector3(5, 5, 5)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("CylinderMesh_kmklm")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="MeshInstance3D"]
+mesh = SubResource("SphereMesh_tmnt7")
+direction = Vector3(0, 0, -1)
+spread = 1.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 233.32
+initial_velocity_max = 233.32
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_kmklm")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="MeshInstance3D2"]
+visibility_aabb = AABB(-1.67152, -1.7158, -51.8754, 3.35849, 3.56965, 52.8754)
+process_material = SubResource("ParticleProcessMaterial_d86sp")
+draw_pass_1 = SubResource("SphereMesh_ovl2g")
+draw_skin = SubResource("Skin_qm7os")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0409579, 0, -14.0962)
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_eo7sy")
+
+[node name="GPUParticlesCollisionSphere3D" type="GPUParticlesCollisionSphere3D" parent="RigidBody3D"]
+radius = 5.49
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4144, 0, 0)
+mesh = SubResource("RibbonTrailMesh_mmnk8")
+
+[node name="GPUParticlesCollisionSDF3D" type="GPUParticlesCollisionSDF3D" parent="."]
+transform = Transform3D(0.614712, 0, -0.788752, 0, 1, 0, 0.788752, 0, 0.614712, 0, 0, -14.422)
+size = Vector3(10, 10, 10)
+thickness = 0.9
+texture = ExtResource("2_iqbcl")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.614712, 0, -0.788752, 0, 1, 0, 0.788752, 0, 0.614712, 0, 0, -14.422)
+mesh = SubResource("PrismMesh_m0wpg")

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhc6obktgdpgv"]
+
+[ext_resource type="Script" path="res://scripts/AIPilot.gd" id="1_sggd6"]
+
+[node name="Node" type="Node"]
+script = ExtResource("1_sggd6")

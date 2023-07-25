@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5frcsl5d1krk"]
+
+[ext_resource type="Script" path="res://scripts/VesselController.gd" id="1_vtela"]
+
+[node name="VesselController" type="Node"]
+script = ExtResource("1_vtela")

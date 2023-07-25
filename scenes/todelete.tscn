@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://b8gtywpw5apwb"]
+
+[ext_resource type="Shader" uid="uid://dmd64mlr4hgc3" path="res://shaders/utility_plates.tres" id="1_xkaqo"]
+[ext_resource type="Texture2D" uid="uid://lr18i8ax20n6" path="res://data/textures/large_panel1r.png" id="2_0wc2l"]
+[ext_resource type="Texture2D" uid="uid://ch3twdstu5ik4" path="res://data/textures/large_panel1n.png" id="3_x0gix"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1wjbw"]
+resource_name = "utility_plating"
+render_priority = 0
+shader = ExtResource("1_xkaqo")
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Plane(0, 0, 1, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 1.0
+shader_parameter/normal_scale = 5.6
+shader_parameter/uv1_scale = Vector3(10, 10, 10)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_metallic = ExtResource("2_0wc2l")
+shader_parameter/texture_roughness = ExtResource("2_0wc2l")
+shader_parameter/texture_normal = ExtResource("3_x0gix")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_prnii"]
+material = SubResource("ShaderMaterial_1wjbw")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_prnii")

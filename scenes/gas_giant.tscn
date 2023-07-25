@@ -1,0 +1,39 @@
+[gd_scene load_steps=9 format=3 uid="uid://xhg4bqu6m3jl"]
+
+[ext_resource type="Shader" path="res://shaders/planet_gas_simple.gdshader" id="1_6ni7y"]
+[ext_resource type="Shader" uid="uid://d14ie3da81au0" path="res://shaders/planet_atmosphere.tres" id="2_dlv4l"]
+
+[sub_resource type="Gradient" id="Gradient_6p4ea"]
+offsets = PackedFloat32Array(0, 0.216733, 0.376096, 0.443825, 0.535458, 0.623108, 0.730677, 0.826295, 1)
+colors = PackedColorArray(0.205682, 0.184784, 0.165887, 1, 0.598261, 0.275208, 0.441642, 1, 0.31964, 0.219305, 0.0509828, 1, 0.457424, 0.590589, 0.285479, 1, 0.600112, 0.71424, 0.573801, 1, 0.79775, 0.832331, 0.748723, 1, 0.797856, 0.315255, 0.721496, 1, 0.124755, 0.583361, 0.767029, 1, 0.223146, 0.133384, 0.0583953, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tmq3d"]
+gradient = SubResource("Gradient_6p4ea")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_16s46"]
+render_priority = 0
+shader = ExtResource("1_6ni7y")
+shader_parameter/unLightDir = null
+shader_parameter/unColorLookup = SubResource("GradientTexture1D_tmq3d")
+
+[sub_resource type="SphereMesh" id="SphereMesh_32t6c"]
+material = SubResource("ShaderMaterial_16s46")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shd8m"]
+render_priority = 0
+shader = ExtResource("2_dlv4l")
+shader_parameter/ColorParameter = Color(0.928047, 0.707148, 0.923194, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7t5bb"]
+material = SubResource("ShaderMaterial_shd8m")
+radius = 0.51
+
+[node name="Node3D" type="Node3D" groups=["far_objects"]]
+
+[node name="planet" type="MeshInstance3D" parent="."]
+layers = 2
+mesh = SubResource("SphereMesh_32t6c")
+
+[node name="atmosphere" type="MeshInstance3D" parent="."]
+layers = 2
+mesh = SubResource("SphereMesh_7t5bb")

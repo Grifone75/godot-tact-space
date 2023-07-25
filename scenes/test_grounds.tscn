@@ -1,0 +1,101 @@
+[gd_scene load_steps=17 format=3 uid="uid://3suxmckufgqt"]
+
+[ext_resource type="Script" path="res://scripts/FreeLookCamera.gd" id="1_k4hff"]
+[ext_resource type="PackedScene" uid="uid://cnecovcfxieb3" path="res://scenes/base_shot.tscn" id="1_xldu4"]
+[ext_resource type="Script" path="res://scripts/test_shot_spawner.gd" id="2_hn7cx"]
+[ext_resource type="Texture2D" uid="uid://c1ete5qpm3sim" path="res://data/textures/dev_textures/Orange/texture_02.png" id="4_7f2xy"]
+[ext_resource type="Texture2D" uid="uid://d4kre1aw8b3jd" path="res://data/textures/dev_textures/Green/texture_01.png" id="5_5iguh"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jr1nm"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ams1q"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_in0d3"]
+albedo_texture = ExtResource("4_7f2xy")
+
+[sub_resource type="BoxMesh" id="BoxMesh_h650x"]
+lightmap_size_hint = Vector2i(14, 21)
+material = SubResource("StandardMaterial3D_in0d3")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_73q7c"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jnbqk"]
+albedo_texture = ExtResource("4_7f2xy")
+uv1_scale = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nu1c4"]
+lightmap_size_hint = Vector2i(14, 21)
+material = SubResource("StandardMaterial3D_jnbqk")
+size = Vector3(2, 2, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ryhvo"]
+size = Vector3(2, 2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aej1f"]
+albedo_texture = ExtResource("5_5iguh")
+uv1_scale = Vector3(50, 50, 50)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_574fj"]
+material = SubResource("StandardMaterial3D_aej1f")
+size = Vector2(50, 50)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qai4k"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.861974, -1.19209e-07, -0.506952, 0.058637, 0.993288, 0.0997007, 0.50355, -0.115666, 0.856189, -4.22669, 2.20373, 17.8267)
+script = ExtResource("1_k4hff")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.355458, 0.808966, -0.468214, -0.489156, 0.587856, 0.644323, 0.796477, 3.55888e-08, 0.604669, -3.81716, 5.29468, 10.5864)
+
+[node name="ref_base_shot" parent="." instance=ExtResource("1_xldu4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.455441, 0.342266, 2.08493)
+
+[node name="shooter" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 0.433887, 1, 15.116)
+mesh = SubResource("CapsuleMesh_jr1nm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="shooter"]
+transform = Transform3D(0.3, 0, 0, 0, -1.31134e-08, -0.3, 0, 0.3, -1.31134e-08, 0, 0.340569, -0.522398)
+mesh = SubResource("CylinderMesh_ams1q")
+
+[node name="Node3D" type="Node3D" parent="shooter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.53674e-07, 0.340569, -0.883002)
+script = ExtResource("2_hn7cx")
+
+[node name="ref_body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -15.7821)
+mesh = SubResource("BoxMesh_h650x")
+
+[node name="RigidBody3D-giorgio" type="RigidBody3D" parent="ref_body"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ref_body/RigidBody3D-giorgio"]
+shape = SubResource("BoxShape3D_73q7c")
+
+[node name="ref_body2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.63499, -15.7821)
+mesh = SubResource("BoxMesh_h650x")
+
+[node name="RigidBody3D-pino" type="RigidBody3D" parent="ref_body2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ref_body2/RigidBody3D-pino"]
+shape = SubResource("BoxShape3D_73q7c")
+
+[node name="ref_body3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.709, 1, -15.782)
+mesh = SubResource("BoxMesh_nu1c4")
+
+[node name="RigidBody3D-pippo" type="RigidBody3D" parent="ref_body3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ref_body3/RigidBody3D-pippo"]
+shape = SubResource("BoxShape3D_ryhvo")
+
+[node name="ref_ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_574fj")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="ref_ground"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ref_ground/StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_qai4k")

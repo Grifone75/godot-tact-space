@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw518qoa0kcsc"]
+
+[ext_resource type="Script" path="res://scenes/info_label_1.gd" id="1_tg3v0"]
+
+[node name="VesselInfo" type="Node3D"]
+script = ExtResource("1_tg3v0")
+
+[node name="ShipName" type="Label3D" parent="."]
+visibility_range_end = 50.0
+visibility_range_end_margin = 100.0
+visibility_range_fade_mode = 1
+pixel_size = 0.0005
+offset = Vector2(0, 90)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+alpha_scissor_threshold = 0.295
+alpha_hash_scale = 0.38
+alpha_antialiasing_mode = 2
+alpha_antialiasing_edge = 0.32
+texture_filter = 4
+modulate = Color(0.368627, 0.772549, 0.196078, 1)
+outline_modulate = Color(0.0666667, 0.156863, 0.0823529, 1)
+text = "This is a test"
+font_size = 30
+outline_size = 2
+
+[node name="VesselControllerInfo" type="Label3D" parent="."]
+visibility_range_end = 50.0
+visibility_range_end_margin = 100.0
+visibility_range_fade_mode = 1
+pixel_size = 0.0005
+offset = Vector2(0, 50)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+alpha_scissor_threshold = 0.295
+alpha_hash_scale = 0.38
+alpha_antialiasing_mode = 2
+alpha_antialiasing_edge = 0.32
+texture_filter = 4
+modulate = Color(0.368627, 0.772549, 0.196078, 1)
+outline_modulate = Color(0.0666667, 0.156863, 0.0823529, 1)
+text = "This is a test"
+font_size = 30
+outline_size = 2
+
+[node name="AIPilotInfo" type="Label3D" parent="."]
+visibility_range_end = 50.0
+visibility_range_end_margin = 100.0
+visibility_range_fade_mode = 1
+pixel_size = 0.0005
+offset = Vector2(0, -50)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+alpha_scissor_threshold = 0.295
+alpha_hash_scale = 0.38
+alpha_antialiasing_mode = 2
+alpha_antialiasing_edge = 0.32
+texture_filter = 4
+modulate = Color(0.368627, 0.772549, 0.196078, 1)
+outline_modulate = Color(0.0666667, 0.156863, 0.0823529, 1)
+text = "This is a test"
+font_size = 30
+outline_size = 2

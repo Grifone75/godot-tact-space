@@ -1,0 +1,44 @@
+[gd_resource type="VisualShader" load_steps=3 format=3 uid="uid://bbnml8kx0gjoi"]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_e085x"]
+constant = Color(0.971327, 0.974348, 0, 1)
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_gegws"]
+constant = Color(0, 0, 0, 1)
+
+[resource]
+code = "shader_type spatial;
+render_mode cull_disabled, diffuse_lambert_wrap, specular_disabled, shadows_disabled;
+
+
+
+
+void fragment() {
+// ColorConstant:3
+	vec4 n_out3p0 = vec4(0.000000, 0.000000, 0.000000, 1.000000);
+
+
+// ColorConstant:2
+	vec4 n_out2p0 = vec4(0.971327, 0.974348, 0.000000, 1.000000);
+
+
+// Output:0
+	ALBEDO = vec3(n_out3p0.xyz);
+	EMISSION = vec3(n_out2p0.xyz);
+
+
+}
+"
+graph_offset = Vector2(19.6789, 79.1788)
+modes/cull = 2
+modes/diffuse = 1
+modes/specular = 2
+flags/shadows_disabled = true
+nodes/fragment/0/position = Vector2(720, 80)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorConstant_e085x")
+nodes/fragment/2/position = Vector2(200, 240)
+nodes/fragment/3/node = SubResource("VisualShaderNodeColorConstant_gegws")
+nodes/fragment/3/position = Vector2(200, 120)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 5, 3, 0, 0, 0)
+nodes/light/0/position = Vector2(740, 120)
+nodes/start/0/position = Vector2(640, 100)

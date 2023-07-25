@@ -1,0 +1,27 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://c6egmqdbvqpx4"]
+
+[ext_resource type="Texture2D" uid="uid://dlxf40louufe3" path="res://data/textures/panel3diffuse.png" id="1_mqnbx"]
+[ext_resource type="Shader" uid="uid://dlt6oa1vpdxfj" path="res://shaders/standard_plates_shader.tres" id="1_yivxu"]
+[ext_resource type="Texture2D" uid="uid://3vymtehojg31" path="res://data/textures/panel3m2.png" id="2_2ujdo"]
+[ext_resource type="Texture2D" uid="uid://dyfa3nhf0isbg" path="res://data/textures/panel3n.png" id="3_jrii8"]
+[ext_resource type="Texture2D" uid="uid://dra2tisd5s8ol" path="res://data/textures/pj1.png" id="5_3spwv"]
+
+[resource]
+resource_name = "standard_plates"
+render_priority = 0
+shader = ExtResource("1_yivxu")
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Plane(0, 0, 1, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 1.0
+shader_parameter/normal_scale = 0.271001
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = ExtResource("1_mqnbx")
+shader_parameter/texture_paintjob = ExtResource("5_3spwv")
+shader_parameter/texture_metallic = ExtResource("2_2ujdo")
+shader_parameter/texture_roughness = ExtResource("2_2ujdo")
+shader_parameter/texture_normal = ExtResource("3_jrii8")

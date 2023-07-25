@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <linearGradient id="gradient-2" bx:pinned="true">
+      <stop offset="0.052" style="stop-color: rgb(88, 185, 234);"/>
+      <stop offset="0.562" style="stop-color: rgb(176, 217, 238);"/>
+    </linearGradient>
+    <radialGradient gradientUnits="userSpaceOnUse" cx="298.176" cy="235.137" r="75.654" id="gradient-2-1" gradientTransform="matrix(-1.272831, -4.160908, 2.399142, -0.733903, 40.417618, 1736.363651)" xlink:href="#gradient-2"/>
+    <radialGradient gradientUnits="userSpaceOnUse" cx="311.608" cy="251.348" r="50.902" id="gradient-0" gradientTransform="matrix(1.949869, -0.878383, 0.877752, 1.94847, -567.304485, 22.038258)" spreadMethod="pad">
+      <stop offset="0" style="stop-color: rgba(238, 222, 222, 1)"/>
+      <stop offset="1" style="stop-color: rgba(203, 155, 155, 1)"/>
+    </radialGradient>
+    <linearGradient id="gradient-3" bx:pinned="true">
+      <stop offset="0" style="stop-color: rgba(223, 167, 167, 0.36);"/>
+      <stop offset="1" style="stop-color: rgb(250, 247, 247);"/>
+    </linearGradient>
+    <linearGradient id="gradient-5" bx:pinned="true">
+      <stop offset="0.739" style="stop-color: rgb(216, 216, 216);"/>
+      <stop offset="1" style="stop-color: rgba(255, 255, 255, 0.16);"/>
+    </linearGradient>
+    <linearGradient id="gradient-4" bx:pinned="true">
+      <stop offset="0.186" style="stop-color: rgb(255, 212, 58);"/>
+      <stop offset="0.954" style="stop-color: rgba(242, 238, 225, 0);"/>
+    </linearGradient>
+    <linearGradient id="gradient-7" bx:pinned="true">
+      <stop offset="0.353" style="stop-color: rgb(169, 202, 212);"/>
+      <stop offset="0.474" style="stop-color: rgb(107, 97, 69);"/>
+    </linearGradient>
+    <radialGradient gradientUnits="userSpaceOnUse" cx="308.219" cy="290.542" r="88.418" id="gradient-1" gradientTransform="matrix(1.547672, 0, 0, 1.547672, -212.975033, -217.994534)">
+      <stop offset="0" style="stop-color: rgba(0, 0, 0, 1)"/>
+      <stop offset="1" style="stop-color: rgba(0, 0, 0, 1)"/>
+    </radialGradient>
+    <radialGradient id="gradient-5-0" gradientUnits="userSpaceOnUse" cx="308.219" cy="290.542" r="88.418" gradientTransform="matrix(1.547672, 0, 0, 1.547672, -212.975033, -217.994534)" xlink:href="#gradient-5"/>
+    <linearGradient id="gradient-4-0" gradientUnits="userSpaceOnUse" x1="34.047" y1="523.043" x2="34.047" y2="956.939" gradientTransform="matrix(-0.561172, -0.8277, 0.684657, -0.46419, -388.70269, 905.551036)" xlink:href="#gradient-4"/>
+    <linearGradient id="gradient-7-0" gradientUnits="userSpaceOnUse" x1="517.431" y1="467.56" x2="517.431" y2="551.768" spreadMethod="reflect" gradientTransform="matrix(-0.085725, 0.997936, -0.785316, -0.033613, 889.748279, 5.255782)" xlink:href="#gradient-7"/>
+  </defs>
+  <rect x="0.78" y="-0.262" width="498.378" height="500.34" style="stroke: rgb(0, 0, 0); stroke-opacity: 0; pointer-events: none;"/>
+  <ellipse style="stroke: url(#gradient-1); stroke-miterlimit: 1; stroke-opacity: 0; fill: url(#gradient-5-0);" cx="264.047" cy="231.669" rx="136.842" ry="128.652"/>
+  <ellipse style="stroke: rgb(0, 0, 0); fill-rule: nonzero; fill: url(#gradient-2-1); paint-order: stroke; stroke-opacity: 0;" cx="263.566" cy="230.6" rx="117.088" ry="111.306"/>
+  <path style="stroke: rgb(0, 0, 0); fill: url(#gradient-0); stroke-opacity: 0; paint-order: stroke; fill-opacity: 0.87; fill-rule: nonzero;" d="M 267.903 124.112 C 314.309 131.159 364.272 149.17 374.872 223.372 C 380.654 287.94 333.253 329.306 281.395 331.302 C 319.795 296.735 317.967 246.941 314.159 217.59 C 311.169 194.544 274.21 141.256 217.79 136.641 C 238.909 122.267 256.305 123.135 267.903 124.112 Z"/>
+  <path d="M 443.025 466.664 Q 451.883 441.637 460.74 466.664 L 476.323 510.697 Q 485.18 535.724 467.466 535.724 L 436.299 535.724 Q 418.585 535.724 427.442 510.697 Z" style="stroke: rgb(0, 0, 0); fill: url(#gradient-7-0);" transform="matrix(0.901129, 0.433552, -0.414141, 0.910468, -109.805435, -544.351501)" bx:shape="triangle 418.585 441.637 66.595 94.087 0.5 0.266 1@b39d1ec9" bx:origin="0.487 0.595"/>
+  <path style="stroke: rgb(0, 0, 0); fill: url(#gradient-4-0); stroke-opacity: 0;" d="M 16.383 226.585 C 183.375 226.585 287.747 407.359 204.248 551.982 C 148.847 647.942 30.035 686.726 -71.312 641.933 C -80.211 638 -81.514 625.908 -73.66 620.168 C -71.04 618.254 -67.785 617.421 -64.567 617.842 C 87.695 640.935 211.059 501.026 154.926 357.615 C 131.647 298.132 78.153 242.853 16.383 226.585 Z" transform="matrix(-0.116197, 0.993226, -0.993226, -0.116197, 690.706481, 282.000409)" bx:origin="0.956 0.511"/>
+</svg>

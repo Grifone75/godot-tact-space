@@ -1,0 +1,108 @@
+[gd_scene load_steps=11 format=3 uid="uid://deqn4d3qx5h2o"]
+
+[ext_resource type="Script" path="res://scripts/explosion01.gd" id="1_u63y4"]
+
+[sub_resource type="Gradient" id="Gradient_dbbp2"]
+offsets = PackedFloat32Array(0, 0.404445, 0.674286, 0.902857, 1)
+colors = PackedColorArray(0.632874, 0.205452, 0.899559, 1, 0.848991, 0.503498, 0.121849, 1, 0.938312, 0.439369, 0.457957, 1, 0.977591, 0.411168, 0.605764, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1bhgb"]
+gradient = SubResource("Gradient_dbbp2")
+
+[sub_resource type="Gradient" id="Gradient_82srs"]
+offsets = PackedFloat32Array(0.179048, 0.60127)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mjud6"]
+gradient = SubResource("Gradient_82srs")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kbdrr"]
+lifetime_randomness = 0.15
+direction = Vector3(0, 0, -1)
+spread = 50.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 25.0
+linear_accel_min = -77.59
+linear_accel_max = -77.59
+scale_max = 2.0
+color = Color(1, 0.694118, 0.486275, 1)
+color_ramp = SubResource("GradientTexture1D_mjud6")
+color_initial_ramp = SubResource("GradientTexture1D_1bhgb")
+
+[sub_resource type="Curve" id="Curve_qklv0"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.492746, 0.519507), 1.22656, 1.22656, 0, 0, Vector2(1, 0), -2.65977, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Shader" id="Shader_qauwt"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.0.1.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_back;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
+uniform float point_size : hint_range(0,128);
+uniform float roughness : hint_range(0,1);
+uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r,filter_linear_mipmap,repeat_enable;
+uniform float specular;
+uniform float metallic;
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+}
+
+
+void fragment() {
+	vec2 base_uv = UV;
+	ALBEDO *= COLOR.rgb;
+	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
+	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	SPECULAR = specular;
+	EMISSION = COLOR.rgb;
+	ALPHA = COLOR.a;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cfyca"]
+render_priority = 0
+shader = SubResource("Shader_qauwt")
+shader_parameter/albedo = Color(0.756863, 0.403922, 0, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Plane(1, 0, 0, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_ho1fi"]
+material = SubResource("ShaderMaterial_cfyca")
+size = 0.05
+section_length = 0.1
+curve = SubResource("Curve_qklv0")
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_u63y4")
+
+[node name="exp" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 50
+lifetime = 0.71
+one_shot = true
+explosiveness = 0.81
+randomness = 0.33
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_kbdrr")
+draw_pass_1 = SubResource("RibbonTrailMesh_ho1fi")

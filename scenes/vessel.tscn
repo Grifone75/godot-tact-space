@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkie2n4viccl0"]
+
+[ext_resource type="Script" path="res://scripts/VesselInstancer.gd" id="1_wl206"]
+
+[node name="Eastern Scarf" type="Node" groups=["local_objects", "vessels"]]
+script = ExtResource("1_wl206")

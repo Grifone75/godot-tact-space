@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://ym6o1f38v4eh"]
+
+[ext_resource type="Shader" uid="uid://bi3ou12kcttl7" path="res://shaders/solar_panels.tres" id="1_2hf1m"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_2hf1m")

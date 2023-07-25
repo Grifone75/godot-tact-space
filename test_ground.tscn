@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://3g565irsk1wh"]
+
+[ext_resource type="Script" path="res://scripts/test_inertia.gd" id="1_xiib4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5eirp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_0nhw1"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+script = ExtResource("1_xiib4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_5eirp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("BoxMesh_0nhw1")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.844815, -0.0155997, 0.534831, -0.194995, 0.921856, 0.3349, -0.498262, -0.387218, 0.775756, 2.37829, 0.890324, 3.7842)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.97286, 3.30558)

@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://wv5v1o64kbws"]
+
+[ext_resource type="FontFile" uid="uid://d222eno48e1u1" path="res://data/fonts/Nova_Mono/NovaMono-Regular.ttf" id="1_4beh0"]
+
+[resource]
+default_font = ExtResource("1_4beh0")
+default_font_size = 10
