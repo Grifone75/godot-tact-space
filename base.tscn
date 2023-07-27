@@ -601,8 +601,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.166775, 0, 0.777185)
 
 [connection signal="item_clicked" from="SubViewportContainer/FlowContainer/ItemList" to="." method="_on_item_list_item_clicked"]
 [connection signal="item_selected" from="SubViewportContainer/FlowContainer/ItemList" to="." method="_on_nav_mode_list_item_selected"]
-[connection signal="pressed" from="SubViewportContainer/FlowContainer/Button_change_ship" to="." method="_on_button_change_ship_pressed"]
 [connection signal="pressed" from="SubViewportContainer/FlowContainer/Button_change_ship" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/FlowContainer/Button_change_ship" to="." method="_on_button_change_ship_pressed"]
 [connection signal="pressed" from="SubViewportContainer/FlowContainer/Button_change_navpoint" to="." method="_on_button_pressed"]
 [connection signal="toggled" from="SubViewportContainer/FlowContainer/Aggressive_mode" to="." method="_on_aggressive_mode_toggled"]
 [connection signal="toggled" from="SubViewportContainer/FlowContainer/DirectControlButton" to="." method="_on_direct_control_button_toggled"]

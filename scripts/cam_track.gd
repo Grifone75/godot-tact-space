@@ -10,9 +10,11 @@ signal focus_updated
 
 
 
+var delta_rotation : Quaternion = Quaternion.IDENTITY
 var current_rotation : Quaternion = Quaternion.IDENTITY
 var current_dir_up : Vector3 = Vector3.UP
 var current_cam_pos : Vector3 = Vector3.ZERO
+var current_tracked_pos : Vector3 = Vector3.ZERO
 var _mouse_position = Vector2.ZERO
 var sensitivity = 0.01
 var zoom = 1.0
@@ -22,11 +24,19 @@ var t_obs_pos = Vector3(0,0,10)
 func _ready():
 	pass # Replace with function body.
 
-func update_tracked(n3):
+func old_update_tracked(n3):
 	tracked = n3
 	tracked_updated.emit(n3)
 	global_position = tracked.global_position - tracked.global_transform.basis.z * 10
 	$ReflectionProbe.tracked_object = n3
+	
+func update_tracked(n3):
+	tracked = n3
+	tracked_updated.emit(n3)
+	self.get_parent().remove_child(self)
+	tracked.get_node("Smoothing").add_child(self)
+	#$ReflectionProbe.tracked_object = n3
+	
 	
 func update_focus(n3):
 	focus = n3
@@ -35,6 +45,17 @@ func update_focus(n3):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	_update_mouselook()
+	if tracked:
+		t_obs_pos = t_obs_pos * zoom
+		zoom = 1
+		var new_basis = Basis(current_rotation * delta_rotation)
+		current_rotation = Quaternion.IDENTITY
+		var l_new_cam_pos = (new_basis * t_obs_pos)
+		self.position = l_new_cam_pos
+		self.look_at(tracked.global_position, tracked.global_transform.basis.y)
+
+func old_process(delta):
 	_update_mouselook()
 	if tracked:
 
@@ -68,7 +89,8 @@ func _process(delta):
 		
 		# compute observation point in w space
 		#var g_obs_pos = -(new_basis * obs_vec)  + tracked.global_position
-		var g_tgt_pos = tracked.global_position
+		var g_tgt_pos = current_tracked_pos.lerp(tracked.global_position,0.1)
+		current_tracked_pos = g_tgt_pos
 
 
 
@@ -126,7 +148,7 @@ func _update_mouselook():
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		_mouse_position *= sensitivity
 		var new_rot = Quaternion.from_euler(Vector3(-_mouse_position.y,_mouse_position.x,0))
-		current_rotation *= new_rot
+		delta_rotation *= new_rot
 
 		_mouse_position = Vector2.ZERO
 

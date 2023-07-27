@@ -3,11 +3,12 @@ extends Node3D
 var cam_tracked = null
 var followed_vessel
 var moving_origin: bool = false
-
+var cam = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#SubViewportContainer/
-	$SubViewportContainer/SubViewport_objects/cam_track.tracked_updated.connect(func(x) : cam_tracked = x)
+	cam = $SubViewportContainer/SubViewport_objects/cam_track
+	cam.tracked_updated.connect(func(x) : cam_tracked = x)
 	_delayed_init()
 	
 
@@ -17,14 +18,14 @@ func _delayed_init():
 	_update_followed_relationships()
 
 func _update_followed_relationships():
-	$SubViewportContainer/SubViewport_objects/cam_track.update_tracked(
+	cam.update_tracked(
 		followed_vessel.get_node("VesselController/RigidBody3D")
 	)
 	
 
 func _origin_shift():
 	moving_origin = true
-	var shift = $SubViewportContainer/SubViewport_objects/cam_track.global_position
+	var shift = cam.global_position
 	print("*** calling OShift, delta: ",shift)
 	for obj in get_tree().get_nodes_in_group("local_objects"):
 		if obj.is_in_group("vessels"):
@@ -33,7 +34,7 @@ func _origin_shift():
 			obj.global_position -= shift
 	for obj in get_tree().get_nodes_in_group("far_objects"):
 		obj.global_position -= shift/10000.0
-	$SubViewportContainer/SubViewport_objects/cam_track.reset_origin()
+	cam.reset_origin()
 	moving_origin = false
 	
 
@@ -41,7 +42,7 @@ func _origin_shift():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var _time = Time.get_ticks_msec() / 1000.0
-	if ($SubViewportContainer/SubViewport_objects/cam_track.global_position.length() > 1000) and !moving_origin:
+	if (cam.global_position.length() > 1000) and !moving_origin:
 		_origin_shift()
 
 	# DebugDraw.set_text("Time", _time)

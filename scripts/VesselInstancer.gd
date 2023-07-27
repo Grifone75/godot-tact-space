@@ -232,12 +232,13 @@ func _instance_me(_p = null):
 	#transform = body.mi3D.transform.rotated(Vector3(1,0,0),PI/2.)
 	
 	var my_rb = self.get_node("VesselController/RigidBody3D")
+	var my_mesh_attach = self.get_node("VesselController/RigidBody3D/Smoothing")
 	
 	body.mi3D.transform.origin = Vector3.ZERO
 	#body.mi3D.look_at(my_rb.global_transform.origin + my_rb.to_global(Vector3.LEFT))
 	body.mi3D.transform = body.mi3D.transform.rotated(Vector3(1,0,0),PI/2.)
 	
-	my_rb.add_child(body.mi3D)
+	my_mesh_attach.add_child(body.mi3D)
 	if body.cs3D: colliders[body.mi3D.get_instance_id()] = body.cs3D
 	body.mi3D = _expand_connectors(body.mi3D)
 	for mesh_instance_id in colliders.keys():
@@ -285,11 +286,11 @@ func _ready():
 	var vcontroller = load("res://scenes/VesselController.tscn").instantiate()
 	self.add_child(vcontroller)
 	vcontroller.functionals = functionals
-	var rb = RigidBody3D.new()
-	rb.name = "RigidBody3D"
-	vcontroller.add_child(rb)
+	var rb = self.get_node("VesselController/RigidBody3D")
+
+
 	_instance_me()
-	self.get_node("VesselController/RigidBody3D").global_transform.origin = initial_position
+	rb.global_transform.origin = initial_position
 	
 	var pilot = load("res://scenes/AIPilot.tscn").instantiate()
 	pilot.name = "AIPilot"

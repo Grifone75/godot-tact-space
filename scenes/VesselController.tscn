@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5frcsl5d1krk"]
+[gd_scene load_steps=3 format=3 uid="uid://c5frcsl5d1krk"]
 
 [ext_resource type="Script" path="res://scripts/VesselController.gd" id="1_vtela"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_lxt50"]
 
 [node name="VesselController" type="Node"]
 script = ExtResource("1_vtela")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+
+[node name="Smoothing" type="Node3D" parent="RigidBody3D"]
+script = ExtResource("2_lxt50")
