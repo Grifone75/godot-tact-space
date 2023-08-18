@@ -25,7 +25,7 @@ default_value = Color(0.928047, 0.707148, 0.923194, 1)
 
 [resource]
 code = "shader_type spatial;
-render_mode unshaded;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform vec4 ColorParameter : source_color = vec4(0.928047, 0.707148, 0.923194, 1.000000);
 

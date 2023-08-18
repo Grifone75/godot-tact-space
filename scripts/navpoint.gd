@@ -9,3 +9,5 @@ func update_label(value):
 
 func _ready():
 	global_position = initial_position
+	$Draw3D.circle_XZ()
+	$Draw3D.cube()

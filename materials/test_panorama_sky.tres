@@ -1,6 +1,13 @@
-[gd_resource type="PanoramaSkyMaterial" load_steps=2 format=3 uid="uid://dp14xu10d7qi6"]
+[gd_resource type="PanoramaSkyMaterial" load_steps=3 format=3 uid="uid://dp14xu10d7qi6"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_1ttum"]
+viewport_path = NodePath("SubViewport_background_panorama")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_dx138"]
+resource_local_to_scene = true
+diffuse_texture = SubResource("ViewportTexture_1ttum")
+specular_color = Color(0, 0, 0, 1)
 
 [resource]
+resource_local_to_scene = true
 panorama = SubResource("CanvasTexture_dx138")

@@ -1,0 +1,8 @@
+[gd_resource type="PanoramaSkyMaterial" load_steps=2 format=3 uid="uid://dydkb0nk8m5ld"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_40gjg"]
+viewport_path = NodePath("SubViewport_background_panorama")
+
+[resource]
+resource_local_to_scene = true
+panorama = SubResource("ViewportTexture_40gjg")

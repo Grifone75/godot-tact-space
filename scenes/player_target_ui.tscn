@@ -1,0 +1,147 @@
+[gd_scene load_steps=9 format=3 uid="uid://slgsr0avyt5k"]
+
+[ext_resource type="Script" path="res://scripts/PlayerTargetUI.gd" id="1_inohu"]
+[ext_resource type="Theme" uid="uid://dc8gbjy78j8gx" path="res://Themes/ship_ui_theme.tres" id="1_us1ch"]
+[ext_resource type="Texture2D" uid="uid://cywek8vwwygxh" path="res://data/textures/ring_1.png" id="4_c2y5l"]
+[ext_resource type="Texture2D" uid="uid://bndu73pel372" path="res://data/textures/ring_center.png" id="4_enms3"]
+[ext_resource type="Texture2D" uid="uid://bm1yhc7mcm537" path="res://data/textures/ring_0.png" id="5_75ko3"]
+[ext_resource type="Texture2D" uid="uid://2ydji1o673i6" path="res://data/textures/ring_arrow_ext.png" id="5_w6jkc"]
+[ext_resource type="Texture2D" uid="uid://jswvt5ner8fb" path="res://data/textures/ring_arrow_int.png" id="6_x0vf7"]
+[ext_resource type="Texture2D" uid="uid://bwinympqhrq6q" path="res://data/textures/ring_grade.png" id="8_uujfp"]
+
+[node name="PlayerTargetUI" type="Control"]
+modulate = Color(0.164706, 0.760784, 0.72549, 0.505882)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+size_flags_horizontal = 4
+theme = ExtResource("1_us1ch")
+script = ExtResource("1_inohu")
+
+[node name="Distance" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.275
+anchor_top = -0.55
+anchor_right = 1.4
+anchor_bottom = -0.55
+offset_left = -9.0
+offset_top = -4.0
+offset_right = 31.0
+offset_bottom = 19.0
+text = "Distance"
+vertical_alignment = 1
+
+[node name="full_circle" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.75
+anchor_right = 0.75
+anchor_bottom = 0.75
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+texture = ExtResource("5_75ko3")
+expand_mode = 1
+
+[node name="semi_circle" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.75
+anchor_right = 0.75
+anchor_bottom = 0.75
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+texture = ExtResource("4_c2y5l")
+expand_mode = 1
+
+[node name="dot" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.75
+anchor_right = 0.75
+anchor_bottom = 0.75
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+texture = ExtResource("4_enms3")
+expand_mode = 1
+
+[node name="arrow_ext" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.75
+anchor_right = 0.75
+anchor_bottom = 0.75
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+texture = ExtResource("5_w6jkc")
+expand_mode = 1
+
+[node name="arrow_int" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.75
+anchor_right = 0.75
+anchor_bottom = 0.75
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+texture = ExtResource("6_x0vf7")
+expand_mode = 1
+
+[node name="grade" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.75
+anchor_right = 0.75
+anchor_bottom = 0.75
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.523599
+pivot_offset = Vector2(40, 40)
+texture = ExtResource("8_uujfp")
+expand_mode = 1

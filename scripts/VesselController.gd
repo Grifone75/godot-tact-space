@@ -8,6 +8,8 @@ var local_force_input: Vector3 = Vector3.ZERO
 var nav_target
 var functionals: Dictionary
 var ref_rb:RigidBody3D
+#account for drive engine inertia
+var current_local_force_input : Vector3 = Vector3.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -42,22 +44,26 @@ func _physics_process(delta):
 		#first cap the local force according to thrusters (TEMP)
 		local_force_input = local_force_input.clamp(Vector3(-1.,-1.,-1.),Vector3(1.,1.,10.))
 		
+		current_local_force_input = current_local_force_input.lerp(local_force_input,.05)
 		
-		var gforce =  ref_rb.global_transform.basis * local_force_input
+		var gforce =  ref_rb.global_transform.basis * current_local_force_input
 		var gtorque =  ref_rb.global_transform.basis * local_torque_input
 		#vessel_info.emit("%3.3f" % (ref_rb.linear_velocity.length()))
-		vessel_info.emit("%3.3f - %3.3f - %3.3f" % [local_force_input.x,local_force_input.y,local_force_input.z])
+		vessel_info.emit("%3.3f - %3.3f - %3.3f" % [current_local_force_input.x,current_local_force_input.y,current_local_force_input.z])
+		
 		#debug info
 		# DebugDraw.draw_line(
-		# 	ref_rb.global_transform.origin+Vector3.ONE, 
-		# 	ref_rb.global_transform.origin+Vector3.ONE+ ref_rb.global_transform.basis.z * 5, 
+		# 	ref_rb.global_transform.origin, 
+		# 	ref_rb.global_transform.origin+gforce*10.0, 
 		# 	Color(0, 0, .2)
 		# )
-		# DebugDraw.draw_line(
-		# 	ref_rb.global_transform.origin+Vector3.ONE, 
-		# 	ref_rb.global_transform.origin+Vector3.ONE+ ref_rb.global_transform.basis.x * 5, 
-		# 	Color(.2, 0, 0)
-		# )
+		# if nav_target:
+		# 	DebugDraw.draw_line(
+		# 		ref_rb.global_transform.origin,
+		# 		nav_target.global_position, 
+		# 		Color(.2, .2, .2)
+		# 	)
+
 		# DebugDraw.draw_line(
 		# 	ref_rb.global_transform.origin+Vector3.ONE, 
 		# 	ref_rb.global_transform.origin+Vector3.ONE+ ref_rb.global_transform.basis.y * 5, 
@@ -72,17 +78,17 @@ func _physics_process(delta):
 		
 		# DebugDraw.draw_line(
 		# 	ref_rb.global_transform.origin, 
-		# 	ref_rb.global_transform.origin+local_force_input.z * ref_rb.global_transform.basis.z * 10, 
+		# 	ref_rb.global_transform.origin+current_local_force_input.z * ref_rb.global_transform.basis.z * 10, 
 		# 	Color(0, 0, 1)
 		# )
 		# DebugDraw.draw_line(
 		# 	ref_rb.global_transform.origin, 
-		# 	ref_rb.global_transform.origin+local_force_input.x * ref_rb.global_transform.basis.x * 10, 
+		# 	ref_rb.global_transform.origin+current_local_force_input.x * ref_rb.global_transform.basis.x * 10, 
 		# 	Color(1, 0, 0)
 		# )
 		# DebugDraw.draw_line(
 		# 	ref_rb.global_transform.origin, 
-		# 	ref_rb.global_transform.origin+local_force_input.y * ref_rb.global_transform.basis.y * 10, 
+		# 	ref_rb.global_transform.origin+current_local_force_input.y * ref_rb.global_transform.basis.y * 10, 
 		# 	Color(0, 1, 0)
 		# )
 		# if nav_target:
@@ -96,7 +102,7 @@ func _physics_process(delta):
 		ref_rb.apply_torque(gtorque)
 		# update other
 		for thruster in functionals.get("thrusters",[]):
-			thruster.set_thrust(local_force_input)
+			thruster.set_thrust(current_local_force_input)
 		
 		local_force_input = Vector3.ZERO
 		local_torque_input = Vector3.ZERO

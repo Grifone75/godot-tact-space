@@ -49,10 +49,12 @@ func _process(delta):
 	if tracked:
 		t_obs_pos = t_obs_pos * zoom
 		zoom = 1
-		var new_basis = Basis(current_rotation * delta_rotation)
-		current_rotation = Quaternion.IDENTITY
+		var new_basis = Basis(current_rotation * delta_rotation).orthonormalized()
+		delta_rotation = Quaternion.IDENTITY
+		current_rotation = Quaternion(new_basis)
+		
 		var l_new_cam_pos = (new_basis * t_obs_pos)
-		self.position = l_new_cam_pos
+		self.position = self.position.lerp(l_new_cam_pos,0.1)
 		self.look_at(tracked.global_position, tracked.global_transform.basis.y)
 
 func old_process(delta):
@@ -154,6 +156,8 @@ func _update_mouselook():
 
 func reset_origin():
 	print("cam resetting")
-	var delta = self.current_cam_pos - self.global_position
+	var delta_current = self.current_cam_pos - self.global_position
+	var delta_tracked = self.current_tracked_pos - self.global_position
 	self.global_position = Vector3.ZERO
-	self.current_cam_pos = delta
+	self.current_cam_pos = delta_current
+	self.current_tracked_pos = delta_tracked

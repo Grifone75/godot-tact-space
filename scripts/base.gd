@@ -6,6 +6,7 @@ var moving_origin: bool = false
 var cam = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
 	#SubViewportContainer/
 	cam = $SubViewportContainer/SubViewport_objects/cam_track
 	cam.tracked_updated.connect(func(x) : cam_tracked = x)
@@ -61,7 +62,7 @@ func _on_button_pressed():
 var current_index = 0
 func _on_button_change_ship_pressed():
 	_on_direct_control_button_toggled(false) #to be sure we restore ai pilot when changing vessel
-	get_node("/root/base/SubViewportContainer/FlowContainer/DirectControlButton").button_pressed = false
+	get_node("/root/base/UserMenuUI/FlowContainer/DirectControlButton").button_pressed = false
 	#followed_vessel = get_tree().get_nodes_in_group("vessels").pick_random()
 	if current_index >= len(get_tree().get_nodes_in_group("vessels")):
 		current_index = 0
@@ -79,6 +80,7 @@ func _on_item_list_item_clicked(index, at_position, mouse_button_index):
 
 
 func _on_direct_control_button_toggled(button_pressed):
+	$PlayerHudHandler.set_active(button_pressed)
 	if button_pressed:
 		if followed_vessel:
 			followed_vessel.get_node("AIPilot").torque_input.disconnect(followed_vessel.get_node("VesselController").update_control_torque)

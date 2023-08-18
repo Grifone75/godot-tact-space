@@ -241,7 +241,8 @@ vec4 mysky(vec3 eye_dir){
 	#ifdef TONEMAPPING
     vec4 fragColor = vec4(ToneMapFilmicALU(sum.xyz*.2),1.0);
 	#else
-    vec4 fragColor = vec4(sum.xyz,1.0);
+	float new_alpha = length(sum);
+    vec4 fragColor = vec4(sum.xyz,new_alpha);
 	#endif	
 	return fragColor;
 }
@@ -260,7 +261,7 @@ void fragment() {
 		);
 	
 	vec4 col = mysky(eyedir);//generate_fancy_clouds(EYEDIR, TIME); // Clouds will be rendered to half res texture.
-	COLOR = vec4(col.rgb*.8,1.);
+	COLOR = vec4(col.rgb*.8,col.a);
 	//ALPHA = col.a; // Subpasses can use alpha.
 } 
 	

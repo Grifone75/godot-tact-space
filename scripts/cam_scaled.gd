@@ -10,5 +10,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	self.global_transform.origin = master.global_transform.origin / factor
+	if factor > 0:
+		self.global_transform.origin = master.global_transform.origin / factor
 	self.global_transform.basis = master.global_transform.basis

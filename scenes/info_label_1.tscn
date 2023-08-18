@@ -1,66 +1,76 @@
-[gd_scene load_steps=2 format=3 uid="uid://bw518qoa0kcsc"]
+[gd_scene load_steps=5 format=3 uid="uid://bw518qoa0kcsc"]
 
 [ext_resource type="Script" path="res://scenes/info_label_1.gd" id="1_tg3v0"]
+[ext_resource type="Theme" uid="uid://dc8gbjy78j8gx" path="res://Themes/ship_ui_theme.tres" id="2_ms1s6"]
+[ext_resource type="Texture2D" uid="uid://c2hsqksgcrwse" path="res://data/textures/ring.png" id="3_g2wtl"]
+[ext_resource type="Texture2D" uid="uid://bndu73pel372" path="res://data/textures/ring_center.png" id="4_qpy3q"]
 
 [node name="VesselInfo" type="Node3D"]
 script = ExtResource("1_tg3v0")
 
-[node name="ShipName" type="Label3D" parent="."]
-visibility_range_end = 50.0
-visibility_range_end_margin = 100.0
-visibility_range_fade_mode = 1
-pixel_size = 0.0005
-offset = Vector2(0, 90)
-billboard = 1
-no_depth_test = true
-fixed_size = true
-alpha_scissor_threshold = 0.295
-alpha_hash_scale = 0.38
-alpha_antialiasing_mode = 2
-alpha_antialiasing_edge = 0.32
-texture_filter = 4
-modulate = Color(0.368627, 0.772549, 0.196078, 1)
-outline_modulate = Color(0.0666667, 0.156863, 0.0823529, 1)
-text = "This is a test"
-font_size = 30
-outline_size = 2
+[node name="Anchor2D" type="Control" parent="."]
+modulate = Color(0.254902, 0.584314, 0.486275, 0.654902)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="VesselControllerInfo" type="Label3D" parent="."]
-visibility_range_end = 50.0
-visibility_range_end_margin = 100.0
-visibility_range_fade_mode = 1
-pixel_size = 0.0005
-offset = Vector2(0, 50)
-billboard = 1
-no_depth_test = true
-fixed_size = true
-alpha_scissor_threshold = 0.295
-alpha_hash_scale = 0.38
-alpha_antialiasing_mode = 2
-alpha_antialiasing_edge = 0.32
-texture_filter = 4
-modulate = Color(0.368627, 0.772549, 0.196078, 1)
-outline_modulate = Color(0.0666667, 0.156863, 0.0823529, 1)
-text = "This is a test"
-font_size = 30
-outline_size = 2
+[node name="Distance" type="Label" parent="Anchor2D"]
+layout_mode = 0
+offset_left = -64.0
+offset_top = -60.0
+offset_right = -24.0
+offset_bottom = -34.0
+theme = ExtResource("2_ms1s6")
+text = "distance"
 
-[node name="AIPilotInfo" type="Label3D" parent="."]
-visibility_range_end = 50.0
-visibility_range_end_margin = 100.0
-visibility_range_fade_mode = 1
-pixel_size = 0.0005
-offset = Vector2(0, -50)
-billboard = 1
-no_depth_test = true
-fixed_size = true
-alpha_scissor_threshold = 0.295
-alpha_hash_scale = 0.38
-alpha_antialiasing_mode = 2
-alpha_antialiasing_edge = 0.32
-texture_filter = 4
-modulate = Color(0.368627, 0.772549, 0.196078, 1)
-outline_modulate = Color(0.0666667, 0.156863, 0.0823529, 1)
-text = "This is a test"
-font_size = 30
-outline_size = 2
+[node name="Shipname" type="Label" parent="Anchor2D"]
+self_modulate = Color(0.768627, 0.784314, 0, 1)
+layout_mode = 0
+offset_left = -18.0
+offset_top = -79.0
+offset_right = 22.0
+offset_bottom = -53.0
+theme = ExtResource("2_ms1s6")
+text = "shipname"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="AIPilotInfo" type="Label" parent="Anchor2D"]
+visible = false
+layout_mode = 0
+offset_left = -20.0
+offset_top = 39.0
+offset_right = 20.0
+offset_bottom = 65.0
+theme = ExtResource("2_ms1s6")
+text = "pilot info"
+
+[node name="VesselControllerInfo" type="Label" parent="Anchor2D"]
+visible = false
+layout_mode = 0
+offset_left = 37.0
+offset_top = -61.0
+offset_right = 77.0
+offset_bottom = -35.0
+theme = ExtResource("2_ms1s6")
+text = "vessel info"
+
+[node name="TextureRect" type="TextureRect" parent="Anchor2D"]
+visible = false
+layout_mode = 1
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+texture = ExtResource("3_g2wtl")
+expand_mode = 1
+
+[node name="ring" type="TextureRect" parent="Anchor2D"]
+layout_mode = 1
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+texture = ExtResource("4_qpy3q")
+expand_mode = 1

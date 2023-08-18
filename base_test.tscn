@@ -1,0 +1,634 @@
+[gd_scene load_steps=49 format=3 uid="uid://cdaljvxncku1c"]
+
+[ext_resource type="Script" path="res://scripts/base.gd" id="1_skmut"]
+[ext_resource type="PackedScene" uid="uid://c4weja143s0g4" path="res://scenes/instancer.tscn" id="2_i1xug"]
+[ext_resource type="PackedScene" uid="uid://cnhotw0s7wl50" path="res://scenes/navpoint.tscn" id="3_dhvts"]
+[ext_resource type="Script" path="res://scripts/FreeLookCamera.gd" id="4_uwha5"]
+[ext_resource type="Shader" path="res://shaders/nav_mesh.gdshader" id="5_yeb3a"]
+[ext_resource type="Script" path="res://scripts/testROTREF.gd" id="6_8ll5g"]
+[ext_resource type="Environment" uid="uid://bnyjssjuothnq" path="res://materials/final_local_environment.tres" id="7_88we5"]
+[ext_resource type="Script" path="res://scripts/cam_track.gd" id="8_m5frx"]
+[ext_resource type="Script" path="res://scripts/ReflectionProbeAligner.gd" id="9_qe63t"]
+[ext_resource type="Material" uid="uid://ym6o1f38v4eh" path="res://materials/solar_panels.tres" id="10_ti6pl"]
+[ext_resource type="Script" path="res://scripts/PlayerInputHandler.gd" id="11_cb6cn"]
+[ext_resource type="PackedScene" uid="uid://xhg4bqu6m3jl" path="res://scenes/gas_giant.tscn" id="12_3hqpv"]
+[ext_resource type="Script" path="res://scripts/cam_scaled.gd" id="13_knlkw"]
+[ext_resource type="Shader" path="res://shaders/nebula_to_equirect.gdshader" id="15_mmhhc"]
+[ext_resource type="Material" uid="uid://37u50ju3r4sh" path="res://materials/standard_plates.tres" id="16_er7ij"]
+[ext_resource type="PackedScene" uid="uid://gk8tvwc6a2rp" path="res://scenes/thruster.tscn" id="17_2cgo2"]
+[ext_resource type="Script" path="res://scripts/PlayerHudHandler.gd" id="18_ddmff"]
+[ext_resource type="Theme" uid="uid://wv5v1o64kbws" path="res://ui/themes/default_interface.tres" id="19_3s2da"]
+[ext_resource type="Texture2D" uid="uid://b47k2pg7xj7xo" path="res://data/textures/icons_trimmed.png" id="20_n36oq"]
+[ext_resource type="Texture2D" uid="uid://rypgaskiayxv" path="res://data/textures/icon_atlas1.tres" id="21_s0abm"]
+[ext_resource type="Shader" path="res://shaders/hud1.gdshader" id="22_gkqfj"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_eex47"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t8o0c"]
+render_priority = 0
+shader = ExtResource("5_yeb3a")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/wire_color = Color(0.384314, 1, 0.352941, 1)
+shader_parameter/wire_width = 1.561
+shader_parameter/wire_smoothness = 0.01
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_a3umw"]
+resource_local_to_scene = true
+auto_exposure_min_sensitivity = 49.08
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_hgedn"]
+material = ExtResource("10_ti6pl")
+
+[sub_resource type="Shader" id="Shader_1a5x1"]
+code = "// Uniforms
+shader_type spatial;
+
+//
+// Description : Array and textureless GLSL 2D/3D/4D simplex 
+//               noise functions.
+//      Author : Ian McEwan, Ashima Arts.
+//  Maintainer : stegu
+//     Lastmod : 20201014 (stegu)
+//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
+//               Distributed under the MIT License. See LICENSE file.
+//               https://github.com/ashima/webgl-noise
+//               https://github.com/stegu/webgl-noise
+// 
+
+vec3 mod289_3(vec3 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec4 mod289(vec4 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec4 permute(vec4 x) {
+     return mod289(((x*34.0)+10.0)*x);
+}
+
+vec4 taylorInvSqrt(vec4 r)
+{
+  return 1.79284291400159 - 0.85373472095314 * r;
+}
+
+float snoise(vec3 v)
+  { 
+  const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+  const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+
+// First corner
+  vec3 i  = floor(v + dot(v, C.yyy) );
+  vec3 x0 =   v - i + dot(i, C.xxx) ;
+
+// Other corners
+  vec3 g = step(x0.yzx, x0.xyz);
+  vec3 l = 1.0 - g;
+  vec3 i1 = min( g.xyz, l.zxy );
+  vec3 i2 = max( g.xyz, l.zxy );
+
+  //   x0 = x0 - 0.0 + 0.0 * C.xxx;
+  //   x1 = x0 - i1  + 1.0 * C.xxx;
+  //   x2 = x0 - i2  + 2.0 * C.xxx;
+  //   x3 = x0 - 1.0 + 3.0 * C.xxx;
+  vec3 x1 = x0 - i1 + C.xxx;
+  vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
+  vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
+
+// Permutations
+  i = mod289_3(i); 
+  vec4 p = permute( permute( permute( 
+             i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+           + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
+           + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+
+// Gradients: 7x7 points over a square, mapped onto an octahedron.
+// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
+  float n_ = 0.142857142857; // 1.0/7.0
+  vec3  ns = n_ * D.wyz - D.xzx;
+
+  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)
+
+  vec4 x_ = floor(j * ns.z);
+  vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
+
+  vec4 x = x_ *ns.x + ns.yyyy;
+  vec4 y = y_ *ns.x + ns.yyyy;
+  vec4 h = 1.0 - abs(x) - abs(y);
+
+  vec4 b0 = vec4( x.xy, y.xy );
+  vec4 b1 = vec4( x.zw, y.zw );
+
+  //vec4 s0 = vec4(lessThan(b0,0.0))*2.0 - 1.0;
+  //vec4 s1 = vec4(lessThan(b1,0.0))*2.0 - 1.0;
+  vec4 s0 = floor(b0)*2.0 + 1.0;
+  vec4 s1 = floor(b1)*2.0 + 1.0;
+  vec4 sh = -step(h, vec4(0.0));
+
+  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+
+  vec3 p0 = vec3(a0.xy,h.x);
+  vec3 p1 = vec3(a0.zw,h.y);
+  vec3 p2 = vec3(a1.xy,h.z);
+  vec3 p3 = vec3(a1.zw,h.w);
+
+//Normalise gradients
+  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+  p0 *= norm.x;
+  p1 *= norm.y;
+  p2 *= norm.z;
+  p3 *= norm.w;
+
+// Mix final noise value
+  vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+  m = m * m;
+  return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+                                dot(p2,x2), dot(p3,x3) ) );
+  }
+
+
+ float noise(vec3 position, int octaves, float frequency, float persistence) {
+    float total = 0.0; // Total value so far
+    float maxAmplitude = 0.0; // Accumulates highest theoretical amplitude
+    float amplitude = 1.0;
+    for (int i = 0; i < octaves; i++) {
+
+        // Get the noise sample
+        total += snoise(position * frequency) * amplitude;
+
+        // Make the wavelength twice as small
+        frequency *= 2.0;
+
+        // Add to our maximum possible amplitude
+        maxAmplitude += amplitude;
+
+        // Reduce amplitude according to persistence for the next octave
+        amplitude *= persistence;
+    }
+
+    // Scale the result by the maximum amplitude
+    return total / maxAmplitude;
+}
+
+uniform sampler2D unColorLookup: repeat_enable;
+uniform vec3 unLightDir;   
+
+// Inputs
+//in vec3 fNormal;
+//in float fTexCoord;  
+
+void vertex(){
+	COLOR = vec4(NORMAL,1.);
+}
+
+void fragment() {
+	float bands = 1.;//smoothstep(-.5,.5,sin(UV.y*30.))*2.-1.;
+    // Preturb texture coordinate with noise
+    float n = noise(COLOR.xyz*10.+TIME*.1*bands,6,0.1,0.8)*.1;
+    vec2 newTexCoord = vec2(UV.y*2. + n,UV.x);
+
+    // Lookup the texture
+    vec3 texColor = texture(unColorLookup, newTexCoord).rgb;
+
+    // Output color to pixel
+    ALBEDO = texColor;
+}"
+
+[sub_resource type="Gradient" id="Gradient_ooymf"]
+offsets = PackedFloat32Array(0.167263, 0.423018, 0.502302, 0.635294, 0.735038, 0.970333)
+colors = PackedColorArray(0.124755, 0.583361, 0.767029, 1, 0.205682, 0.184784, 0.165887, 1, 0.223146, 0.133384, 0.0583953, 1, 0.457424, 0.590589, 0.285479, 1, 0.600112, 0.71424, 0.573801, 1, 0.209589, 0.585204, 0.644229, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_p58q2"]
+gradient = SubResource("Gradient_ooymf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i4uu0"]
+render_priority = 0
+shader = SubResource("Shader_1a5x1")
+shader_parameter/unLightDir = null
+shader_parameter/unColorLookup = SubResource("GradientTexture1D_p58q2")
+
+[sub_resource type="SphereMesh" id="SphereMesh_ehmgg"]
+material = SubResource("ShaderMaterial_i4uu0")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_noc1h"]
+input_name = "normal"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1n8bm"]
+input_name = "view"
+
+[sub_resource type="VisualShaderNodeDotProduct" id="VisualShaderNodeDotProduct_iqkla"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_wl2mq"]
+default_input_values = [0, 1.0, 1, 0.0]
+operator = 1
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_itu4n"]
+default_input_values = [0, 0.0, 1, 10.0]
+operator = 5
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_4b7xm"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_fpo0o"]
+parameter_name = "ColorParameter"
+default_value_enabled = true
+default_value = Color(0.928047, 0.707148, 0.923194, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_pqf6k"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 ColorParameter : source_color = vec4(0.928047, 0.707148, 0.923194, 1.000000);
+
+
+
+void fragment() {
+// ColorParameter:8
+	vec4 n_out8p0 = ColorParameter;
+
+
+// Input:2
+	vec3 n_out2p0 = NORMAL;
+
+
+// Input:3
+	vec3 n_out3p0 = VIEW;
+
+
+// DotProduct:4
+	float n_out4p0 = dot(n_out2p0, n_out3p0);
+
+
+// FloatOp:5
+	float n_in5p0 = 1.00000;
+	float n_out5p0 = n_in5p0 - n_out4p0;
+
+
+// FloatOp:6
+	float n_in6p1 = 10.00000;
+	float n_out6p0 = pow(n_out5p0, n_in6p1);
+
+
+// FloatConstant:7
+	float n_out7p0 = 0.000000;
+
+
+// Output:0
+	ALBEDO = vec3(n_out8p0.xyz);
+	ALPHA = n_out6p0;
+	METALLIC = n_out7p0;
+
+
+}
+"
+graph_offset = Vector2(52.2222, -4.44444)
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(760, 20)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_noc1h")
+nodes/fragment/2/position = Vector2(20, 80)
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_1n8bm")
+nodes/fragment/3/position = Vector2(20, 160)
+nodes/fragment/4/node = SubResource("VisualShaderNodeDotProduct_iqkla")
+nodes/fragment/4/position = Vector2(300, 100)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_wl2mq")
+nodes/fragment/5/position = Vector2(440, 60)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatOp_itu4n")
+nodes/fragment/6/position = Vector2(520, 240)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_4b7xm")
+nodes/fragment/7/position = Vector2(260, 240)
+nodes/fragment/8/node = SubResource("VisualShaderNodeColorParameter_fpo0o")
+nodes/fragment/8/position = Vector2(160, 340)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 0, 3, 0, 4, 1, 4, 0, 5, 1, 5, 0, 6, 0, 6, 0, 0, 1, 7, 0, 0, 2, 8, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ifkb1"]
+render_priority = 0
+shader = SubResource("VisualShader_pqf6k")
+shader_parameter/ColorParameter = Color(0.172549, 0.694118, 0.666667, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ss0lf"]
+material = SubResource("ShaderMaterial_ifkb1")
+radius = 0.205
+height = 0.41
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_strcg"]
+frequency = 0.0227
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ksq2t"]
+noise = SubResource("FastNoiseLite_strcg")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o8lp7"]
+shader = ExtResource("15_mmhhc")
+shader_parameter/dust_density = 0.096
+shader_parameter/star_bloom = 0.012
+shader_parameter/star_color = Color(0.619608, 0.698039, 0.458824, 1)
+shader_parameter/nebula_density_range0 = Color(0.772549, 0.976471, 0.866667, 1)
+shader_parameter/nebula_density_range1 = Color(0.184314, 0.266667, 0.141176, 1)
+shader_parameter/core_color = Color(0.8, 1, 1, 1)
+shader_parameter/core_factor = 1.814
+shader_parameter/edge_color = Color(0.996078, 0.615686, 0.607843, 1)
+shader_parameter/edge_factor = 0.584
+shader_parameter/base_noise = SubResource("NoiseTexture2D_ksq2t")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ef0wg"]
+material = ExtResource("16_er7ij")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gx1mj"]
+atlas = ExtResource("20_n36oq")
+region = Rect2(162, 810, 162, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sqbb2"]
+atlas = ExtResource("20_n36oq")
+region = Rect2(324, 324, 162, 162)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_t03fv"]
+viewport_path = NodePath("SubViewportHud")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_epb0w"]
+shader = ExtResource("22_gkqfj")
+
+[node name="base" type="Node3D"]
+script = ExtResource("1_skmut")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 13.9771, 3.86948, -6.63642)
+light_color = Color(0.345098, 0.611765, 0.745098, 1)
+light_energy = 0.1
+light_cull_mask = 4294967283
+shadow_bias = 0.567
+shadow_normal_bias = 0.333
+shadow_transmittance_bias = -1.87
+shadow_blur = 0.772
+sky_mode = 1
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 13.9771, 3.86948, 18.8248)
+light_color = Color(0.972549, 0.956863, 0.913725, 1)
+light_cull_mask = 4294967283
+shadow_enabled = true
+shadow_blur = 0.459
+sky_mode = 1
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+stretch = true
+
+[node name="SubViewport_objects" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+msaa_2d = 3
+msaa_3d = 3
+screen_space_aa = 1
+use_debanding = true
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="ship_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_i1xug")]
+cube_size = 2
+delta = 20.0
+
+[node name="ship_Instancer2" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_i1xug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 200, 0)
+cube_size = 2
+delta = 20.0
+
+[node name="navpoint_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_i1xug")]
+model_scene = ExtResource("3_dhvts")
+cube_size = 10
+direct_transforms = true
+delta = 300.0
+
+[node name="cam_dev" type="Camera3D" parent="SubViewportContainer/SubViewport_objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00601, 44.9752)
+cull_mask = 1048573
+current = true
+script = ExtResource("4_uwha5")
+
+[node name="ROTREF" type="MeshInstance3D" parent="SubViewportContainer/SubViewport_objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.323559, 20.3751, 44.2456)
+mesh = SubResource("PrismMesh_eex47")
+surface_material_override/0 = SubResource("ShaderMaterial_t8o0c")
+script = ExtResource("6_8ll5g")
+
+[node name="cam_track" type="Camera3D" parent="SubViewportContainer/SubViewport_objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.50848)
+cull_mask = 1048569
+environment = ExtResource("7_88we5")
+attributes = SubResource("CameraAttributesPractical_a3umw")
+current = true
+fov = 60.0
+script = ExtResource("8_m5frx")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="SubViewportContainer/SubViewport_objects/cam_track"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.50848)
+visible = false
+update_mode = 1
+max_distance = 27.9
+script = ExtResource("9_qe63t")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport_objects/cam_track"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1053, 0, -6.91094)
+visible = false
+mesh = SubResource("CapsuleMesh_hgedn")
+skeleton = NodePath("../..")
+
+[node name="PlayerInputHandler" type="Node" parent="."]
+script = ExtResource("11_cb6cn")
+
+[node name="SubViewport_planets" type="SubViewport" parent="."]
+transparent_bg = true
+handle_input_locally = false
+msaa_2d = 3
+msaa_3d = 3
+screen_space_aa = 1
+use_debanding = true
+fsr_sharpness = 0.0
+size = Vector2i(2304, 1296)
+render_target_update_mode = 4
+
+[node name="Altair" parent="SubViewport_planets" instance=ExtResource("12_3hqpv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.16454, 0, 0.618969)
+
+[node name="Nimrod" parent="SubViewport_planets" instance=ExtResource("12_3hqpv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.724772, 0, -2.72044)
+
+[node name="planet" parent="SubViewport_planets/Nimrod" index="0"]
+mesh = SubResource("SphereMesh_ehmgg")
+
+[node name="atmosphere" parent="SubViewport_planets/Nimrod" index="1"]
+mesh = SubResource("SphereMesh_ss0lf")
+
+[node name="cam_planets" type="Camera3D" parent="SubViewport_planets" node_paths=PackedStringArray("master")]
+cull_mask = 2
+fov = 60.0
+script = ExtResource("13_knlkw")
+master = NodePath("../../SubViewportContainer/SubViewport_objects/cam_track")
+factor = 10000.0
+
+[node name="SubViewport_background_panorama" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+msaa_2d = 2
+msaa_3d = 2
+screen_space_aa = 1
+use_debanding = true
+scaling_3d_mode = 1
+scaling_3d_scale = 2.0
+texture_mipmap_bias = 2.0
+fsr_sharpness = 1.0
+size = Vector2i(4096, 2048)
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="SubViewport_background_panorama"]
+texture_filter = 6
+material = SubResource("ShaderMaterial_o8lp7")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="tester" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.820052, 0, 0.572289, 0, 1, 0, -0.572289, 0, 0.820052, 0.319622, 0, 4.82493)
+visible = false
+mesh = SubResource("CapsuleMesh_ef0wg")
+skeleton = NodePath("thruster")
+
+[node name="thruster" parent="tester" instance=ExtResource("17_2cgo2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.166775, 0, 0.777185)
+
+[node name="PlayerHudHandler" type="Node" parent="."]
+script = ExtResource("18_ddmff")
+
+[node name="UserMenuContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
+grow_vertical = 2
+size_flags_vertical = 8
+
+[node name="FlowContainer" type="FlowContainer" parent="UserMenuContainer"]
+layout_mode = 2
+theme = ExtResource("19_3s2da")
+
+[node name="ItemList" type="ItemList" parent="UserMenuContainer/FlowContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.427298, 0.668871, 0.49691, 1)
+theme_override_colors/font_outline_color = Color(0.427451, 0.670588, 0.498039, 1)
+auto_height = true
+item_count = 5
+item_0/text = "Idle"
+item_0/selectable = false
+item_1/text = "Translation"
+item_1/selectable = false
+item_2/text = "Orientation"
+item_2/selectable = false
+item_3/text = "Slow Approach"
+item_3/selectable = false
+item_4/text = "Full Approach"
+item_4/selectable = false
+
+[node name="Button_change_ship" type="Button" parent="UserMenuContainer/FlowContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.427298, 0.668871, 0.49691, 1)
+theme_override_colors/font_outline_color = Color(0.427451, 0.670588, 0.498039, 1)
+text = "change_ship"
+icon = SubResource("AtlasTexture_gx1mj")
+alignment = 0
+text_overrun_behavior = 3
+clip_text = true
+expand_icon = true
+
+[node name="Button_change_navpoint" type="Button" parent="UserMenuContainer/FlowContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.427298, 0.668871, 0.49691, 1)
+theme_override_colors/font_outline_color = Color(0.427451, 0.670588, 0.498039, 1)
+text = "change_nav_point"
+icon = ExtResource("21_s0abm")
+alignment = 0
+text_overrun_behavior = 3
+clip_text = true
+expand_icon = true
+
+[node name="Aggressive_mode" type="CheckButton" parent="UserMenuContainer/FlowContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_outline_color = Color(0.427451, 0.670588, 0.498039, 1)
+text = "Aggressive Mode
+"
+icon = SubResource("AtlasTexture_sqbb2")
+text_overrun_behavior = 2
+clip_text = true
+expand_icon = true
+
+[node name="DirectControlButton" type="CheckButton" parent="UserMenuContainer/FlowContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.427451, 0.670588, 0.498039, 1)
+text = "Direct Control"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.0
+offset_top = -20.0
+offset_right = 23.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+custom_minimum_size = Vector2(1024, 1024)
+layout_mode = 2
+offset_left = -236.0
+offset_top = -236.0
+offset_right = 276.0
+offset_bottom = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_t03fv")
+expand_mode = 3
+
+[node name="SubViewportHud" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1024, 1024)
+
+[node name="ColorRect" type="ColorRect" parent="SubViewportHud"]
+material = SubResource("ShaderMaterial_epb0w")
+custom_minimum_size = Vector2(1024, 1024)
+offset_right = 40.0
+offset_bottom = 40.0
+
+[connection signal="item_clicked" from="UserMenuContainer/FlowContainer/ItemList" to="." method="_on_item_list_item_clicked"]
+[connection signal="item_selected" from="UserMenuContainer/FlowContainer/ItemList" to="." method="_on_nav_mode_list_item_selected"]
+[connection signal="pressed" from="UserMenuContainer/FlowContainer/Button_change_ship" to="." method="_on_button_change_ship_pressed"]
+[connection signal="pressed" from="UserMenuContainer/FlowContainer/Button_change_ship" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="UserMenuContainer/FlowContainer/Button_change_navpoint" to="." method="_on_button_pressed"]
+[connection signal="toggled" from="UserMenuContainer/FlowContainer/Aggressive_mode" to="." method="_on_aggressive_mode_toggled"]
+[connection signal="toggled" from="UserMenuContainer/FlowContainer/DirectControlButton" to="." method="_on_direct_control_button_toggled"]
+
+[editable path="SubViewport_planets/Altair"]
+[editable path="SubViewport_planets/Nimrod"]

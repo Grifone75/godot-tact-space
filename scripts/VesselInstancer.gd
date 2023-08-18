@@ -312,7 +312,7 @@ func _ready():
 	$AIPilot.force_input.connect($VesselController.update_control_force)
 	$AIPilot.changed_target.connect($VesselController.update_nav_target)
 	$VesselController.vessel_info.connect($VesselController/RigidBody3D/VesselInfo.update_vessel_label)
-	$VesselController/RigidBody3D/VesselInfo/ShipName.text = self.name
+	$VesselController/RigidBody3D/VesselInfo.set_shipname(self.name)
 	
 
 

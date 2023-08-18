@@ -1,0 +1,82 @@
+[gd_resource type="Environment" load_steps=12 format=3 uid="uid://bnyjssjuothnq"]
+
+[ext_resource type="Shader" path="res://shaders/far_plane_background.gdshader" id="1_i2fnh"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_173y6"]
+viewport_path = NodePath("SubViewport_planets")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_je0kr"]
+viewport_path = NodePath("SubViewport_background_panorama")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5c85c"]
+noise_type = 2
+frequency = 0.035
+fractal_type = 2
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_8xcm4"]
+width = 128
+height = 128
+depth = 128
+seamless = true
+noise = SubResource("FastNoiseLite_5c85c")
+
+[sub_resource type="Gradient" id="Gradient_2lcls"]
+offsets = PackedFloat32Array(0.582672, 0.669314)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_88rmi"]
+noise_type = 2
+seed = 4
+frequency = 0.0332
+fractal_lacunarity = 1.145
+fractal_gain = 1.23
+fractal_weighted_strength = 1.0
+domain_warp_enabled = true
+domain_warp_type = 2
+domain_warp_frequency = 0.01
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_w6i25"]
+seamless = true
+color_ramp = SubResource("Gradient_2lcls")
+noise = SubResource("FastNoiseLite_88rmi")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_somgu"]
+viewport_path = NodePath("SubViewport_UI")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gfrww"]
+resource_local_to_scene = true
+shader = ExtResource("1_i2fnh")
+shader_parameter/background_planets = SubResource("ViewportTexture_173y6")
+shader_parameter/equirect_nebula = SubResource("ViewportTexture_je0kr")
+shader_parameter/noise_stars = SubResource("NoiseTexture3D_8xcm4")
+shader_parameter/noise_stars_filter2 = SubResource("NoiseTexture3D_w6i25")
+shader_parameter/ui = SubResource("ViewportTexture_somgu")
+
+[sub_resource type="Sky" id="Sky_5jsfi"]
+resource_local_to_scene = true
+sky_material = SubResource("ShaderMaterial_gfrww")
+process_mode = 1
+radiance_size = 4
+
+[resource]
+resource_local_to_scene = true
+background_mode = 2
+sky = SubResource("Sky_5jsfi")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 2
+glow_enabled = true
+glow_levels/1 = 1.5
+glow_levels/2 = 0.8
+glow_levels/3 = 0.5
+glow_levels/4 = 0.2
+glow_levels/5 = 0.0
+glow_intensity = 0.31
+glow_strength = 0.54
+glow_bloom = 0.21
+glow_blend_mode = 1
+glow_hdr_threshold = 0.64
+glow_hdr_scale = 0.71
+glow_hdr_luminance_cap = 10.24
+glow_map_strength = 0.0
+adjustment_enabled = true
