@@ -10,6 +10,7 @@ var functionals: Dictionary
 var ref_rb:RigidBody3D
 #account for drive engine inertia
 var current_local_force_input : Vector3 = Vector3.ZERO
+var current_local_torque_input : Vector3 = Vector3.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,11 +24,12 @@ func _delayed_init():
 func set_aggressive(yes_flag):
 	for turret in functionals.get("turrets",[]):
 		if yes_flag:
-			turret.set_target(get_tree().get_nodes_in_group("vessels").pick_random().get_rb())
+			if "vessels" in nav_target.get_parent().get_parent().get_groups():
+				turret.set_target(nav_target)
+			else:
+				turret.set_target(get_tree().get_nodes_in_group("vessels").pick_random().get_rb())
 		else:
 			turret.set_target(null)
-		
-
 
 func _init_rb():
 	while ref_rb == null:
@@ -45,9 +47,10 @@ func _physics_process(delta):
 		local_force_input = local_force_input.clamp(Vector3(-1.,-1.,-1.),Vector3(1.,1.,10.))
 		
 		current_local_force_input = current_local_force_input.lerp(local_force_input,.05)
+		current_local_torque_input = current_local_torque_input.lerp(local_torque_input,.05)
 		
 		var gforce =  ref_rb.global_transform.basis * current_local_force_input
-		var gtorque =  ref_rb.global_transform.basis * local_torque_input
+		var gtorque =  ref_rb.global_transform.basis * current_local_torque_input
 		#vessel_info.emit("%3.3f" % (ref_rb.linear_velocity.length()))
 		vessel_info.emit("%3.3f - %3.3f - %3.3f" % [current_local_force_input.x,current_local_force_input.y,current_local_force_input.z])
 		
@@ -103,6 +106,7 @@ func _physics_process(delta):
 		# update other
 		for thruster in functionals.get("thrusters",[]):
 			thruster.set_thrust(current_local_force_input)
+			thruster._calculate_force_from_torque(local_torque_input)
 		
 		local_force_input = Vector3.ZERO
 		local_torque_input = Vector3.ZERO

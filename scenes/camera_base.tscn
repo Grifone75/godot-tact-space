@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://d3uuy2stcdbwm"]
+
+[ext_resource type="Script" path="res://scripts/cam_pivot_track.gd" id="1_xkahv"]
+[ext_resource type="Environment" uid="uid://bnyjssjuothnq" path="res://materials/final_local_environment.tres" id="2_v00ws"]
+[ext_resource type="Script" path="res://scripts/ReflectionProbeAligner.gd" id="3_uqsou"]
+[ext_resource type="Material" uid="uid://ym6o1f38v4eh" path="res://materials/solar_panels.tres" id="4_gbsak"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_qhca5"]
+resource_local_to_scene = true
+auto_exposure_min_sensitivity = 49.08
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_j8k1h"]
+material = ExtResource("4_gbsak")
+
+[node name="CameraBase" type="Node3D"]
+script = ExtResource("1_xkahv")
+
+[node name="BasePivot" type="Node3D" parent="."]
+transform = Transform3D(0.807372, 0, 0.590042, 0, 1, 0, -0.590042, 0, 0.807372, 0, 0, 0)
+
+[node name="CameraArm" type="Node3D" parent="BasePivot"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 3.33786e-06, 0, 12.6859)
+
+[node name="cam_track" type="Camera3D" parent="BasePivot/CameraArm"]
+cull_mask = 1048569
+environment = ExtResource("2_v00ws")
+attributes = SubResource("CameraAttributesPractical_qhca5")
+current = true
+fov = 60.0
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="BasePivot/CameraArm/cam_track"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.50848)
+visible = false
+update_mode = 1
+max_distance = 27.9
+script = ExtResource("3_uqsou")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BasePivot/CameraArm/cam_track"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1053, 0, -6.91094)
+visible = false
+mesh = SubResource("CapsuleMesh_j8k1h")
+skeleton = NodePath("../..")

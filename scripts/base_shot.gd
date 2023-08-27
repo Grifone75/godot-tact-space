@@ -40,4 +40,10 @@ func _physics_process(delta):
 		get_tree().get_root().add_child(exp)
 		exp.global_position = result["position"]
 		exp.global_transform = exp.global_transform.looking_at(result["normal"])
+		
+		var splat = load("res://scenes/bolt_decal.tscn").instantiate()
+		result["collider"].add_child(splat)
+		splat.global_position = result["position"]
+		splat.global_transform = splat.global_transform.looking_at(result["normal"])
+		
 		#c.queue_free()

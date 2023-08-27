@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://6fdy60tmg07r"]
+
+[ext_resource type="Material" uid="uid://c5xpao2756ck" path="res://materials/windows4.tres" id="1_pyxei"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_s1rdh"]
+material = ExtResource("1_pyxei")
+size = Vector2(0.2, 0.6)
+
+[node name="windows4" type="MeshInstance3D"]
+mesh = SubResource("QuadMesh_s1rdh")
+
+[node name="attach_f" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 8.65783e-10, 2.48154e-24, -0.0099034)

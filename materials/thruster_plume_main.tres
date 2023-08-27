@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://bilur23o1a33o"]
+
+[ext_resource type="Shader" path="res://shaders/plume_mesh_2.gdshader" id="1_h04vg"]
+[ext_resource type="Texture2D" uid="uid://ctccxhapnbcaj" path="res://data/textures/heatcolors4.png" id="2_k0b4t"]
+[ext_resource type="Texture2D" uid="uid://bi2sv55klhwfy" path="res://data/textures/flowmap.png" id="3_mbqpe"]
+[ext_resource type="Texture2D" uid="uid://dogiypop245p1" path="res://data/textures/perlin1.jpg" id="4_onhqg"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_h04vg")
+shader_parameter/_ColorSelector = 0.99
+shader_parameter/plume_width_factor = 1.0
+shader_parameter/_FlowMap = ExtResource("3_mbqpe")
+shader_parameter/_NoiseMap = ExtResource("4_onhqg")
+shader_parameter/_FlameColors = ExtResource("2_k0b4t")

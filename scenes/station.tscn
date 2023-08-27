@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgb6yluny7cde"]
+
+[ext_resource type="Script" path="res://scripts/VesselInstancer.gd" id="1_pqy48"]
+[ext_resource type="Resource" uid="uid://lcm47f6qqlqe" path="res://resources/station.tres" id="2_jpqqb"]
+
+[node name="Eastern Scarf" type="Node" groups=["local_objects", "vessels"]]
+script = ExtResource("1_pqy48")
+construction_data = ExtResource("2_jpqqb")

@@ -18,6 +18,7 @@ uniform vec3 uv1_offset;
 uniform vec3 uv2_scale;
 uniform vec3 uv2_offset;
 uniform vec4 em_color : source_color;
+
 instance uniform float _Thrust = 0.5;
 
 
@@ -27,6 +28,9 @@ void vertex() {
 
 
 void fragment() {
+	float color_mixer1 = smoothstep(0.05,0.09, _Thrust);
+	float color_mixer2 = smoothstep(0.09,0.2, _Thrust);
+	vec4 final_color = mix(vec4(0.2,0.02,0.0,1.0),mix(vec4(0.5,0.2,0.0,1.0),em_color,color_mixer2),color_mixer1);
 	vec2 base_uv = UV;
 	vec4 albedo_tex = texture(texture_albedo,base_uv);
 	vec4 aoch_tex = texture(texture_aoch,base_uv);
@@ -41,7 +45,7 @@ void fragment() {
 	SPECULAR = specular;
 	NORMAL_MAP = texture(texture_normal,base_uv).rgb;
 	NORMAL_MAP_DEPTH = normal_scale;
-	EMISSION = em_color.rgb * em_mult;
+	EMISSION = final_color.rgb * em_mult;
 	ALPHA = aoch_tex.a;
 	AO = 1.-aoch_tex.r;
 }

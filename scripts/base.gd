@@ -3,14 +3,18 @@ extends Node3D
 var cam_tracked = null
 var followed_vessel
 var moving_origin: bool = false
-var cam = null
+@export var cam: Node3D = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
-	#SubViewportContainer/
-	cam = $SubViewportContainer/SubViewport_objects/cam_track
+	#DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
+	$SubViewportContainer/SubViewport_objects.connect("size_changed", _on_viewport_resize)
 	cam.tracked_updated.connect(func(x) : cam_tracked = x)
 	_delayed_init()
+
+func _on_viewport_resize():
+	print_debug("*** SIZE CHANGED")
+	print_debug($SubViewportContainer/SubViewport_objects.size)
+	$SubViewport_UI.size = $SubViewportContainer/SubViewport_objects.size
 	
 
 func _delayed_init():
@@ -31,11 +35,13 @@ func _origin_shift():
 	for obj in get_tree().get_nodes_in_group("local_objects"):
 		if obj.is_in_group("vessels"):
 			obj.get_node("VesselController/RigidBody3D").global_position -= shift
+		elif obj.has_method("manage_origin_shift"):
+			obj.manage_origin_shift(shift)
 		else:
 			obj.global_position -= shift
 	for obj in get_tree().get_nodes_in_group("far_objects"):
 		obj.global_position -= shift/10000.0
-	cam.reset_origin()
+	#cam.reset_origin() #not necessary anymore as the camera is on a object which is already shifted
 	moving_origin = false
 	
 
@@ -62,7 +68,7 @@ func _on_button_pressed():
 var current_index = 0
 func _on_button_change_ship_pressed():
 	_on_direct_control_button_toggled(false) #to be sure we restore ai pilot when changing vessel
-	get_node("/root/base/UserMenuUI/FlowContainer/DirectControlButton").button_pressed = false
+	get_node("/root/base/VFlowContainer/DirectControlButton").button_pressed = false
 	#followed_vessel = get_tree().get_nodes_in_group("vessels").pick_random()
 	if current_index >= len(get_tree().get_nodes_in_group("vessels")):
 		current_index = 0
@@ -100,3 +106,8 @@ func _on_direct_control_button_toggled(button_pressed):
 func _on_aggressive_mode_toggled(button_pressed):
 	if followed_vessel:
 		followed_vessel.get_node("VesselController").set_aggressive(button_pressed)
+
+
+func _on_option_button_item_selected(index):
+	var vessel = $VFlowContainer/OptionButton.get_item_metadata(index)
+	followed_vessel.get_node("AIPilot").update_navtarget(vessel.rb)

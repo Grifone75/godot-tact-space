@@ -28,7 +28,7 @@ void sky() {
 	//(1.-cplanets.a) * cbackground + cplanets.a * cplanets.rgb;
 	// vec3(cplanets.a,.0,.0);
 	// cnebula.rgb;
-	float scanline = abs(sin(SCREEN_UV.y*600.0+TIME*2.0));
-	COLOR = (1.-cplanets.a) * cbackground + cplanets.a * cplanets.rgb + ui_col.rgb*4.0*ui_col.a*scanline;
+	float scanline = abs(sin(SCREEN_UV.y*600.0+TIME*2.0))+0.3;
+	COLOR = (1.-cplanets.a) * cbackground + cplanets.a * cplanets.rgb + ui_col.rgb*3.0*ui_col.a*scanline;
 	
 }

@@ -9,6 +9,7 @@
 render_priority = 0
 shader = ExtResource("1_jb72e")
 shader_parameter/_ColorSelector = 0.99
+shader_parameter/plume_width_factor = 1.0
 shader_parameter/_FlowMap = ExtResource("3_07qbh")
 shader_parameter/_NoiseMap = ExtResource("4_xm0cb")
 shader_parameter/_FlameColors = ExtResource("2_3r5qs")

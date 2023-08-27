@@ -26,7 +26,9 @@ func get_wvel():
 		return Vector3.ZERO
 
 func get_worientation_pos():
-	#temporarily
+	#temporarily returns the position of the target, in the future enhance to support a custom orientation method
 	return self.get_wpos()
+
+
 
 	

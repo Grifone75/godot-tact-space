@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Space_construction_class" load_steps=2 format=3 uid="uid://lcm47f6qqlqe"]
+
+[ext_resource type="Script" path="res://scripts/space_construction_class.gd" id="1_2nyn2"]
+
+[resource]
+script = ExtResource("1_2nyn2")
+model_scene_path = "res://data/models/all_ships_and_stations.blend"
+root_pattern = "station_hub[0-9]"
+matches = {
+"station_hub[0-9]": {
+"attach_m_main_text": ["res://scenes/test_dynamic_label.tscn"],
+"attach_m_stationjoint": ["station_joint1", "station_module1"],
+"attach_m_windows": ["res://scenes/windows_4.tscn"]
+},
+"station_joint[0-9]": {
+"attach_m_stationjoint": ["station_module1"]
+}
+}
+functional_mapping = {
+"res://scenes/cabin_01.tscn": "cabins",
+"res://scenes/gun_1.tscn": "turrets",
+"res://scenes/test_dynamic_label.tscn": "banners",
+"res://scenes/thruster.tscn": "thrusters",
+"res://scenes/thruster_small.tscn": "thrusters",
+"res://scenes/windows_4.tscn": "cabins"
+}
+names = [{
+"n1": ["The Phoenix", "The Cascade", "The Thunderstorm", "The Curator", "The Face Of Death", "The Stalker", "The Brimstone", "The Black Talon", "The Leech", "The Necro", "The Homage", "The Giant's Fist", "The Eventide", "The Mongrel", "The Curtain's Fall", "The Specter", "The Storm Cloud", "The Requiem", "The Bloodlord", "The Flame Wall"]
+}, {
+"n0": ["Home of ", "Shelter of", "Eye of "],
+"n1": ["The Serpent Raiders", "The Berserker Bandits", "The Rusty Bandits", "The Merpeople Raiders", "The Pirates of the North", "The Pillagers of the Great Lake", "The Bandits of the Plank", "The Salty Dogs", "The Blackbeards", "The Crazy Eyes", "The Nightmare Corsairs", "The Neptune Raiders", "The White Shark Plunderers", "The Berserker Pirates", "The Bandits of the North", "The Pirates of the Black Squid", "The Bandits of the Sanguine Flag", "The Hired Guns", "The Skull and Crossbones", "The Shellbacks", "The Merpeople Buccaneers", "The Mermaid Buccaneers", "The Seashell Pirates", "The East Sea Rovers", "The Buccaneers of the Inner Sea", "The Pirates of the Lost Treasure", "The Rovers of the Bloodied Flag", "The Barnacles", "The Black Skulls", "The Black Tooth Grins"]
+}, {
+"n1": ["The Aether Soul", "The Devil Blood", "The Blood Blood", "The Evenheart", "The Chaos One", "The Stellar Heart", "The Wondergift", "The Spell Child", "The Virtuechild", "The Fatesoul", "The Frostchild", "The Divine Child", "The Demon Blood", "The Wrath Gift", "The Pure Soul", "The Blood Soul", "The Furor Gift", "The Dead Blood", "The Radiant One", "The Faye Soul "]
+}, {
+"n1": ["Ambystoma", "Scorpaenidae", "Squalus", "Alcelaphinae Major", "Scorpaenidae Major", "Violet Sheep", "Black Trout", "Eastern Scarf", "Western Horn", "Western Robe", "Papilionoidea", "Sarcophilus", "Simia", "Oniscidea Borealis", "Anguis Occidentalis", "Amethyst Rat", "Vermilion Trout", "Eastern Arrow", "Large Telescope", "Small Ship", "Achatina", "Dermaptera", "Ramphastos", "Dromaius Occidentalis", "Enhydra Major", "Harlequin Porcupine", "Red Goose", "Big Brush", "Small Airplane", "Large Couldron", "Cichlidae", "Chelonioidea", "Rhinoceros", "Caeli Orientalis", "Dynastes Australis", "Emerald Starfish", "Violet Kangaroo", "Northern Fountain", "Eastern Spade", "Big Wrench"]
+}]

@@ -15,6 +15,12 @@ var nav_method
 var nav_method_name = ""
 var nav_metrics: Nav_metrics
 var nav_details = ""
+
+@export var mission_script: Script = null
+var mission = null
+var is_mission_playing = false
+@export var contact_list = []
+
 # Called when the node enters the scene tree for the first time.
 func _ready():	
 	
@@ -24,7 +30,29 @@ func _ready():
 	nav_metrics = Nav_metrics.new(ref_rb, targeting_manager)
 	pid_pos = Pid_3f.new(5,0.3,10)
 	pid_vel = Pid_3f.new(5,0.3,10)
-	_monitor_target()
+	#_monitor_target()
+	#_simple_routine()
+	#mission = Base_mission.new(self)
+	_update_contact_list()
+	#mission.play()
+	_mission_sequencer()
+	
+func _mission_sequencer():
+	while true:
+		if mission_script and mission == null:
+			mission = mission_script.new(self)
+		if mission and is_mission_playing==false:
+			mission.play()
+			is_mission_playing = true
+		await get_tree().create_timer(2.).timeout
+
+
+func _update_contact_list():
+	#wip
+	while true:
+		contact_list = get_tree().get_nodes_in_group("vessels").filter(func(x): return x != self.get_parent())
+		await get_tree().create_timer(2.).timeout
+		
 
 
 func _helper_find_target():
@@ -44,17 +72,24 @@ func update_navmode(index):
 		nav_method = []
 		nav_method_name = "idle"
 	if index == 1:
+			nav_method = [func(): _apply_orientation(Vector3.AXIS_X), _kill_all_velocity]
+			nav_method_name = "stabilize"
+	if index == 2:
 		nav_method = [_apply_axial_translation]
 		nav_method_name = "axial"
-	if index == 2:
+	if index == 3:
 		nav_method = [_apply_orientation]
 		nav_method_name = "face to"
-	if index == 3:
+	if index == 4:
 		nav_method = [_apply_orientation, _apply_axial_translation]
 		nav_method_name = "slow approach"
-	if index == 4:
+	if index == 5:
 		nav_method = [_apply_orientation, _apply_approach]
 		nav_method_name = "full approach"
+	if index == 6:
+		nav_method = [func(): _apply_orientation(ref_rb.global_position - (ref_rb.linear_velocity - targeting_manager.get_wvel())*100.0), _kill_relative_velocity]
+		nav_method_name = "match velocity"
+
 
 func _monitor_target():
 	while true:
@@ -98,9 +133,36 @@ func _apply_axial_translation():
 		var cumulated_thust = pid_pos.update(dt,l_translation_to_target,Vector3.ZERO) +	pid_vel.update(dt,l_velocity_to_target,Vector3.ZERO)
 		force_input.emit(cumulated_thust*AXIAL_THRUST_MULTIPLIER)
 
+func _kill_relative_velocity():
+	var AXIAL_THRUST_MULTIPLIER = 0.05
+	var g_offset = Vector3.ZERO
+	var nav_target_linear_velocity = targeting_manager.get_wvel()
+	if nav_target_linear_velocity != null:
+		var dt = get_physics_process_delta_time()
+		var l_translation_to_target = Vector3.ZERO
+		var l_velocity_to_target = (ref_rb.linear_velocity - nav_target_linear_velocity) * ref_rb.global_transform.basis
+		var cumulated_thust = pid_pos.update(dt,l_translation_to_target,Vector3.ZERO) +	pid_vel.update(dt,l_velocity_to_target,Vector3.ZERO)
+		force_input.emit(cumulated_thust*AXIAL_THRUST_MULTIPLIER)
+	
+func _kill_all_velocity():
+	var AXIAL_THRUST_MULTIPLIER = 0.05
+	var g_offset = Vector3.ZERO
+	var nav_target_linear_velocity = Vector3.ZERO
+	if nav_target_linear_velocity != null:
+		var dt = get_physics_process_delta_time()
+		var l_translation_to_target = Vector3.ZERO
+		var l_velocity_to_target = (ref_rb.linear_velocity - nav_target_linear_velocity) * ref_rb.global_transform.basis
+		var cumulated_thust = pid_pos.update(dt,l_translation_to_target,Vector3.ZERO) +	pid_vel.update(dt,l_velocity_to_target,Vector3.ZERO)
+		force_input.emit(cumulated_thust*AXIAL_THRUST_MULTIPLIER)
 
-func _apply_orientation():
-	var orientation_pos = targeting_manager.get_worientation_pos()
+
+func _apply_orientation(face_to = null):
+	var orientation_pos
+	if face_to:
+		orientation_pos = face_to
+		print(face_to)
+	else:
+		orientation_pos = targeting_manager.get_worientation_pos()
 	if orientation_pos:
 		var dt = get_physics_process_delta_time()
 		var g = 1/(1+ kd*dt + kp*dt*dt)
@@ -269,3 +331,14 @@ func _apply_approach2():
 		)
 
 	force_input.emit(final_force)
+
+func _simple_routine():
+	await get_tree().create_timer(2.).timeout
+	_helper_find_target()
+	await get_tree().create_timer(2.).timeout
+	update_navmode(4)
+	while true:
+		if ref_rb.global_position.distance_to(nav_target.global_position) < 10.:
+			_helper_find_target()
+		await get_tree().create_timer(2.).timeout
+	

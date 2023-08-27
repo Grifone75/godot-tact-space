@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://21ciybf6t0cp"]
+
+[ext_resource type="Texture2D" uid="uid://b47k2pg7xj7xo" path="res://data/textures/icons_trimmed.png" id="3_f1iai"]
+[ext_resource type="Script" path="res://scripts/dynamic_label.gd" id="3_jih53"]
+[ext_resource type="Texture2D" uid="uid://bv2r0jxbdlump" path="res://data/textures/test1a_n.png" id="4_bskj4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tp3sn"]
+albedo_color = Color(0.27451, 0.427451, 0.301961, 1)
+normal_enabled = true
+normal_texture = ExtResource("4_bskj4")
+
+[sub_resource type="BoxMesh" id="BoxMesh_gwym1"]
+material = SubResource("StandardMaterial3D_tp3sn")
+size = Vector3(8, 2, 2)
+
+[node name="Decal" type="Decal"]
+transform = Transform3D(-1, -3.82137e-15, 8.74228e-08, -8.74228e-08, 4.37114e-08, -1, 0, -1, -4.37114e-08, 0, 0, -0.506303)
+size = Vector3(9.57932, 2.99277, 1.42867)
+script = ExtResource("3_jih53")
+tex = ExtResource("3_f1iai")
+
+[node name="attach_f" type="Node3D" parent="."]
+transform = Transform3D(1.31134e-07, 1, 8.74228e-08, -4.37114e-08, 8.74228e-08, -1, -1, 1.31134e-07, 4.37114e-08, -3.38349e-08, -0.141619, -4.00253e-08)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, -8.74228e-08, -8.74226e-08, 8.74228e-08, -4.37114e-08, 1, -8.74228e-08, -1, -4.37114e-08, 9.11427e-08, -1.50291, 2.54484e-08)
+visible = false
+mesh = SubResource("BoxMesh_gwym1")

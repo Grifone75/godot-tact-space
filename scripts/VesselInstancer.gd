@@ -1,53 +1,16 @@
 @tool 
 extends Node
 
-
+@export var construction_data : Space_construction_class
 
 @export var instance_it = false : set = _instance_me
 
 @export var initial_position: Vector3 = Vector3(0,0,0) 
 
-@export var matches = {
-	"center_[0-9]":{
-		"attach_m_side":["side_2","side_1","side_5", "side_6", "side_4", "side_7"],
-		"attach_m_front":["front4_h", "front5_h", "front2_h", "front1"],
-		"attach_m.back":["^engine1","enginehub","enginehub2","enginehub3"],
-		"attach_mback":["^engine1","enginehub","enginehub2","enginehub3"],
-		"attach_m_module_small":["ship_module_scanner","ship_module_omnisensor"],
-		"attach_m_weapon":["res://scenes/gun_1.tscn"]
-	},
-	"side_[0-9]":{
-		"attach_m_weapon":["res://scenes/gun_1.tscn"]	
-	},
-	"front[0-9](_h)*":{
-		"attach_m_side":["fr_section2_h","fr_section3_h", "fr_section4_h"],
-		"attach_m_module_small":["ship_module_scanner"],
-		"attach_m_rcs":["res://scenes/thruster_small.tscn"]	,
-		"attach_m_signal_light":["res://scenes/signal_light.tscn"]	
-	},
-	"fr_section":{
-		"attach_m_module_small":["ship_module_omnisensor"],
-		"attach_m_rcs":["res://scenes/thruster_small.tscn"]	
-	},
-	"enginehub[0-9]*":{
-		"attach_m_sideengine":{"novarying":"engine", "list":["side_engine1","side_engine2","side_engine3"]},
-		"attach_m_rcs":["res://scenes/thruster_small.tscn"]	
-	},
-	"^engine[0-1]*":{
-		"attach_m_thruster":["res://scenes/thruster.tscn"],
-	},
-	"side_engine[0-9]*":{
-		"attach_m_thruster":["res://scenes/thruster.tscn"],
-		"attach_m_rcs":["res://scenes/thruster_small.tscn"]	
-	}
-	
-}
-
-var functional_mapping = {
-	"res://scenes/thruster.tscn":"thrusters",
-	"res://scenes/thruster_small.tscn":"thrusters",
-	"res://scenes/gun_1.tscn":"turrets"
-}
+@export var rb:RigidBody3D
+@export var pilot:Node
+@export var smooth: Node3D
+@export var vesselcontroller: Node
 
 var functionals = {
 	
@@ -65,38 +28,16 @@ var col_dark
 var col_utility
 var col_complement
 
-var names = [
-	{
-		"n1":["The Phoenix","The Cascade","The Thunderstorm","The Curator","The Face Of Death","The Stalker","The Brimstone","The Black Talon","The Leech","The Necro","The Homage","The Giant's Fist","The Eventide","The Mongrel","The Curtain's Fall","The Specter","The Storm Cloud","The Requiem","The Bloodlord","The Flame Wall"]
-	},
-	{
-		"n0":["Pride of the ","Nation of the ", "Force of the ", "Gift of the ", "Sword of the ", "Hand of the "],
-		"n1":["Etralese","Ashiaonian","Tredalic","Clasteiniot","Yogrurino","Woclurese","Hoslioanian","Jaseno","Stroain","Trieri","Uchurgish","Eglaanian","Scuguaiote","Sheyguaiote","Zecresese","Leblean","Quscii","Lutriene","Skiaite","Scaihasonian","Uwhosene","Aclonite","Shiusauanian","Smoelori","Coshoese","Bawhijaian","Tusnino","Qatrier","Striehonian","Pluypiote"]
-	},
-	{
-		"n0":["Home of ", "", "Eye of "],
-		"n1":["The Serpent Raiders","The Berserker Bandits","The Rusty Bandits","The Merpeople Raiders","The Pirates of the North","The Pillagers of the Great Lake","The Bandits of the Plank","The Salty Dogs","The Blackbeards","The Crazy Eyes","The Nightmare Corsairs","The Neptune Raiders","The White Shark Plunderers","The Berserker Pirates","The Bandits of the North","The Pirates of the Black Squid","The Bandits of the Sanguine Flag","The Hired Guns","The Skull and Crossbones","The Shellbacks","The Merpeople Buccaneers","The Mermaid Buccaneers","The Seashell Pirates","The East Sea Rovers","The Buccaneers of the Inner Sea","The Pirates of the Lost Treasure","The Rovers of the Bloodied Flag","The Barnacles","The Black Skulls","The Black Tooth Grins"]
-	},
-	{
-		"n1":["The Aether Soul", "The Devil Blood", "The Blood Blood", "The Evenheart", "The Chaos One", "The Stellar Heart", "The Wondergift", "The Spell Child", "The Virtuechild", "The Fatesoul", "The Frostchild", "The Divine Child", "The Demon Blood", "The Wrath Gift", "The Pure Soul", "The Blood Soul", "The Furor Gift", "The Dead Blood", "The Radiant One", "The Faye Soul "]
-	},
-	{
-		"n1":["Ambystoma","Scorpaenidae","Squalus","Alcelaphinae Major","Scorpaenidae Major","Violet Sheep","Black Trout","Eastern Scarf","Western Horn","Western Robe","Papilionoidea","Sarcophilus","Simia","Oniscidea Borealis","Anguis Occidentalis","Amethyst Rat","Vermilion Trout","Eastern Arrow","Large Telescope","Small Ship","Achatina","Dermaptera","Ramphastos","Dromaius Occidentalis","Enhydra Major","Harlequin Porcupine","Red Goose","Big Brush","Small Airplane","Large Couldron","Cichlidae","Chelonioidea","Rhinoceros","Caeli Orientalis","Dynastes Australis","Emerald Starfish","Violet Kangaroo","Northern Fountain","Eastern Spade","Big Wrench"]
-	}
-]
-
-
-
 
 func _get_components_by_father_and_link(father_node_name,link_name):
 	""" retrieve a suitable component name from the given father and link names
 	"""
 	var regex = RegEx.new()
 	var match_subset = {}
-	for father_pattern in matches.keys():
+	for father_pattern in construction_data.matches.keys():
 		regex.compile(father_pattern)
 		if regex.search(father_node_name):
-			match_subset = matches[father_pattern]
+			match_subset = construction_data.matches[father_pattern]
 			break
 	#now get the list of components
 	#1st reverse match the link_name to the link base name in the match_subset keys
@@ -137,7 +78,7 @@ func _get_children_by_pattern(father_node,pattern):
 	
 func _pick_model_from_blender_library(name):
 	
-	var functional_class = functional_mapping.get(name)
+	var functional_class = construction_data.functional_mapping.get(name)
 	var selected_mi
 	var collisionshape = null
 	
@@ -214,22 +155,18 @@ func _attach_component_to_father(father,father_link,component):
 	# get the transformation from moving_t to target_t and apply it to c
 	var qcomp = Quaternion(component_attach.global_transform.basis)
 	var qmast = Quaternion(master_attach.global_transform.basis)
-	
 	var delta_rot = qmast * Quaternion(qcomp).inverse() 
-	
 	component.global_transform.basis = Basis(delta_rot * Quaternion(component.global_transform.basis))
-	
-	
 	component.global_transform.origin += (master_attach.global_transform.origin - component_attach.global_transform.origin)
+	# exp remove links
+	component_attach.queue_free()
+	master_attach.queue_free()
 	
 
 func _instance_me(_p = null):
-	all_models = load("res://data/models/all_ships_and_stations.blend").instantiate()
+	all_models = load(construction_data.model_scene_path).instantiate()
 
-	var body = _pick_model_from_blender_library("center_[0-9]")
-
-	
-	#transform = body.mi3D.transform.rotated(Vector3(1,0,0),PI/2.)
+	var body = _pick_model_from_blender_library(construction_data.root_pattern)
 	
 	var my_rb = self.get_node("VesselController/RigidBody3D")
 	var my_mesh_attach = self.get_node("VesselController/RigidBody3D/Smoothing")
@@ -249,22 +186,60 @@ func _instance_me(_p = null):
 		#
 		my_rb.add_child(collider)
 	#b.transform.origin = Vector3(randf_range(-20,20),randf_range(-20,20),randf_range(-20,20))
-	
+	all_models = null
 	print("all is ok")
 	
 
 func _christen():
-	var ship_name = ""
-	for group in names.pick_random().values():
-		ship_name += group.pick_random()
-	return ship_name
+	return construction_data.get_construction_name()
+
+func _materialize():
+	vesselcontroller = load("res://scenes/VesselController.tscn").instantiate()
+	self.add_child(vesselcontroller)
+	vesselcontroller.functionals = functionals
+	rb = self.get_node("VesselController/RigidBody3D")
+	smooth = self.get_node("VesselController/RigidBody3D/Smoothing")
+
+	_instance_me()
+	rb.global_transform.origin = initial_position
+	
+	pilot = load("res://scenes/AIPilot.tscn").instantiate()
+	pilot.name = "AIPilot"
+	self.add_child(pilot)
+	self.name = _christen()
+	#test alignment
+	self.get_node("VesselController/RigidBody3D").look_at(
+		Vector3(
+			randf_range(-1,1),
+			randf_range(-1,1),
+			randf_range(-1,1)
+			))
+			
+	var label = load("res://scenes/info_label_1.tscn").instantiate()
+	smooth.add_child(label)
+	pilot.pilot_info.connect(smooth.get_node("VesselInfo").update_pilot_label)
+	#connecting signals
+	pilot.torque_input.connect(vesselcontroller.update_control_torque)
+	pilot.force_input.connect(vesselcontroller.update_control_force)
+	pilot.changed_target.connect(vesselcontroller.update_nav_target)
+	vesselcontroller.vessel_info.connect(smooth.get_node("VesselInfo").update_vessel_label)
+	smooth.get_node("VesselInfo").set_shipname(self.name)
+	var tracer = load("res://scenes/path_trace_hud.tscn").instantiate()
+	smooth.add_child(tracer)
+	tracer.traced_vessel = smooth
+	pilot.mission_script = construction_data.initial_mission_path
+	
+	for banner in functionals.get("banners",[]):
+		banner.update_text(self.name)
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
 	col = [
-		Color.from_ok_hsl(randf_range(0.,1.),randf_range(0.1,.5),randf_range(.6,.9)),
-		Color.from_ok_hsl(randf_range(0.,1.),randf_range(0.7,1.),randf_range(.1,.4))
+		Color.from_ok_hsl(randf_range(0.0,1.0),randf_range(0.1,.5),randf_range(.6,.9)),
+		Color.from_ok_hsl(randf_range(0.0,1.0),randf_range(0.7,1.),randf_range(.1,.4))
 		].pick_random()
 	col_dark = col.darkened(.7)
 	col_complement = [
@@ -281,38 +256,9 @@ func _ready():
 	#for ucol in utilities:
 	#	if abs(ucol.h - opp_hue) < abs(col_utility.h - opp_hue):
 	#		col_utility = ucol
+	_materialize()
 	
 	
-	var vcontroller = load("res://scenes/VesselController.tscn").instantiate()
-	self.add_child(vcontroller)
-	vcontroller.functionals = functionals
-	var rb = self.get_node("VesselController/RigidBody3D")
-
-
-	_instance_me()
-	rb.global_transform.origin = initial_position
-	
-	var pilot = load("res://scenes/AIPilot.tscn").instantiate()
-	pilot.name = "AIPilot"
-	self.add_child(pilot)
-	self.name = _christen()
-	#test alignment
-	self.get_node("VesselController/RigidBody3D").look_at(
-		Vector3(
-			randf_range(-1,1),
-			randf_range(-1,1),
-			randf_range(-1,1)
-			))
-			
-	var label = load("res://scenes/info_label_1.tscn").instantiate()
-	rb.add_child(label)
-	$AIPilot.pilot_info.connect($VesselController/RigidBody3D/VesselInfo.update_pilot_label)
-	#connecting signals
-	$AIPilot.torque_input.connect($VesselController.update_control_torque)
-	$AIPilot.force_input.connect($VesselController.update_control_force)
-	$AIPilot.changed_target.connect($VesselController.update_nav_target)
-	$VesselController.vessel_info.connect($VesselController/RigidBody3D/VesselInfo.update_vessel_label)
-	$VesselController/RigidBody3D/VesselInfo.set_shipname(self.name)
 	
 
 
@@ -321,4 +267,4 @@ func _process(delta):
 	pass
 
 func get_rb():
-	return $VesselController/RigidBody3D
+	return rb

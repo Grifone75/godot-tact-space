@@ -1,15 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkie2n4viccl0"]
+[gd_resource type="Resource" script_class="Space_construction_class" load_steps=2 format=3 uid="uid://t1iold6ra4wx"]
 
-[ext_resource type="Script" path="res://scripts/VesselInstancer.gd" id="1_wl206"]
-[ext_resource type="Script" path="res://scripts/space_construction_class.gd" id="2_cq2wd"]
-[ext_resource type="Script" path="res://scripts/base_mission.gd" id="2_jgoc0"]
+[ext_resource type="Script" path="res://scripts/space_construction_class.gd" id="1_jm5nc"]
 
-[sub_resource type="Resource" id="Resource_7s4qq"]
-script = ExtResource("2_cq2wd")
+[resource]
+script = ExtResource("1_jm5nc")
 model_scene_path = "res://data/models/all_ships_and_stations.blend"
 root_pattern = "center_[0-9]"
 matches = {
-"^engine[0-1]*$": {
+"^engine[0-1]*": {
 "attach_m_thruster": ["res://scenes/thruster.tscn"]
 },
 "center_[0-9]": {
@@ -69,9 +67,3 @@ names = [{
 }, {
 "n1": ["Ambystoma", "Scorpaenidae", "Squalus", "Alcelaphinae Major", "Scorpaenidae Major", "Violet Sheep", "Black Trout", "Eastern Scarf", "Western Horn", "Western Robe", "Papilionoidea", "Sarcophilus", "Simia", "Oniscidea Borealis", "Anguis Occidentalis", "Amethyst Rat", "Vermilion Trout", "Eastern Arrow", "Large Telescope", "Small Ship", "Achatina", "Dermaptera", "Ramphastos", "Dromaius Occidentalis", "Enhydra Major", "Harlequin Porcupine", "Red Goose", "Big Brush", "Small Airplane", "Large Couldron", "Cichlidae", "Chelonioidea", "Rhinoceros", "Caeli Orientalis", "Dynastes Australis", "Emerald Starfish", "Violet Kangaroo", "Northern Fountain", "Eastern Spade", "Big Wrench"]
 }]
-initial_mission_path = ExtResource("2_jgoc0")
-
-[node name="Eastern Scarf" type="Node" node_paths=PackedStringArray("vesselcontroller") groups=["local_objects", "vessels"]]
-script = ExtResource("1_wl206")
-construction_data = SubResource("Resource_7s4qq")
-vesselcontroller = NodePath("VesselController")
