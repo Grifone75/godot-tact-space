@@ -58,7 +58,7 @@ curve = SubResource("Curve_4hi80")
 
 [node name="base_shot" type="Node3D"]
 script = ExtResource("1_iysr0")
-velocity_ms = 50.0
+velocity_ms = 100.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)

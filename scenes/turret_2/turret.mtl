@@ -1,0 +1,44 @@
+# Blender 3.3.1 MTL File: 'sci-fi lab2.blend'
+# www.blender.org
+
+newmtl gun_barrel
+Ns 365.475220
+Ka 0.759091 0.759091 0.759091
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl gun_base
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Ns C:/Users/fabri/Documents/Blender/Textures/new_panel/new_paneling_2_roughness.png
+map_refl C:/Users/fabri/Documents/Blender/Textures/new_panel/new_paneling_2_metalness.png
+map_Bump -bm 1.000000 C:/Users/fabri/Documents/Blender/Textures/new_panel/new_paneling_2_normal.png
+
+newmtl gun_steel
+Ns 453.236450
+Ka 0.527559 0.527559 0.527559
+Kd 0.054969 0.054969 0.054969
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl plating
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2

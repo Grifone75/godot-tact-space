@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=8 format=3 uid="uid://c3t3138g1g61v"]
 
 [ext_resource type="Shader" path="res://shaders/plume_mesh_2.gdshader" id="1_ja1y1"]
 [ext_resource type="Texture2D" uid="uid://bi2sv55klhwfy" path="res://data/textures/flowmap.png" id="2_no2jd"]
@@ -9,7 +9,7 @@
 render_priority = 0
 shader = ExtResource("1_ja1y1")
 shader_parameter/_ColorSelector = 1.0
-shader_parameter/_Seed = 0.0
+shader_parameter/plume_width_factor = 1.0
 shader_parameter/_FlowMap = ExtResource("2_no2jd")
 shader_parameter/_NoiseMap = ExtResource("3_ykbuu")
 shader_parameter/_FlameColors = ExtResource("2_wj1y2")

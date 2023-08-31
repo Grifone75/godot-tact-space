@@ -9,7 +9,7 @@
 script = ExtResource("1_tg3v0")
 
 [node name="Anchor2D" type="Control" parent="."]
-modulate = Color(0.254902, 0.584314, 0.486275, 0.654902)
+modulate = Color(0.607843, 0.937255, 0.827451, 0.435294)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -27,12 +27,24 @@ text = "distance"
 [node name="Shipname" type="Label" parent="Anchor2D"]
 self_modulate = Color(0.768627, 0.784314, 0, 1)
 layout_mode = 0
-offset_left = -18.0
-offset_top = -79.0
-offset_right = 22.0
-offset_bottom = -53.0
+offset_left = -23.0
+offset_top = -99.0
+offset_right = 31.0
+offset_bottom = -73.0
 theme = ExtResource("2_ms1s6")
 text = "shipname"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="Shipfaction" type="Label" parent="Anchor2D"]
+self_modulate = Color(0.960784, 0.760784, 0.447059, 1)
+layout_mode = 0
+offset_left = -34.0
+offset_top = -80.0
+offset_right = 41.0
+offset_bottom = -54.0
+theme = ExtResource("2_ms1s6")
+text = "shipfaction"
 horizontal_alignment = 1
 uppercase = true
 

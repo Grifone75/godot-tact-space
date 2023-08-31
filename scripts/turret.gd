@@ -29,7 +29,7 @@ func _ready():
 	
 func _test_mad_shooter():
 	while true:
-		await get_tree().create_timer(1).timeout
+		await get_tree().create_timer(.3).timeout
 		if turret_state == TURRET_STATES.TRACKING:
 			var bolt = load("res://scenes/base_shot.tscn").instantiate()
 			get_tree().get_root().add_child(bolt)
@@ -101,4 +101,11 @@ func set_target(t):
 		target = t
 		turret_state = TURRET_STATES.TRACKING
 	
+func set_material_properties(prop_dict):
+	var tiles_col = prop_dict.get("albedo")
+	var main_col = prop_dict.get("main_color")
+	$yaw_axis/pitch_axis/gun_body.set_instance_shader_parameter("albedo", tiles_col)
+	$yaw_axis/pitch_axis/gun_body.set_instance_shader_parameter("main_color", main_col)
+	$yaw_axis/pitch_axis/gun_body/gun_barrel2.set_instance_shader_parameter("main_color", main_col)
+	$yaw_axis/gun_yaw.set_instance_shader_parameter("main_color", main_col)
 	

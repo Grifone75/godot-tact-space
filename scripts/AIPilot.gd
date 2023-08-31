@@ -51,7 +51,7 @@ func _update_contact_list():
 	#wip
 	while true:
 		contact_list = get_tree().get_nodes_in_group("vessels").filter(func(x): return x != self.get_parent())
-		await get_tree().create_timer(2.).timeout
+
 		
 
 
@@ -119,7 +119,7 @@ var damping = 0.8
 var kp = 6*frequency*6*frequency*0.25
 var kd = 4.5 * frequency * damping
 
-func _apply_axial_translation():
+func _apply_axial_translation(limit_distance = 20.0):
 	var AXIAL_THRUST_MULTIPLIER = 0.05
 	var g_offset = Vector3.ZERO
 	if local_rototranslation_node:
@@ -129,6 +129,7 @@ func _apply_axial_translation():
 	if nav_target_linear_velocity != null:
 		var dt = get_physics_process_delta_time()
 		var l_translation_to_target = ((ref_rb.global_position - nav_target.global_position) + g_offset) * ref_rb.global_transform.basis
+		l_translation_to_target = l_translation_to_target - l_translation_to_target.normalized()*limit_distance
 		var l_velocity_to_target = (ref_rb.linear_velocity - nav_target_linear_velocity) * ref_rb.global_transform.basis
 		var cumulated_thust = pid_pos.update(dt,l_translation_to_target,Vector3.ZERO) +	pid_vel.update(dt,l_velocity_to_target,Vector3.ZERO)
 		force_input.emit(cumulated_thust*AXIAL_THRUST_MULTIPLIER)
@@ -209,7 +210,7 @@ func get_braking_distance(velocity:float, thrust:float, mass:float):
 	return (velocity * velocity)/(2.0*acc)
 		
 
-func _apply_approach():
+func _apply_approach(limit_distance = 100.0):
 	var ref_thrust = 2.0
 	var ref_mass = 3.0
 
@@ -236,7 +237,7 @@ func _apply_approach():
 	if (approach_rate < 0.0) : 
 		activation_approach_discord = 1.0
 
-	var decel_distance = get_braking_distance(nav_metrics.l_vtt_sag_pos_len, ref_thrust, ref_mass)
+	var decel_distance = get_braking_distance(nav_metrics.l_vtt_sag_pos_len, ref_thrust, ref_mass)+limit_distance
 
 	""" 	
 	var activation_braking = clamp(remap(
@@ -342,3 +343,15 @@ func _simple_routine():
 			_helper_find_target()
 		await get_tree().create_timer(2.).timeout
 	
+
+# temporary, to be moved in amore appropriate place (like in a functional)
+var drone_manager
+func spawn_drones():
+	if drone_manager == null:
+		drone_manager = Drone_manager.new()
+	var d = load("res://scenes/drone.tscn").instantiate()
+	get_tree().get_root().add_child(d)
+	d.global_transform = ref_rb.global_transform
+	d.global_position += ref_rb.global_transform.basis.z * 10.0
+	d.set_focus(ref_rb.global_position, 10.0).set_manager(drone_manager)
+

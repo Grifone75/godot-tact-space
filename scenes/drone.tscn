@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdfy40lfs1tat"]
+
+[ext_resource type="Script" path="res://scripts/base_drone.gd" id="1_f1qm8"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4bj27"]
+radius = 0.1
+height = 0.3
+
+[node name="drone_base" type="Node3D"]
+script = ExtResource("1_f1qm8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_4bj27")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://csc4v1riq350"]
+[gd_scene load_steps=67 format=3 uid="uid://csc4v1riq350"]
 
 [ext_resource type="Script" path="res://scripts/base.gd" id="1_gttts"]
 [ext_resource type="Script" path="res://scripts/tex_gen.gd" id="2_6hyml"]
@@ -18,10 +18,12 @@
 [ext_resource type="Material" uid="uid://37u50ju3r4sh" path="res://materials/standard_plates.tres" id="15_emxrh"]
 [ext_resource type="PackedScene" uid="uid://gk8tvwc6a2rp" path="res://scenes/thruster.tscn" id="16_xbgv8"]
 [ext_resource type="Script" path="res://scripts/PlayerHudHandler.gd" id="17_7lty4"]
+[ext_resource type="Theme" uid="uid://wv5v1o64kbws" path="res://ui/themes/default_interface.tres" id="18_22tth"]
 [ext_resource type="Script" path="res://scripts/framerate.gd" id="19_af1e2"]
 [ext_resource type="Script" path="res://scripts/OptionButtonContacts.gd" id="19_dyptw"]
 [ext_resource type="Texture2D" uid="uid://b47k2pg7xj7xo" path="res://data/textures/icons_trimmed.png" id="19_glt0h"]
 [ext_resource type="Texture2D" uid="uid://rypgaskiayxv" path="res://data/textures/icon_atlas1.tres" id="20_s1x1m"]
+[ext_resource type="Shader" path="res://shaders/hud1.gdshader" id="21_amw0m"]
 [ext_resource type="FontFile" uid="uid://d222eno48e1u1" path="res://data/fonts/Nova_Mono/NovaMono-Regular.ttf" id="24_jgh06"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ud73c"]
@@ -385,14 +387,11 @@ glow_hdr_threshold = 0.64
 glow_hdr_scale = 0.71
 glow_hdr_luminance_cap = 10.24
 glow_map_strength = 0.0
-volumetric_fog_density = 0.0
-volumetric_fog_albedo = Color(0.141176, 0.376471, 0.431373, 1)
 adjustment_enabled = true
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_27r5v"]
 resource_local_to_scene = true
-auto_exposure_enabled = true
-auto_exposure_min_sensitivity = 200.0
+auto_exposure_min_sensitivity = 49.08
 
 [sub_resource type="PrismMesh" id="PrismMesh_eex47"]
 
@@ -430,16 +429,18 @@ material = ExtResource("15_emxrh")
 atlas = ExtResource("19_glt0h")
 region = Rect2(162, 810, 162, 162)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_w74ml"]
-atlas = ExtResource("19_glt0h")
-region = Rect2(648, 486, 162, 162)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_sqbb2"]
 atlas = ExtResource("19_glt0h")
 region = Rect2(324, 324, 162, 162)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_olgnf"]
 viewport_path = NodePath("SubViewportContainer/SubViewport_objects/SubViewport_target")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_t03fv"]
+viewport_path = NodePath("SubViewportHud")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_epb0w"]
+shader = ExtResource("21_amw0m")
 
 [node name="base" type="Node3D" node_paths=PackedStringArray("cam")]
 script = ExtResource("1_gttts")
@@ -591,15 +592,11 @@ attributes = SubResource("CameraAttributesPractical_27r5v")
 remote_path = NodePath("../../../../../SubViewport_target/cam_target")
 
 [node name="ship_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_mx3wh")]
-cube_size = 1
-delta = 20.0
-
-[node name="ship_Instancer2" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_mx3wh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -200, 0, -200)
+cube_size = 2
 delta = 20.0
 
 [node name="station_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_mx3wh")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 400, 400, -500)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 200, 0)
 model_scene = ExtResource("8_tss7c")
 cube_size = 1
 delta = 20.0
@@ -713,20 +710,6 @@ text_overrun_behavior = 3
 clip_text = true
 expand_icon = true
 
-[node name="Button_custom_command" type="Button" parent="VFlowContainer"]
-custom_minimum_size = Vector2(150, 50)
-layout_mode = 2
-size_flags_horizontal = 2
-theme_override_colors/font_color = Color(0.427298, 0.668871, 0.49691, 1)
-theme_override_colors/font_outline_color = Color(0.427451, 0.670588, 0.498039, 1)
-text = "custom command
-"
-icon = SubResource("AtlasTexture_w74ml")
-alignment = 0
-text_overrun_behavior = 3
-clip_text = true
-expand_icon = true
-
 [node name="Aggressive_mode" type="CheckButton" parent="VFlowContainer"]
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -769,12 +752,66 @@ layout_mode = 2
 size_flags_horizontal = 4
 texture = SubResource("ViewportTexture_olgnf")
 
+[node name="UserMenuUI" type="SubViewportContainer" parent="."]
+visible = false
+offset_right = 386.0
+offset_bottom = 564.0
+size_flags_horizontal = 3
+size_flags_vertical = 8
+stretch = true
+
+[node name="FlowContainer" type="FlowContainer" parent="UserMenuUI"]
+layout_mode = 2
+theme = ExtResource("18_22tth")
+
+[node name="Control" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.0
+offset_top = -20.0
+offset_right = 23.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+visible = false
+custom_minimum_size = Vector2(1024, 1024)
+layout_mode = 2
+offset_left = -236.0
+offset_top = -236.0
+offset_right = 276.0
+offset_bottom = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_t03fv")
+expand_mode = 3
+
+[node name="SubViewportHud" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="SubViewportHud"]
+material = SubResource("ShaderMaterial_epb0w")
+custom_minimum_size = Vector2(1024, 1024)
+offset_right = 40.0
+offset_bottom = 40.0
+
 [connection signal="item_clicked" from="VFlowContainer/ItemList" to="." method="_on_item_list_item_clicked"]
 [connection signal="item_selected" from="VFlowContainer/ItemList" to="." method="_on_nav_mode_list_item_selected"]
-[connection signal="pressed" from="VFlowContainer/Button_change_ship" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="VFlowContainer/Button_change_ship" to="." method="_on_button_change_ship_pressed"]
+[connection signal="pressed" from="VFlowContainer/Button_change_ship" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="VFlowContainer/Button_change_navpoint" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="VFlowContainer/Button_custom_command" to="." method="_on_custom_button_pressed"]
 [connection signal="toggled" from="VFlowContainer/Aggressive_mode" to="." method="_on_aggressive_mode_toggled"]
 [connection signal="toggled" from="VFlowContainer/DirectControlButton" to="." method="_on_direct_control_button_toggled"]
 [connection signal="item_selected" from="VFlowContainer/OptionButton" to="." method="_on_option_button_item_selected"]

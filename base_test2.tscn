@@ -1,28 +1,29 @@
-[gd_scene load_steps=64 format=3 uid="uid://csc4v1riq350"]
+[gd_scene load_steps=67 format=3 uid="uid://cmoruchd5do1d"]
 
-[ext_resource type="Script" path="res://scripts/base.gd" id="1_gttts"]
-[ext_resource type="Script" path="res://scripts/tex_gen.gd" id="2_6hyml"]
-[ext_resource type="PackedScene" uid="uid://d3uuy2stcdbwm" path="res://scenes/camera_base.tscn" id="2_302yi"]
-[ext_resource type="PackedScene" uid="uid://c4weja143s0g4" path="res://scenes/instancer.tscn" id="2_mx3wh"]
-[ext_resource type="Shader" path="res://shaders/far_plane_background.gdshader" id="3_pueam"]
-[ext_resource type="PackedScene" uid="uid://cnhotw0s7wl50" path="res://scenes/navpoint.tscn" id="3_swqlf"]
-[ext_resource type="Shader" path="res://shaders/nav_mesh.gdshader" id="5_aow7t"]
-[ext_resource type="Script" path="res://scripts/testROTREF.gd" id="6_am27l"]
-[ext_resource type="PackedScene" uid="uid://dgb6yluny7cde" path="res://scenes/station.tscn" id="8_tss7c"]
-[ext_resource type="Script" path="res://scripts/cam_target.gd" id="10_ystd1"]
-[ext_resource type="Script" path="res://scripts/PlayerInputHandler.gd" id="11_7yiaw"]
-[ext_resource type="PackedScene" uid="uid://slgsr0avyt5k" path="res://scenes/player_target_ui.tscn" id="11_u3uu1"]
-[ext_resource type="PackedScene" uid="uid://xhg4bqu6m3jl" path="res://scenes/gas_giant.tscn" id="12_2yeht"]
-[ext_resource type="Script" path="res://scripts/cam_scaled.gd" id="13_jw80r"]
-[ext_resource type="Shader" path="res://shaders/nebula_to_equirect.gdshader" id="14_hiq5x"]
-[ext_resource type="Material" uid="uid://37u50ju3r4sh" path="res://materials/standard_plates.tres" id="15_emxrh"]
-[ext_resource type="PackedScene" uid="uid://gk8tvwc6a2rp" path="res://scenes/thruster.tscn" id="16_xbgv8"]
-[ext_resource type="Script" path="res://scripts/PlayerHudHandler.gd" id="17_7lty4"]
-[ext_resource type="Script" path="res://scripts/framerate.gd" id="19_af1e2"]
-[ext_resource type="Script" path="res://scripts/OptionButtonContacts.gd" id="19_dyptw"]
-[ext_resource type="Texture2D" uid="uid://b47k2pg7xj7xo" path="res://data/textures/icons_trimmed.png" id="19_glt0h"]
-[ext_resource type="Texture2D" uid="uid://rypgaskiayxv" path="res://data/textures/icon_atlas1.tres" id="20_s1x1m"]
-[ext_resource type="FontFile" uid="uid://d222eno48e1u1" path="res://data/fonts/Nova_Mono/NovaMono-Regular.ttf" id="24_jgh06"]
+[ext_resource type="Script" path="res://scripts/base.gd" id="1_83b2m"]
+[ext_resource type="Script" path="res://scripts/tex_gen.gd" id="2_vx1gr"]
+[ext_resource type="FontFile" uid="uid://d222eno48e1u1" path="res://data/fonts/Nova_Mono/NovaMono-Regular.ttf" id="3_x5lb1"]
+[ext_resource type="PackedScene" uid="uid://slgsr0avyt5k" path="res://scenes/player_target_ui.tscn" id="4_cvunf"]
+[ext_resource type="PackedScene" uid="uid://xhg4bqu6m3jl" path="res://scenes/gas_giant.tscn" id="5_osfjg"]
+[ext_resource type="Script" path="res://scripts/cam_scaled.gd" id="6_b7je7"]
+[ext_resource type="Script" path="res://scripts/cam_target.gd" id="7_rss54"]
+[ext_resource type="PackedScene" uid="uid://d3uuy2stcdbwm" path="res://scenes/camera_base.tscn" id="8_2alhn"]
+[ext_resource type="Shader" path="res://shaders/far_plane_background.gdshader" id="9_jfsab"]
+[ext_resource type="PackedScene" uid="uid://c4weja143s0g4" path="res://scenes/instancer.tscn" id="10_h4owa"]
+[ext_resource type="PackedScene" uid="uid://dgb6yluny7cde" path="res://scenes/station.tscn" id="11_3lklb"]
+[ext_resource type="PackedScene" uid="uid://cnhotw0s7wl50" path="res://scenes/navpoint.tscn" id="12_mha2h"]
+[ext_resource type="Shader" path="res://shaders/nav_mesh.gdshader" id="13_i61gt"]
+[ext_resource type="Script" path="res://scripts/testROTREF.gd" id="14_fyyld"]
+[ext_resource type="Script" path="res://scripts/PlayerInputHandler.gd" id="15_jwjoq"]
+[ext_resource type="Shader" path="res://shaders/nebula_to_equirect.gdshader" id="16_ax6sm"]
+[ext_resource type="Material" uid="uid://37u50ju3r4sh" path="res://materials/standard_plates.tres" id="17_tqkwi"]
+[ext_resource type="PackedScene" uid="uid://gk8tvwc6a2rp" path="res://scenes/thruster.tscn" id="18_t3qj6"]
+[ext_resource type="Script" path="res://scripts/PlayerHudHandler.gd" id="19_pj20l"]
+[ext_resource type="Script" path="res://scripts/framerate.gd" id="20_71ftt"]
+[ext_resource type="Texture2D" uid="uid://b47k2pg7xj7xo" path="res://data/textures/icons_trimmed.png" id="21_y3pbq"]
+[ext_resource type="Texture2D" uid="uid://rypgaskiayxv" path="res://data/textures/icon_atlas1.tres" id="22_jw2j0"]
+[ext_resource type="Script" path="res://scripts/OptionButtonContacts.gd" id="23_ftdki"]
+[ext_resource type="Shader" path="res://shaders/hud1.gdshader" id="24_ais6i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ud73c"]
 resource_local_to_scene = true
@@ -351,7 +352,7 @@ viewport_path = NodePath("SubViewport_UI")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k1hso"]
 resource_local_to_scene = true
-shader = ExtResource("3_pueam")
+shader = ExtResource("9_jfsab")
 shader_parameter/background_planets = SubResource("ViewportTexture_it0dv")
 shader_parameter/equirect_nebula = SubResource("ViewportTexture_1earm")
 shader_parameter/noise_stars = SubResource("NoiseTexture3D_8xcm4")
@@ -398,7 +399,7 @@ auto_exposure_min_sensitivity = 200.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t8o0c"]
 render_priority = 0
-shader = ExtResource("5_aow7t")
+shader = ExtResource("13_i61gt")
 shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/wire_color = Color(0.384314, 1, 0.352941, 1)
 shader_parameter/wire_width = 1.561
@@ -411,7 +412,7 @@ frequency = 0.0227
 noise = SubResource("FastNoiseLite_strcg")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o8lp7"]
-shader = ExtResource("14_hiq5x")
+shader = ExtResource("16_ax6sm")
 shader_parameter/dust_density = 0.096
 shader_parameter/star_bloom = 0.012
 shader_parameter/star_color = Color(0.619608, 0.698039, 0.458824, 1)
@@ -424,32 +425,38 @@ shader_parameter/edge_factor = 0.584
 shader_parameter/base_noise = SubResource("NoiseTexture2D_ksq2t")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ef0wg"]
-material = ExtResource("15_emxrh")
+material = ExtResource("17_tqkwi")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gx1mj"]
-atlas = ExtResource("19_glt0h")
+atlas = ExtResource("21_y3pbq")
 region = Rect2(162, 810, 162, 162)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w74ml"]
-atlas = ExtResource("19_glt0h")
+atlas = ExtResource("21_y3pbq")
 region = Rect2(648, 486, 162, 162)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sqbb2"]
-atlas = ExtResource("19_glt0h")
+atlas = ExtResource("21_y3pbq")
 region = Rect2(324, 324, 162, 162)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_olgnf"]
 viewport_path = NodePath("SubViewportContainer/SubViewport_objects/SubViewport_target")
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_t03fv"]
+viewport_path = NodePath("SubViewportHud")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_epb0w"]
+shader = ExtResource("24_ais6i")
+
 [node name="base" type="Node3D" node_paths=PackedStringArray("cam")]
-script = ExtResource("1_gttts")
+script = ExtResource("1_83b2m")
 cam = NodePath("SubViewportContainer/SubViewport_objects/CameraBase")
 
 [node name="Tex_gen" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("BoxMesh_0wqlr")
 skeleton = NodePath("Text_generator")
-script = ExtResource("2_6hyml")
+script = ExtResource("2_vx1gr")
 
 [node name="Text_generator" type="SubViewport" parent="Tex_gen"]
 disable_3d = true
@@ -479,7 +486,7 @@ offset_right = 101.0
 offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("24_jgh06")
+theme_override_fonts/font = ExtResource("3_x5lb1")
 theme_override_font_sizes/font_size = 40
 text = "Show me what you can do"
 label_settings = SubResource("LabelSettings_r1o3t")
@@ -513,7 +520,7 @@ canvas_cull_mask = 4293918784
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
-[node name="PlayerTargetUI" parent="SubViewport_UI" instance=ExtResource("11_u3uu1")]
+[node name="PlayerTargetUI" parent="SubViewport_UI" instance=ExtResource("4_cvunf")]
 offset_left = -596.0
 offset_top = -344.0
 offset_right = -556.0
@@ -528,10 +535,10 @@ fsr_sharpness = 0.0
 size = Vector2i(2304, 1296)
 render_target_update_mode = 4
 
-[node name="Altair" parent="SubViewport_planets" instance=ExtResource("12_2yeht")]
+[node name="Altair" parent="SubViewport_planets" instance=ExtResource("5_osfjg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.16454, 0, 0.618969)
 
-[node name="Nimrod" parent="SubViewport_planets" instance=ExtResource("12_2yeht")]
+[node name="Nimrod" parent="SubViewport_planets" instance=ExtResource("5_osfjg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.724772, 0, -2.72044)
 
 [node name="planet" parent="SubViewport_planets/Nimrod" index="0"]
@@ -543,7 +550,7 @@ mesh = SubResource("SphereMesh_ss0lf")
 [node name="cam_planets" type="Camera3D" parent="SubViewport_planets" node_paths=PackedStringArray("master")]
 cull_mask = 2
 fov = 60.0
-script = ExtResource("13_jw80r")
+script = ExtResource("6_b7je7")
 master = NodePath("../../SubViewportContainer/SubViewport_objects/CameraBase/BasePivot/CameraArm/cam_track")
 factor = 10000.0
 
@@ -578,10 +585,10 @@ cull_mask = 1048573
 fov = 20.0
 near = 1.0
 far = 10000.0
-script = ExtResource("10_ystd1")
+script = ExtResource("7_rss54")
 main_camera = NodePath("../../CameraBase/BasePivot/CameraArm/cam_track")
 
-[node name="CameraBase" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_302yi")]
+[node name="CameraBase" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("8_2alhn")]
 
 [node name="cam_track" parent="SubViewportContainer/SubViewport_objects/CameraBase/BasePivot/CameraArm" index="0"]
 environment = SubResource("Environment_yqn5r")
@@ -590,22 +597,22 @@ attributes = SubResource("CameraAttributesPractical_27r5v")
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="SubViewportContainer/SubViewport_objects/CameraBase/BasePivot/CameraArm/cam_track" index="2"]
 remote_path = NodePath("../../../../../SubViewport_target/cam_target")
 
-[node name="ship_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_mx3wh")]
+[node name="ship_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("10_h4owa")]
 cube_size = 1
 delta = 20.0
 
-[node name="ship_Instancer2" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_mx3wh")]
+[node name="ship_Instancer2" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("10_h4owa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -200, 0, -200)
 delta = 20.0
 
-[node name="station_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_mx3wh")]
+[node name="station_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("10_h4owa")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 400, 400, -500)
-model_scene = ExtResource("8_tss7c")
+model_scene = ExtResource("11_3lklb")
 cube_size = 1
 delta = 20.0
 
-[node name="navpoint_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_mx3wh")]
-model_scene = ExtResource("3_swqlf")
+[node name="navpoint_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("10_h4owa")]
+model_scene = ExtResource("12_mha2h")
 cube_size = 10
 direct_transforms = true
 delta = 100.0
@@ -614,10 +621,10 @@ delta = 100.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.323559, 20.3751, 44.2456)
 mesh = SubResource("PrismMesh_eex47")
 surface_material_override/0 = SubResource("ShaderMaterial_t8o0c")
-script = ExtResource("6_am27l")
+script = ExtResource("14_fyyld")
 
 [node name="PlayerInputHandler" type="Node" parent="."]
-script = ExtResource("11_7yiaw")
+script = ExtResource("15_jwjoq")
 
 [node name="SubViewport_background_panorama" type="SubViewport" parent="."]
 disable_3d = true
@@ -648,11 +655,11 @@ visible = false
 mesh = SubResource("CapsuleMesh_ef0wg")
 skeleton = NodePath("thruster")
 
-[node name="thruster" parent="tester" instance=ExtResource("16_xbgv8")]
+[node name="thruster" parent="tester" instance=ExtResource("18_t3qj6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.166775, 0, 0.777185)
 
 [node name="PlayerHudHandler" type="Node" parent="."]
-script = ExtResource("17_7lty4")
+script = ExtResource("19_pj20l")
 
 [node name="VFlowContainer" type="VFlowContainer" parent="."]
 offset_right = 258.0
@@ -662,7 +669,7 @@ offset_bottom = 582.0
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "5555"
-script = ExtResource("19_af1e2")
+script = ExtResource("20_71ftt")
 
 [node name="ItemList" type="ItemList" parent="VFlowContainer"]
 custom_minimum_size = Vector2(20, 0)
@@ -707,7 +714,7 @@ size_flags_horizontal = 2
 theme_override_colors/font_color = Color(0.427298, 0.668871, 0.49691, 1)
 theme_override_colors/font_outline_color = Color(0.427451, 0.670588, 0.498039, 1)
 text = "change_nav_point"
-icon = ExtResource("20_s1x1m")
+icon = ExtResource("22_jw2j0")
 alignment = 0
 text_overrun_behavior = 3
 clip_text = true
@@ -747,7 +754,7 @@ text = "Direct Control"
 [node name="OptionButton" type="OptionButton" parent="VFlowContainer"]
 layout_mode = 2
 size_flags_vertical = 4
-script = ExtResource("19_dyptw")
+script = ExtResource("23_ftdki")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 modulate = Color(0.678431, 0.729412, 0.639216, 0.956863)
@@ -768,6 +775,49 @@ custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = SubResource("ViewportTexture_olgnf")
+
+[node name="Control" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.0
+offset_top = -20.0
+offset_right = 23.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+visible = false
+custom_minimum_size = Vector2(1024, 1024)
+layout_mode = 2
+offset_left = -236.0
+offset_top = -236.0
+offset_right = 276.0
+offset_bottom = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_t03fv")
+expand_mode = 3
+
+[node name="SubViewportHud" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="SubViewportHud"]
+material = SubResource("ShaderMaterial_epb0w")
+custom_minimum_size = Vector2(1024, 1024)
+offset_right = 40.0
+offset_bottom = 40.0
 
 [connection signal="item_clicked" from="VFlowContainer/ItemList" to="." method="_on_item_list_item_clicked"]
 [connection signal="item_selected" from="VFlowContainer/ItemList" to="." method="_on_nav_mode_list_item_selected"]

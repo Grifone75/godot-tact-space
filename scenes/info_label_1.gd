@@ -30,6 +30,7 @@ func update_vessel_label(vesselvalue):
 func update_pilot_label(aivalue):
 		$Anchor2D/AIPilotInfo.text = str(aivalue)
 
-func set_shipname(sname):
+func set_shipname(sname,fname):
 	shipname = sname
 	$Anchor2D/Shipname.text = shipname
+	$Anchor2D/Shipfaction.text = fname

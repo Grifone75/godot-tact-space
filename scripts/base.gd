@@ -34,7 +34,8 @@ func _origin_shift():
 	print("*** calling OShift, delta: ",shift)
 	for obj in get_tree().get_nodes_in_group("local_objects"):
 		if obj.is_in_group("vessels"):
-			obj.get_node("VesselController/RigidBody3D").global_position -= shift
+			obj.rb.global_position -= shift
+			obj.smooth.teleport()
 		elif obj.has_method("manage_origin_shift"):
 			obj.manage_origin_shift(shift)
 		else:
@@ -111,3 +112,7 @@ func _on_aggressive_mode_toggled(button_pressed):
 func _on_option_button_item_selected(index):
 	var vessel = $VFlowContainer/OptionButton.get_item_metadata(index)
 	followed_vessel.get_node("AIPilot").update_navtarget(vessel.rb)
+
+
+func _on_custom_button_pressed():
+	followed_vessel.get_node("AIPilot").spawn_drones()
