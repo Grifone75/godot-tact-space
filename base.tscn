@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://csc4v1riq350"]
+[gd_scene load_steps=61 format=3 uid="uid://csc4v1riq350"]
 
 [ext_resource type="Script" path="res://scripts/base.gd" id="1_gttts"]
 [ext_resource type="Script" path="res://scripts/tex_gen.gd" id="2_6hyml"]
@@ -15,8 +15,6 @@
 [ext_resource type="PackedScene" uid="uid://xhg4bqu6m3jl" path="res://scenes/gas_giant.tscn" id="12_2yeht"]
 [ext_resource type="Script" path="res://scripts/cam_scaled.gd" id="13_jw80r"]
 [ext_resource type="Shader" path="res://shaders/nebula_to_equirect.gdshader" id="14_hiq5x"]
-[ext_resource type="Material" uid="uid://37u50ju3r4sh" path="res://materials/standard_plates.tres" id="15_emxrh"]
-[ext_resource type="PackedScene" uid="uid://gk8tvwc6a2rp" path="res://scenes/thruster.tscn" id="16_xbgv8"]
 [ext_resource type="Script" path="res://scripts/PlayerHudHandler.gd" id="17_7lty4"]
 [ext_resource type="Script" path="res://scripts/framerate.gd" id="19_af1e2"]
 [ext_resource type="Script" path="res://scripts/OptionButtonContacts.gd" id="19_dyptw"]
@@ -328,7 +326,7 @@ seamless = true
 noise = SubResource("FastNoiseLite_5c85c")
 
 [sub_resource type="Gradient" id="Gradient_2lcls"]
-offsets = PackedFloat32Array(0.582672, 0.669314)
+offsets = PackedFloat32Array(0.468074, 0.618469)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_88rmi"]
 noise_type = 2
@@ -392,7 +390,7 @@ adjustment_enabled = true
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_27r5v"]
 resource_local_to_scene = true
 auto_exposure_enabled = true
-auto_exposure_min_sensitivity = 200.0
+auto_exposure_min_sensitivity = 100.0
 
 [sub_resource type="PrismMesh" id="PrismMesh_eex47"]
 
@@ -422,9 +420,6 @@ shader_parameter/core_factor = 1.814
 shader_parameter/edge_color = Color(0.996078, 0.615686, 0.607843, 1)
 shader_parameter/edge_factor = 0.584
 shader_parameter/base_noise = SubResource("NoiseTexture2D_ksq2t")
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_ef0wg"]
-material = ExtResource("15_emxrh")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gx1mj"]
 atlas = ExtResource("19_glt0h")
@@ -569,6 +564,7 @@ render_target_update_mode = 4
 
 [node name="SubViewport_target" type="SubViewport" parent="SubViewportContainer/SubViewport_objects"]
 transparent_bg = true
+size = Vector2i(256, 256)
 render_target_update_mode = 4
 
 [node name="cam_target" type="Camera3D" parent="SubViewportContainer/SubViewport_objects/SubViewport_target" node_paths=PackedStringArray("main_camera")]
@@ -591,7 +587,7 @@ attributes = SubResource("CameraAttributesPractical_27r5v")
 remote_path = NodePath("../../../../../SubViewport_target/cam_target")
 
 [node name="ship_Instancer" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_mx3wh")]
-cube_size = 1
+cube_size = 2
 delta = 20.0
 
 [node name="ship_Instancer2" parent="SubViewportContainer/SubViewport_objects" instance=ExtResource("2_mx3wh")]
@@ -641,15 +637,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="tester" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.820052, 0, 0.572289, 0, 1, 0, -0.572289, 0, 0.820052, 0.319622, 0, 4.82493)
-visible = false
-mesh = SubResource("CapsuleMesh_ef0wg")
-skeleton = NodePath("thruster")
-
-[node name="thruster" parent="tester" instance=ExtResource("16_xbgv8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.166775, 0, 0.777185)
 
 [node name="PlayerHudHandler" type="Node" parent="."]
 script = ExtResource("17_7lty4")
@@ -745,25 +732,43 @@ theme_override_colors/font_outline_color = Color(0.427451, 0.670588, 0.498039, 1
 text = "Direct Control"
 
 [node name="OptionButton" type="OptionButton" parent="VFlowContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 4
 script = ExtResource("19_dyptw")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-modulate = Color(0.678431, 0.729412, 0.639216, 0.956863)
-anchors_preset = 6
+[node name="LineEdit" type="LineEdit" parent="VFlowContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+placeholder_text = "command"
+caret_blink = true
+
+[node name="TabContainer" type="TabContainer" parent="."]
+modulate = Color(0.00392157, 0.835294, 0, 0.698039)
+custom_minimum_size = Vector2(300, 50)
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -512.0
-offset_top = -256.0
+offset_left = -256.0
 offset_bottom = 256.0
 grow_horizontal = 0
-grow_vertical = 2
-size_flags_horizontal = 8
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer"]
+[node name="SYS" type="ScrollContainer" parent="TabContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="UNK" type="VBoxContainer" parent="TabContainer/SYS"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="TGT" type="PanelContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/TGT"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -779,6 +784,7 @@ texture = SubResource("ViewportTexture_olgnf")
 [connection signal="toggled" from="VFlowContainer/DirectControlButton" to="." method="_on_direct_control_button_toggled"]
 [connection signal="item_selected" from="VFlowContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="VFlowContainer/OptionButton" to="VFlowContainer/OptionButton" method="_on_pressed"]
+[connection signal="text_submitted" from="VFlowContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
 
 [editable path="SubViewport_planets/Altair"]
 [editable path="SubViewport_planets/Nimrod"]

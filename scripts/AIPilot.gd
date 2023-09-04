@@ -51,7 +51,7 @@ func _update_contact_list():
 	#wip
 	while true:
 		contact_list = get_tree().get_nodes_in_group("vessels").filter(func(x): return x != self.get_parent())
-
+		await get_tree().create_timer(2.).timeout
 		
 
 
@@ -345,7 +345,8 @@ func _simple_routine():
 	
 
 # temporary, to be moved in amore appropriate place (like in a functional)
-var drone_manager
+var drone_manager: Drone_manager = null
+
 func spawn_drones():
 	if drone_manager == null:
 		drone_manager = Drone_manager.new()
@@ -353,5 +354,22 @@ func spawn_drones():
 	get_tree().get_root().add_child(d)
 	d.global_transform = ref_rb.global_transform
 	d.global_position += ref_rb.global_transform.basis.z * 10.0
+	d.rotate(Vector3(randf(), randf(),.5).normalized(),randf_range(0,PI))
 	d.set_focus(ref_rb.global_position, 10.0).set_manager(drone_manager)
+
+func set_drone_distance(d):
+	drone_manager.set_distance(d)
+
+func set_drone_focus(v3):
+	drone_manager.set_focus(v3)
+
+func set_drone_destroy():
+	drone_manager.destroy()
+
+func process_command(ev):
+	if ev == "drone_test":
+		if drone_manager != null:
+			#drone_manager.set_distance(20)
+			drone_manager.set_focus(targeting_manager.get_wpos())
+		
 

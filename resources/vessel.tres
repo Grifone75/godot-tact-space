@@ -9,7 +9,7 @@ model_scene_path = "res://data/models/all_ships_and_stations.blend"
 root_pattern = "center_[0-9]"
 matches = {
 "^engine[0-1]*$": {
-"attach_m_thruster": ["res://scenes/thruster.tscn"]
+"attach_m_thruster": ["res://scenes/thruster/thruster.tscn"]
 },
 "center_[0-9]": {
 "attach_m.back": ["^engine1", "enginehub", "enginehub2", "enginehub3"],
@@ -34,6 +34,7 @@ matches = {
 },
 "front[0-9](_h)*": {
 "attach_m_cabin01": ["res://scenes/cabin_01.tscn"],
+"attach_m_dockport": ["res://scenes/dock_port/dockport.tscn", "res://scenes/dock_port/dockport2.tscn"],
 "attach_m_module_small": ["ship_module_scanner"],
 "attach_m_rcs": ["res://scenes/thruster_small.tscn"],
 "attach_m_side": ["fr_section2_h", "fr_section3_h", "fr_section4_h"],
@@ -45,13 +46,13 @@ matches = {
 },
 "side_engine[0-9]*": {
 "attach_m_rcs": ["res://scenes/thruster_small.tscn"],
-"attach_m_thruster": ["res://scenes/thruster.tscn"]
+"attach_m_thruster": ["res://scenes/thruster/thruster.tscn"]
 }
 }
 functional_mapping = {
 "res://scenes/cabin_01.tscn": "cabins",
 "res://scenes/gun_1.tscn": "turrets",
-"res://scenes/thruster.tscn": "thrusters",
+"res://scenes/thruster/thruster.tscn": "thrusters",
 "res://scenes/thruster_small.tscn": "thrusters",
 "res://scenes/windows_4.tscn": "cabins"
 }

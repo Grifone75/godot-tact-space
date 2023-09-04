@@ -26,6 +26,7 @@ func _update_followed_relationships():
 	cam.update_tracked(
 		followed_vessel.get_node("VesselController/RigidBody3D")
 	)
+	$PlayerInputHandler.connect("special_commands", followed_vessel.pilot.process_command)
 	
 
 func _origin_shift():
@@ -73,7 +74,9 @@ func _on_button_change_ship_pressed():
 	#followed_vessel = get_tree().get_nodes_in_group("vessels").pick_random()
 	if current_index >= len(get_tree().get_nodes_in_group("vessels")):
 		current_index = 0
+	followed_vessel.hud_link(false)
 	followed_vessel = get_tree().get_nodes_in_group("vessels")[current_index]
+	followed_vessel.hud_link(true)
 	current_index += 1
 	_update_followed_relationships()
 
@@ -116,3 +119,14 @@ func _on_option_button_item_selected(index):
 
 func _on_custom_button_pressed():
 	followed_vessel.get_node("AIPilot").spawn_drones()
+
+
+func _on_line_edit_text_submitted(new_text):
+	match new_text:
+		"range10": followed_vessel.pilot.set_drone_distance(10)
+		"range20": followed_vessel.pilot.set_drone_distance(20)
+		"range50": followed_vessel.pilot.set_drone_distance(50)
+		"focusme": followed_vessel.pilot.set_drone_focus(followed_vessel.rb.global_position)
+		"focustgt": followed_vessel.pilot.set_drone_focus(followed_vessel.pilot.targeting_manager.get_wpos())
+		"destroy": followed_vessel.pilot.set_drone_destroy()
+		_: pass

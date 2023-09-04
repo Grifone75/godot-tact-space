@@ -1,6 +1,9 @@
 extends Node3D
 
 @export var max_thrust = 1.0
+
+signal current_thrust
+
 var vessel_thrust_axis:Vector3 = Vector3(0,0,1)
 var vessel_thruster_offset:Vector3 = Vector3.ZERO
 var _ref_rb
@@ -48,6 +51,9 @@ func set_thrust(value):
 	var fvalue = clampf(-vessel_thrust_axis.dot(value)/max_thrust,0.0,1.0)
 	$thruster.set_instance_shader_parameter("_Thrust",fvalue)
 	$plume_mesh_1.set_instance_shader_parameter("_Throttle",fvalue-0.2)
+	current_thrust.emit({self.name:fvalue})
+	
+	
 
 	current_noise_level = fvalue
 	

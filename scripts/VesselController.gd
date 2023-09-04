@@ -37,6 +37,7 @@ func _init_rb():
 		await get_tree().create_timer(1).timeout
 	for thruster in functionals.get("thrusters",[]):
 		thruster.init_placement(ref_rb)
+		
 
 
 func _physics_process(delta):

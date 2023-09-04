@@ -166,7 +166,7 @@ func _attach_component_to_father(father,father_link,component):
 	var component_attach = get_node(component_link_f.get_path())
 	
 	component.get_parent().remove_child(component)
-	father.add_child(component)
+	father.add_child(component, true)
 
 	# we need to :
 	# get the transformation from moving_t to target_t and apply it to c
@@ -274,6 +274,17 @@ func materialize(_faction:Faction = null):
 	_materialize()
 	
 	
+func hud_link(is_active:bool):
+	if is_active:
+		#thruster update
+		for thruster in functionals.get("thrusters",[]):
+			var el = load("res://scenes/ui_hud_element.tscn").instantiate()
+			$/root/base/TabContainer/SYS/UNK.add_child(el)
+			thruster.current_thrust.connect(el.update_values)
+	if !is_active:
+		for el in $/root/base/TabContainer/SYS/UNK.get_children():
+			el.queue_free()
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -282,3 +293,6 @@ func _process(delta):
 
 func get_rb():
 	return rb
+	
+	
+

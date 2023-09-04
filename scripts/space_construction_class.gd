@@ -79,10 +79,10 @@ class_name Space_construction_class extends Resource
 @export var initial_mission_path :Script = null
 
 func get_construction_name():
-    randomize()
-    var name = ""
-    for name_group in names.pick_random().values():
-        name += name_group.pick_random()
-    return name
+	randomize()
+	var name = ""
+	for name_group in names.pick_random().values():
+		name += name_group.pick_random()
+	return name
 
 
