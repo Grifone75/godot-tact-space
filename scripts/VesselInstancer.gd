@@ -281,8 +281,15 @@ func hud_link(is_active:bool):
 			var el = load("res://scenes/ui_hud_element.tscn").instantiate()
 			$/root/base/TabContainer/SYS/UNK.add_child(el)
 			thruster.current_thrust.connect(el.update_values)
+			
+		var nav_panel = load("res://scenes/ui_hud_nav.tscn").instantiate()
+		$/root/base/TabContainer/NAV.add_child(nav_panel)
+		self.pilot.pilot_info.connect(nav_panel.update_values)
+		
 	if !is_active:
 		for el in $/root/base/TabContainer/SYS/UNK.get_children():
+			el.queue_free()
+		for el in $/root/base/TabContainer/NAV.get_children():
 			el.queue_free()
 	
 
@@ -294,5 +301,6 @@ func _process(delta):
 func get_rb():
 	return rb
 	
-	
+func request_docking():
+	return {"dockport1":null}
 

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Space_construction_class" load_steps=3 format=3 uid="uid://ob3dey3yjg18"]
 
-[ext_resource type="Script" path="res://scripts/base_mission.gd" id="1_e0g8j"]
+[ext_resource type="Script" path="res://scripts/missions/dock_generic.gd" id="1_xfx85"]
 [ext_resource type="Script" path="res://scripts/space_construction_class.gd" id="2_mc4ta"]
 
 [resource]
@@ -69,4 +69,4 @@ names = [{
 }, {
 "n1": ["Ambystoma", "Scorpaenidae", "Squalus", "Alcelaphinae Major", "Scorpaenidae Major", "Violet Sheep", "Black Trout", "Eastern Scarf", "Western Horn", "Western Robe", "Papilionoidea", "Sarcophilus", "Simia", "Oniscidea Borealis", "Anguis Occidentalis", "Amethyst Rat", "Vermilion Trout", "Eastern Arrow", "Large Telescope", "Small Ship", "Achatina", "Dermaptera", "Ramphastos", "Dromaius Occidentalis", "Enhydra Major", "Harlequin Porcupine", "Red Goose", "Big Brush", "Small Airplane", "Large Couldron", "Cichlidae", "Chelonioidea", "Rhinoceros", "Caeli Orientalis", "Dynastes Australis", "Emerald Starfish", "Violet Kangaroo", "Northern Fountain", "Eastern Spade", "Big Wrench"]
 }]
-initial_mission_path = ExtResource("1_e0g8j")
+initial_mission_path = ExtResource("1_xfx85")

@@ -11,6 +11,8 @@ var sensitivity = 0.01
 var zoom = 1.0
 var delta_rotation : Quaternion = Quaternion.IDENTITY
 
+var _hold_global_basis
+
 signal tracked_updated
 signal focus_updated
 
@@ -54,13 +56,12 @@ func _input(event):
 			MOUSE_BUTTON_WHEEL_UP: # zoom in
 				zoom = clamp(zoom -1.0, -20, 20)
 
-
+var old_rotation: Quaternion = Quaternion.IDENTITY
 func _update_mouselook():
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		_mouse_position *= sensitivity
-		var new_rot = Quaternion.from_euler(Vector3(-_mouse_position.y,_mouse_position.x,0))
-		delta_rotation *= new_rot
-
+		var new_rot = Quaternion.from_euler(Vector3(_mouse_position.y,_mouse_position.x,0))
+		delta_rotation = new_rot
 		_mouse_position = Vector2.ZERO
 	else:
 		var jx = Input.get_joy_axis(0,JOY_AXIS_RIGHT_X)
@@ -70,24 +71,58 @@ func _update_mouselook():
 		var ty = signf(jy) * ease(absf(jy),3)
 		_joy_position = Vector2(tx,ty)
 		var new_rot = Quaternion.from_euler(Vector3(-_joy_position.y*0.1,-_joy_position.x*0.1,0))
-		delta_rotation *= new_rot
+		delta_rotation = new_rot
 		_joy_position = Vector2.ZERO
+		
+	# when this is true we are changing the rotation through the input so we want to suspend the hold rotation function
+	if delta_rotation != old_rotation:
+		hold_suspend = 50
+	old_rotation = delta_rotation
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
+	_hold_global_basis = $BasePivot.global_transform.basis
+	set_notify_transform(true)
+	set_notify_local_transform(true)
 
+
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	
+
 	_update_mouselook()
+	
 	if tracked:
-		
-		var new_basis = Basis($BasePivot.transform.basis.get_rotation_quaternion() * delta_rotation).orthonormalized()
-		transform.basis = transform.basis.slerp(new_basis,0.1)
+		var new_basis = Basis($BasePivot.transform.basis.get_rotation_quaternion() * delta_rotation ).orthonormalized()
+		$BasePivot.transform.basis = $BasePivot.transform.basis.slerp(new_basis,0.1)
+
 		
 		$BasePivot/CameraArm.transform.origin.z += zoom
 		zoom = 0.0
+		
+	if hold_suspend>0:
+		hold_suspend -= 1
+	
+	
+func _on_camera_hold_toggled(button_pressed):
+	is_hold_activated = button_pressed
+	
+var hold_suspend = 0
+var is_hold_activated = false
+func _notification(what):
+
+	if what == NOTIFICATION_TRANSFORM_CHANGED:
+		if hold_suspend == 0 and is_hold_activated: 
+			$BasePivot.global_transform.basis = _hold_global_basis
+		else:
+			_hold_global_basis = $BasePivot.global_transform.basis
+
+
+
 
 
 

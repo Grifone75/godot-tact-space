@@ -1,12 +1,12 @@
 [gd_scene load_steps=10 format=3 uid="uid://wcbb2e6qn6j4"]
 
 [ext_resource type="Script" path="res://scripts/signal_light.gd" id="1_xym8k"]
-[ext_resource type="Texture2D" uid="uid://bnqhb4a63in5n" path="res://data/textures/flare1.png" id="3_wc67f"]
+[ext_resource type="Texture2D" uid="uid://cktg0uns8abaa" path="res://data/textures/flare2.png" id="2_5xx3k"]
 [ext_resource type="Texture2D" uid="uid://d20dywkexhn5f" path="res://data/textures/signal_1d.png" id="4_ewaih"]
 [ext_resource type="Texture2D" uid="uid://uu63wp5trj6f" path="res://data/textures/signal_1n.png" id="5_0na5q"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_7l3uf"]
-size = Vector2(0.6, 0.6)
+size = Vector2(0.1, 0.1)
 
 [sub_resource type="Shader" id="Shader_y13g8"]
 code = "// NOTE: Shader automatically converted from Godot Engine 4.1.1.stable's StandardMaterial3D.
@@ -55,7 +55,7 @@ void fragment() {
 	ROUGHNESS = roughness_tex * roughness;
 	SPECULAR = specular;
 	vec3 emission_tex = texture(texture_emission,base_uv).rgb;
-	EMISSION = (emission.rgb+emission_tex)*emission_energy*5.*active;
+	EMISSION = (emission.rgb+emission_tex)*emission_energy*10.*active;
 	ALPHA *= albedo.a * albedo_tex.a;
 }
 "
@@ -75,8 +75,8 @@ shader_parameter/uv1_scale = Vector3(1, 1, 1)
 shader_parameter/uv1_offset = Vector3(0, 0, 0)
 shader_parameter/uv2_scale = Vector3(1, 1, 1)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
-shader_parameter/texture_albedo = ExtResource("3_wc67f")
-shader_parameter/texture_emission = ExtResource("3_wc67f")
+shader_parameter/texture_albedo = ExtResource("2_5xx3k")
+shader_parameter/texture_emission = ExtResource("2_5xx3k")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gj6gc"]
 transparency = 1
@@ -95,12 +95,12 @@ script = ExtResource("1_xym8k")
 transform = Transform3D(-1, -8.74228e-08, 0, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 0, 0)
 
 [node name="light1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000349998, 0.0716429, 0.0825569)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000349998, 0.0373459, 0.0825569)
 mesh = SubResource("QuadMesh_7l3uf")
 surface_material_override/0 = SubResource("ShaderMaterial_dyg2c")
 
 [node name="light2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000349998, 0.0836131, -0.0850992)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000349998, 0.0493161, -0.0850992)
 mesh = SubResource("QuadMesh_7l3uf")
 surface_material_override/0 = SubResource("ShaderMaterial_dyg2c")
 
