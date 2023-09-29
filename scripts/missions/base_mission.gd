@@ -31,20 +31,18 @@ func _play_mission():
 			var t1
 			if counter != 1:
 				t1 = linked_pilot.get_tree().get_nodes_in_group("navpoints").pick_random() #to be replaced with picking target from the pilot contact list
-				linked_pilot.nav_metrics.set_orientation_mode(Nav_metrics.ORIENTATION_BASE.TO_TGT)
 			else:
 				t1 = linked_pilot.get_tree().get_nodes_in_group("stations").pick_random().rb 
 				linked_pilot.nav_metrics.set_approach_distance(50)
-				linked_pilot.nav_metrics.set_orientation_mode(Nav_metrics.ORIENTATION_BASE.TO_TGT)
 			linked_pilot.update_navtarget(t1)
-			linked_pilot.nav_method = [linked_pilot._apply_orientation,linked_pilot._apply_approach]
+			linked_pilot.set_translation_mode('approach').set_orientation_mode('face_target')
 			linked_pilot.mission_details = 'mission1'
 			counter -= 1
 		await linked_pilot.get_tree().create_timer(2.).timeout
 	linked_pilot.mission_details = 'mission1 last step'
 	while linked_nav_metrics.l_translation_to_target.length() > 50:
 		await linked_pilot.get_tree().create_timer(2.).timeout	
-	linked_pilot.nav_method = [func(): linked_pilot._apply_orientation(Vector3.AXIS_X), linked_pilot._kill_all_velocity]
+		linked_pilot.set_translation_mode('stop').set_orientation_mode('face_fixed')
 	linked_pilot.mission_details = 'mission1 ended - stabilize'
 
 

@@ -1,0 +1,107 @@
+[gd_scene load_steps=6 format=3 uid="uid://dwwhdjxtv64bi"]
+
+[ext_resource type="Script" path="res://scripts/showcase.gd" id="1_r6jbx"]
+[ext_resource type="Theme" uid="uid://dc8gbjy78j8gx" path="res://Themes/ship_ui_theme.tres" id="2_ucgqe"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_t50v5"]
+sky_top_color = Color(0.0117647, 0.0196078, 0.027451, 1)
+sky_horizon_color = Color(0.341176, 0.294118, 0.317647, 1)
+sky_curve = 0.023898
+sky_energy_multiplier = 0.5
+ground_bottom_color = Color(0.0196078, 0.027451, 0.0666667, 1)
+ground_horizon_color = Color(0.341176, 0.294118, 0.317647, 1)
+ground_curve = 0.0386375
+ground_energy_multiplier = 0.5
+
+[sub_resource type="Sky" id="Sky_cbvlu"]
+sky_material = SubResource("ProceduralSkyMaterial_t50v5")
+
+[sub_resource type="Environment" id="Environment_3abot"]
+background_mode = 2
+sky = SubResource("Sky_cbvlu")
+glow_enabled = true
+glow_intensity = 0.3
+glow_strength = 0.5
+glow_bloom = 0.2
+glow_blend_mode = 1
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_r6jbx")
+
+[node name="ship_display" type="VBoxContainer" parent="."]
+modulate = Color(0.72549, 0.835294, 0.67451, 0.898039)
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="ship_display"]
+layout_mode = 2
+text = "spawn ship"
+
+[node name="Button2" type="Button" parent="ship_display"]
+layout_mode = 2
+text = "spawn station"
+
+[node name="blueprint" type="RichTextLabel" parent="ship_display"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme = ExtResource("2_ucgqe")
+theme_override_constants/line_separation = -5
+bbcode_enabled = true
+text = "this
+	is a
+	test
+		of a "
+fit_content = true
+
+[node name="holder" type="Node3D" parent="."]
+
+[node name="spot1" type="SpotLight3D" parent="."]
+transform = Transform3D(0.661456, 0.279626, -0.695906, 0, 0.927895, 0.372843, 0.749984, -0.246619, 0.613761, -22.5522, 11.1432, 18.1454)
+light_energy = 3.055
+shadow_enabled = true
+shadow_blur = 0.2
+spot_range = 142.268
+
+[node name="spot2" type="SpotLight3D" parent="."]
+transform = Transform3D(0.58747, -0.393989, 0.706861, -0.0889227, 0.836763, 0.540297, -0.804346, -0.380264, 0.456538, 23.956, 16.0699, 16.2837)
+light_color = Color(0.109804, 0.592157, 0.792157, 1)
+light_energy = 5.206
+shadow_enabled = true
+spot_range = 153.461
+
+[node name="cam_holder" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.63075)
+
+[node name="Camera3D" type="Camera3D" parent="cam_holder"]
+transform = Transform3D(1, 0, 0, 0, 0.976706, 0.214582, 0, -0.214582, 0.976706, 0, 2.49523, 0.92546)
+environment = SubResource("Environment_3abot")
+
+[node name="faction_display" type="VBoxContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+
+[node name="Button" type="Button" parent="faction_display"]
+modulate = Color(0.72549, 0.835294, 0.67451, 0.898039)
+layout_mode = 2
+text = "new faction"
+
+[node name="main_col" type="ColorRect" parent="faction_display"]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+
+[node name="second_col" type="ColorRect" parent="faction_display"]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+
+[node name="util_col" type="ColorRect" parent="faction_display"]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+
+[connection signal="pressed" from="ship_display/Button" to="." method="_on_button_pressed" binds= ["vessel"]]
+[connection signal="pressed" from="ship_display/Button2" to="." method="_on_button_pressed" binds= ["station"]]
+[connection signal="pressed" from="faction_display/Button" to="." method="set_random_new_faction"]

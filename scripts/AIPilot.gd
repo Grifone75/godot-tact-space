@@ -12,14 +12,17 @@ var targeting_manager: Targeting_manager
 var pid_pos: Pid_3f
 var pid_vel: Pid_3f
 var ref_rb: RigidBody3D
-var nav_method
-var nav_method_name = ""
+
+
 var nav_metrics: Nav_metrics
 var nav_details = ""
 var mission_details = ""
 
-@export var mission_script: Script = null
-var mission = null
+var _translation_mode: Callable = Callable()
+var _orientation_mode: Callable = Callable()
+var _tr_mode_name = ""
+var _or_mode_name = ""
+
 
 @export var contact_list = []
 
@@ -27,7 +30,7 @@ var mission = null
 func _ready():	
 	
 	ref_rb = get_parent().get_node("VesselController/RigidBody3D")
-	nav_method = []
+
 	targeting_manager = Targeting_manager.new()
 	nav_metrics = Nav_metrics.new(ref_rb, targeting_manager)
 	pid_pos = Pid_3f.new(5,0.3,10)
@@ -35,19 +38,7 @@ func _ready():
 
 	_update_contact_list()
 
-	_mission_sequencer()
-	
-func _mission_sequencer():
-	await get_tree().create_timer(2.).timeout
-	
-	if mission_script and (mission == null):
-		print("*** creating new mission")
-		mission = mission_script.new(self)
-	await get_tree().create_timer(2.).timeout
-	if mission and (mission.is_playing==false):
-		print("*** playing mission")
-		mission.play()
-			
+		
 		
 	#todo add logic for sequencing missions when the first finishes
 
@@ -66,29 +57,21 @@ func update_navtarget(n3):
 	
 func update_navmode(index):
 	if index == 0:
-		nav_method = []
-		nav_method_name = "idle"
+		self.set_translation_mode('idle').set_orientation_mode('idle')
 	if index == 1:
-			nav_method = [func(): _apply_orientation(Vector3.AXIS_X), _kill_all_velocity]
-			nav_method_name = "stabilize"
+		self.set_translation_mode('stop').set_orientation_mode('face_fixed')
 	if index == 2:
-		nav_method = [_apply_axial_translation]
-		nav_method_name = "axial"
+		self.set_translation_mode('axial').set_orientation_mode('idle')
 	if index == 3:
-		nav_method = [_apply_orientation]
-		nav_method_name = "face to"
+		self.set_translation_mode('idle').set_orientation_mode('face_target')
 	if index == 4:
-		nav_method = [_apply_orientation, _apply_axial_translation]
-		nav_method_name = "slow approach"
+		self.set_translation_mode('axial').set_orientation_mode('face_target')
 	if index == 5:
-		nav_method = [_apply_orientation, _apply_approach]
-		nav_method_name = "full approach"
+		self.set_translation_mode('approach').set_orientation_mode('face_target')
 	if index == 6:
-		nav_metrics.set_orientation_mode(nav_metrics.ORIENTATION_BASE.AG_VEL)
-		nav_method = [_apply_orientation, _kill_relative_velocity]
-		nav_method_name = "match velocity"
-	else: 
-		nav_metrics.set_orientation_mode(nav_metrics.ORIENTATION_BASE.TO_TGT)
+		self.set_translation_mode('match_velocity').set_orientation_mode('anti_velocity')
+
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -100,13 +83,15 @@ func _process(delta):
 func _physics_process(delta):
 	_pilot_info = {}
 
-	for method in nav_method:
-		nav_metrics.update_metrics()
-		method.call()	
-	#_apply_orientation()
-	#_apply_axial_translation()
 	
-	_pilot_info["nav mode"] = nav_method_name
+	nav_metrics.update_metrics()
+	if not _translation_mode.is_null():
+		_translation_mode.call()
+	if not _orientation_mode.is_null():
+		_orientation_mode.call()
+
+	
+	_pilot_info["nav mode"] = _or_mode_name + ' - ' + _tr_mode_name
 	if nav_target: _pilot_info["nav tgt"] = nav_target.name
 	_pilot_info["tgt dst"] = nav_metrics.l_translation_to_target.length()
 	_pilot_info["tgt vel to"] = nav_metrics.l_vtt_sag_pos_len
@@ -115,14 +100,9 @@ func _physics_process(delta):
 	_pilot_info["details"] = nav_details
 	_pilot_info["mission"] = mission_details
 	pilot_info.emit(_pilot_info)
-	
 
-var frequency = 0.5 #the higher the faster turn rate
-var damping = 0.8
-var kp = 6*frequency*6*frequency*0.25
-var kd = 4.5 * frequency * damping
 
-func _apply_axial_translation(limit_distance = 20.0):
+func _apply_axial_translation():
 	var AXIAL_THRUST_MULTIPLIER = 0.05
 	var g_offset = Vector3.ZERO
 	if local_rototranslation_node:
@@ -132,7 +112,7 @@ func _apply_axial_translation(limit_distance = 20.0):
 	if nav_target_linear_velocity != null:
 		var dt = get_physics_process_delta_time()
 		var l_translation_to_target = ((ref_rb.global_position - nav_target.global_position) + g_offset) * ref_rb.global_transform.basis
-		l_translation_to_target = l_translation_to_target - l_translation_to_target.normalized()*limit_distance
+		l_translation_to_target = l_translation_to_target - l_translation_to_target.normalized()*nav_metrics.get_approach_distance()
 		var l_velocity_to_target = (ref_rb.linear_velocity - nav_target_linear_velocity) * ref_rb.global_transform.basis
 		var cumulated_thust = pid_pos.update(dt,l_translation_to_target,Vector3.ZERO) +	pid_vel.update(dt,l_velocity_to_target,Vector3.ZERO)
 		force_input.emit(cumulated_thust*AXIAL_THRUST_MULTIPLIER)
@@ -159,6 +139,11 @@ func _kill_all_velocity():
 		var cumulated_thust = pid_pos.update(dt,l_translation_to_target,Vector3.ZERO) +	pid_vel.update(dt,l_velocity_to_target,Vector3.ZERO)
 		force_input.emit(cumulated_thust*AXIAL_THRUST_MULTIPLIER)
 
+
+var frequency = 0.2 #the higher the faster turn rate
+var damping = 0.8
+var kp = 6*frequency*6*frequency*0.25
+var kd = 4.5 * frequency * damping
 
 func _apply_orientation(face_to = null):
 	var orientation_pos
@@ -373,3 +358,44 @@ func process_command(ev):
 			drone_manager.set_focus(targeting_manager.get_wpos())
 		
 
+
+# interface for controlling the aipilot
+
+func set_translation_mode(param:String):
+	_tr_mode_name = param
+	match param:
+		'idle':
+			_translation_mode = Callable()
+		'axial':
+			_translation_mode = _apply_axial_translation
+		'approach':
+			_translation_mode = _apply_approach
+		'match_velocity':
+			_translation_mode = _kill_relative_velocity
+		'stop':
+			_translation_mode = _kill_all_velocity
+		_:
+			_tr_mode_name = "unk"
+			_translation_mode = Callable()
+	return self
+
+func set_orientation_mode(param:String):
+	_or_mode_name = param
+	match param:
+		'idle':	
+			_orientation_mode = Callable()		
+			nav_metrics.set_orientation_mode(nav_metrics.ORIENTATION_BASE.TO_TGT)
+		'face_fixed':	
+			_orientation_mode = func(): _apply_orientation(ref_rb.global_position + Vector3.FORWARD*10.0)
+			nav_metrics.set_orientation_mode(nav_metrics.ORIENTATION_BASE.TO_TGT)
+		'face_target':
+			_orientation_mode = _apply_orientation
+			nav_metrics.set_orientation_mode(nav_metrics.ORIENTATION_BASE.TO_TGT)
+		'anti_velocity':
+			_orientation_mode = _apply_orientation
+			nav_metrics.set_orientation_mode(nav_metrics.ORIENTATION_BASE.AG_VEL)
+		_:
+			_or_mode_name = "unk"
+			_orientation_mode = Callable()		
+	return self
+	

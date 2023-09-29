@@ -16,6 +16,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Distance" type="Label" parent="Anchor2D"]
+visible = false
 layout_mode = 0
 offset_left = -64.0
 offset_top = -60.0
@@ -25,6 +26,7 @@ theme = ExtResource("2_ms1s6")
 text = "distance"
 
 [node name="Shipname" type="Label" parent="Anchor2D"]
+visible = false
 self_modulate = Color(0.768627, 0.784314, 0, 1)
 layout_mode = 0
 offset_left = -23.0
@@ -37,6 +39,7 @@ horizontal_alignment = 1
 uppercase = true
 
 [node name="Shipfaction" type="Label" parent="Anchor2D"]
+visible = false
 self_modulate = Color(0.960784, 0.760784, 0.447059, 1)
 layout_mode = 0
 offset_left = -34.0

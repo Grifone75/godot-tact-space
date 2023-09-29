@@ -1,0 +1,36 @@
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://g2hjneqpqkea"]
+
+[ext_resource type="Shader" uid="uid://o7siaa2m7rnu" path="res://shaders/accessory_shader.tres" id="1_qgbnc"]
+[ext_resource type="Texture2D" uid="uid://bbn1g4tsdwhyy" path="res://data/textures/barrel1_alb_mask.png" id="2_wwcpy"]
+[ext_resource type="Texture2D" uid="uid://18c6q5j6qvnc" path="res://data/textures/barrel1_r.png" id="3_vkq4w"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tatxo"]
+load_path = "res://.godot/imported/barrel1_d.png-5bca6bc8272332d82bc90b925073f893.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_v02uv"]
+load_path = "res://.godot/imported/barrel1_ao.png-ef78cff30914de7ed7bf5fa39d216612.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gbsui"]
+load_path = "res://.godot/imported/barrel1_n.png-286af2ebb419a19fb0b463191562e89b.s3tc.ctex"
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_qgbnc")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.49
+shader_parameter/normal_scale = 1.0
+shader_parameter/ao_texture_channel = null
+shader_parameter/ao_light_affect = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = SubResource("CompressedTexture2D_tatxo")
+shader_parameter/albedo_mask = ExtResource("2_wwcpy")
+shader_parameter/texture_roughness = ExtResource("3_vkq4w")
+shader_parameter/texture_normal = SubResource("CompressedTexture2D_gbsui")
+shader_parameter/texture_ambient_occlusion = SubResource("CompressedTexture2D_v02uv")

@@ -1,7 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://d016hbl3tcg1q"]
+[gd_scene load_steps=23 format=3 uid="uid://d016hbl3tcg1q"]
 
 [ext_resource type="Script" path="res://scenes/dock_port/dockport2.gd" id="1_pnwbn"]
 [ext_resource type="Material" uid="uid://gk1v521ivqj1" path="res://materials/space_fabric_plating.tres" id="2_bss02"]
+[ext_resource type="Script" path="res://scripts/signal_light.gd" id="3_qymtc"]
+[ext_resource type="Shader" path="res://shaders/signal_light.gdshader" id="4_apwle"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3rkwa"]
 
@@ -218,6 +220,33 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_oq3uh")
 
+[sub_resource type="QuadMesh" id="QuadMesh_7l3uf"]
+size = Vector2(0.2, 0.2)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_whono"]
+load_path = "res://.godot/imported/flare2.png-57946a5d8f98405c411e85d444b4d4c5.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_y5y0s"]
+load_path = "res://.godot/imported/flare2.png-57946a5d8f98405c411e85d444b4d4c5.s3tc.ctex"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dwyls"]
+render_priority = 0
+shader = ExtResource("4_apwle")
+shader_parameter/albedo = Color(0.454902, 0.321569, 0, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/emission = Color(0.505882, 0.411765, 0, 1)
+shader_parameter/emission_energy = 10.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = SubResource("CompressedTexture2D_whono")
+shader_parameter/texture_emission = SubResource("CompressedTexture2D_y5y0s")
+
 [node name="dockport" type="Node3D"]
 script = ExtResource("1_pnwbn")
 
@@ -230,19 +259,19 @@ mesh = SubResource("ArrayMesh_wosi5")
 skeleton = NodePath("")
 
 [node name="arm2_1" type="MeshInstance3D" parent="shoulder2"]
-transform = Transform3D(1, 0, 0, 0, -1.42109e-14, 1, 0, -1, -1.42109e-14, 0, 3.27523, 2.84217e-14)
+transform = Transform3D(1, 0, 0, 0, -1.42109e-14, 1, 0, -1, -1.42109e-14, 0, 7.433, 0)
 mesh = SubResource("ArrayMesh_saija")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_bss02")
 
 [node name="arm2_2" type="MeshInstance3D" parent="shoulder2/arm2_1"]
-transform = Transform3D(1, 0, 0, 0, 1, 7.10543e-15, 0, -7.10543e-15, 1, 0, -3.55271e-13, -4.41083)
+transform = Transform3D(1, 0, 0, 0, 1, 7.10543e-15, 0, -7.10543e-15, 1, 0, 0, -0.091)
 mesh = SubResource("ArrayMesh_qq05u")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_bss02")
 
 [node name="arm2_3" type="MeshInstance3D" parent="shoulder2/arm2_1/arm2_2"]
-transform = Transform3D(1, 0, 0, 0, 1, 2.84217e-14, 0, -2.84217e-14, 1, 0, -1.27898e-13, -4.48928)
+transform = Transform3D(1, 0, 0, 0, 1, 2.84217e-14, 0, -2.84217e-14, 1, 0, 0, -0.146)
 mesh = SubResource("ArrayMesh_p2rx5")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_bss02")
@@ -251,3 +280,20 @@ surface_material_override/0 = ExtResource("2_bss02")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00871134, -0.0139287, -8.67727)
 mesh = SubResource("ArrayMesh_nc0kc")
 skeleton = NodePath("")
+
+[node name="signal_light" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.260684, 0, -0.0999092)
+script = ExtResource("3_qymtc")
+
+[node name="attach_f" type="Node3D" parent="signal_light"]
+transform = Transform3D(-1, -8.74228e-08, 0, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 0, 0)
+
+[node name="light1" type="MeshInstance3D" parent="signal_light"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259868, 0.0576819, 0.0825569)
+mesh = SubResource("QuadMesh_7l3uf")
+surface_material_override/0 = SubResource("ShaderMaterial_dwyls")
+
+[node name="light2" type="MeshInstance3D" parent="signal_light"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259868, 0.0696521, -0.0850992)
+mesh = SubResource("QuadMesh_7l3uf")
+surface_material_override/0 = SubResource("ShaderMaterial_dwyls")

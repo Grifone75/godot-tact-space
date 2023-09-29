@@ -1,7 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://b6u330ts5tq2v"]
+[gd_scene load_steps=23 format=3 uid="uid://b6u330ts5tq2v"]
 
 [ext_resource type="Script" path="res://scenes/dock_port/dockport.gd" id="1_afyqm"]
 [ext_resource type="Material" uid="uid://gk1v521ivqj1" path="res://materials/space_fabric_plating.tres" id="2_81jh0"]
+[ext_resource type="Script" path="res://scripts/signal_light.gd" id="3_oobho"]
+[ext_resource type="Shader" path="res://shaders/signal_light.gdshader" id="4_uab6o"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y2p42"]
 
@@ -171,6 +173,33 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_dkbj8")
 
+[sub_resource type="QuadMesh" id="QuadMesh_wjo7q"]
+size = Vector2(0.2, 0.2)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_l11ec"]
+load_path = "res://.godot/imported/flare2.png-57946a5d8f98405c411e85d444b4d4c5.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tiwtq"]
+load_path = "res://.godot/imported/flare2.png-57946a5d8f98405c411e85d444b4d4c5.s3tc.ctex"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gj7ps"]
+render_priority = 0
+shader = ExtResource("4_uab6o")
+shader_parameter/albedo = Color(0.454902, 0.321569, 0, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/emission = Color(0.505882, 0.411765, 0, 1)
+shader_parameter/emission_energy = 10.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = SubResource("CompressedTexture2D_l11ec")
+shader_parameter/texture_emission = SubResource("CompressedTexture2D_tiwtq")
+
 [node name="dockport" type="Node3D"]
 script = ExtResource("1_afyqm")
 
@@ -183,7 +212,7 @@ mesh = SubResource("ArrayMesh_ugncp")
 skeleton = NodePath("")
 
 [node name="shjoint0" type="Node3D" parent="dock_port/shoulder"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0562081, 0, 0.0143123)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0562081, 0, 0.0143123)
 
 [node name="arm1" type="MeshInstance3D" parent="dock_port/shoulder/shjoint0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0562081, 0, 1.32679)
@@ -192,7 +221,7 @@ skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_81jh0")
 
 [node name="eljoint1" type="Node3D" parent="dock_port/shoulder/shjoint0/arm1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.403079, -10.7407)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.403079, -10.7407)
 
 [node name="elbow" type="MeshInstance3D" parent="dock_port/shoulder/shjoint0/arm1/eljoint1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.372074, -1.52462)
@@ -200,7 +229,7 @@ mesh = SubResource("ArrayMesh_ifnb2")
 skeleton = NodePath("")
 
 [node name="eljoint2" type="Node3D" parent="dock_port/shoulder/shjoint0/arm1/eljoint1/elbow"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.10006)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -1.10006)
 
 [node name="arm2" type="MeshInstance3D" parent="dock_port/shoulder/shjoint0/arm1/eljoint1/elbow/eljoint2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.38419e-07, 1.8311)
@@ -212,6 +241,23 @@ surface_material_override/0 = ExtResource("2_81jh0")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.4475)
 mesh = SubResource("ArrayMesh_q78au")
 skeleton = NodePath("")
+
+[node name="signal_light" type="Node3D" parent="dock_port/shoulder/shjoint0/arm1/eljoint1/elbow/eljoint2/arm2/connector"]
+transform = Transform3D(11.1111, 0, 0, 0, 1.45705e-06, -11.1111, 0, 11.1111, 1.45705e-06, 2.84544, -0.0628741, -1.58303)
+script = ExtResource("3_oobho")
+
+[node name="attach_f" type="Node3D" parent="dock_port/shoulder/shjoint0/arm1/eljoint1/elbow/eljoint2/arm2/connector/signal_light"]
+transform = Transform3D(-1, -8.74228e-08, 0, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 0, 0)
+
+[node name="light1" type="MeshInstance3D" parent="dock_port/shoulder/shjoint0/arm1/eljoint1/elbow/eljoint2/arm2/connector/signal_light"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259868, 0.0576819, 0.0825569)
+mesh = SubResource("QuadMesh_wjo7q")
+surface_material_override/0 = SubResource("ShaderMaterial_gj7ps")
+
+[node name="light2" type="MeshInstance3D" parent="dock_port/shoulder/shjoint0/arm1/eljoint1/elbow/eljoint2/arm2/connector/signal_light"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259868, 0.0696521, -0.0850992)
+mesh = SubResource("QuadMesh_wjo7q")
+surface_material_override/0 = SubResource("ShaderMaterial_gj7ps")
 
 [node name="attach_f" type="Node3D" parent="."]
 transform = Transform3D(1, 7.10543e-15, 0, -3.82137e-15, 4.37114e-08, -1, -1.42109e-14, 1, 4.37114e-08, -9.23842, -0.0945051, -8.7915)

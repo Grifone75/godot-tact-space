@@ -3,14 +3,15 @@
 [ext_resource type="Script" path="res://scripts/path_trace_hud.gd" id="1_oqeis"]
 [ext_resource type="Script" path="res://addons/draw3d/draw_3d.gd" id="2_h2uxv"]
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_ub02b"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_jujqj"]
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_oqeis")
 
 [node name="Draw3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("ImmediateMesh_ub02b")
+mesh = SubResource("ImmediateMesh_jujqj")
 script = ExtResource("2_h2uxv")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.93614)
+visible = false

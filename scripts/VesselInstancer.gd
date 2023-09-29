@@ -79,6 +79,15 @@ func _get_children_by_pattern(father_node,pattern):
 			candidates.append(child)
 	return candidates
 	
+func _set_colors_to_tree(node,colors):
+	if node.get_class() == "MeshInstance3D":
+		node.set_instance_shader_parameter("albedo", col)
+		node.set_instance_shader_parameter("tile_albedo", col_dark)
+		node.set_instance_shader_parameter("utility_albedo", col_utility)
+		node.set_instance_shader_parameter("main_color", col_complement)
+	for child in node.get_children():
+		_set_colors_to_tree(child,colors)
+	
 func _pick_model_from_blender_library(name):
 	
 	var functional_class = construction_data.functional_mapping.get(name)
@@ -108,20 +117,15 @@ func _pick_model_from_blender_library(name):
 		else:
 			functionals[functional_class] = [selected_mi]
 	#test color override here
-	if selected_mi.has_method("set_material_properties"):
-		selected_mi.set_material_properties(
-			{
+	var colors = {
 				"albedo": col,
 				"tile_albedo": col_dark,
 				"utility_albedo": col_utility,
 				"main_color": col_complement,
 			}
-		)
-	elif selected_mi.get_class() == "MeshInstance3D":
-		selected_mi.set_instance_shader_parameter("albedo", col)
-		selected_mi.set_instance_shader_parameter("tile_albedo", col_dark)
-		selected_mi.set_instance_shader_parameter("utility_albedo", col_utility)
-		selected_mi.set_instance_shader_parameter("main_color", col_complement)
+	if selected_mi.has_method("set_material_properties"):
+		selected_mi.set_material_properties(colors)
+	else: _set_colors_to_tree(selected_mi,colors)
 	
 	return {"mi3D":selected_mi,"cs3D":collisionshape}
 	
@@ -246,7 +250,14 @@ func _materialize():
 	var tracer = load("res://scenes/path_trace_hud.tscn").instantiate()
 	smooth.add_child(tracer)
 	tracer.traced_vessel = smooth
-	pilot.mission_script = construction_data.initial_mission_path
+
+	var missionplayer = load("res://scenes/missionplayer.tscn").instantiate()
+	add_child(missionplayer)
+	missionplayer.mission_script = construction_data.initial_mission_path
+	missionplayer.ref_pilot = pilot
+	
+	if len(functionals.get("dockports",[]))>0:
+		add_child(load("res://scenes/traffic_manager.tscn").instantiate())
 	
 	for banner in functionals.get("banners",[]):
 		banner.update_text(self.name)
@@ -255,13 +266,13 @@ func _materialize():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	randomize()
-	materialize()
+	pass
 
 	
 func materialize(_faction:Faction = null):
+	randomize()
 	if _faction :
-		faction = faction
+		faction = _faction
 	elif faction == null:
 		faction = Faction.new()
 	else:

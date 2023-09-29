@@ -2,8 +2,8 @@ extends Node3D
 
 
 
-@export var tracked : Node3D
-@export var focus : Node3D
+@export var tracked : Node
+@export var focus : Node
 
 var _mouse_position = Vector2.ZERO
 var _joy_position = Vector2.ZERO
@@ -14,21 +14,22 @@ var delta_rotation : Quaternion = Quaternion.IDENTITY
 var _hold_global_basis
 
 signal tracked_updated
-signal focus_updated
+signal focus_updated #TODO not used?
 
 
 
-func update_tracked(n3):
-	tracked = n3
-	tracked_updated.emit(n3)
+func update_tracked(vessel):
+	tracked = vessel
+	tracked_updated.emit(vessel)
 	self.get_parent().remove_child(self)
-	tracked.get_node("Smoothing").add_child(self)
-	#$ReflectionProbe.tracked_object = n3
+	tracked.rb.get_node("Smoothing").add_child(self)
+	#$ReflectionProbe.tracked_object = vessel.rb
 
 	
-func update_focus(n3):
-	focus = n3
-	focus_updated.emit(n3)
+#TODO not used?
+func update_focus(vessel):
+	focus = vessel
+	focus_updated.emit(vessel)
 
 
 func reset_origin():

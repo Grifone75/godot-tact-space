@@ -1,0 +1,30 @@
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://d0pebgyed2eab"]
+
+[ext_resource type="Shader" uid="uid://o7siaa2m7rnu" path="res://shaders/accessory_shader.tres" id="1_4yg0d"]
+[ext_resource type="Texture2D" uid="uid://dwgsiu6h2j2qg" path="res://data/textures/gas_barrel1_alb_mask.png" id="2_sk4s1"]
+[ext_resource type="Texture2D" uid="uid://dj84puvo0yao5" path="res://data/textures/gas_barrel1_d.png" id="3_dlew8"]
+[ext_resource type="Texture2D" uid="uid://bky3sf6uiqkpr" path="res://data/textures/gas_barrel1_ao.png" id="4_4fs1d"]
+[ext_resource type="Texture2D" uid="uid://chgjre8juisr0" path="res://data/textures/gas_barrel1_n.png" id="5_ob2pi"]
+[ext_resource type="Texture2D" uid="uid://kk1t7y4kax4g" path="res://data/textures/gas_barrel1_r.png" id="6_1id02"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_4yg0d")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.49
+shader_parameter/normal_scale = 1.0
+shader_parameter/ao_texture_channel = null
+shader_parameter/ao_light_affect = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = ExtResource("3_dlew8")
+shader_parameter/albedo_mask = ExtResource("2_sk4s1")
+shader_parameter/texture_roughness = ExtResource("6_1id02")
+shader_parameter/texture_normal = ExtResource("5_ob2pi")
+shader_parameter/texture_ambient_occlusion = ExtResource("4_4fs1d")
