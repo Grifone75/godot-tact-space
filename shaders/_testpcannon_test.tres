@@ -8,7 +8,7 @@ constant = Color(0, 0, 0, 1)
 
 [resource]
 code = "shader_type spatial;
-render_mode cull_disabled, diffuse_lambert_wrap, specular_disabled, shadows_disabled;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert_wrap, specular_disabled, shadows_disabled;
 
 
 

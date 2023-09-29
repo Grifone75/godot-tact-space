@@ -12,6 +12,11 @@ var target_object: Node3D = null
 
 var targeting_manager: Targeting_manager
 
+enum ORIENTATION_BASE {TO_TGT, TO_VEL, AG_TGT, AG_VEL}
+var _orientation_base : ORIENTATION_BASE = ORIENTATION_BASE.TO_TGT
+
+var _approach_safe_distance = 0.0
+
 func _init(reference_rb:RigidBody3D, tgt_mgr: Targeting_manager):
 	base_rigidbody = reference_rb
 	targeting_manager = tgt_mgr
@@ -42,3 +47,19 @@ func _change_target(target):
 
 	# finally retrigger calcs
 	self.update_metrics()
+	
+func get_orientation_pointer():
+	if _orientation_base == ORIENTATION_BASE.TO_TGT:
+		return targeting_manager.get_wpos()
+	if _orientation_base == ORIENTATION_BASE.AG_VEL:
+		return base_rigidbody.global_position - (base_rigidbody.linear_velocity - targeting_manager.get_wvel())*100.0
+		
+func set_orientation_mode(mode:ORIENTATION_BASE):
+	_orientation_base = mode
+
+func set_approach_distance(d):
+	_approach_safe_distance = d
+	
+func get_approach_distance():
+	return _approach_safe_distance
+

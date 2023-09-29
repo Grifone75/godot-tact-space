@@ -1,0 +1,291 @@
+[gd_scene load_steps=17 format=3 uid="uid://cdfy40lfs1tat"]
+
+[ext_resource type="Script" path="res://scripts/drone/base_drone.gd" id="1_ealx0"]
+[ext_resource type="Texture2D" uid="uid://brii8qv8vkhd1" path="res://data/textures/dot-blur02.png" id="2_6duh6"]
+[ext_resource type="Texture2D" uid="uid://dlxf40louufe3" path="res://data/textures/panel3diffuse.png" id="2_kdtx7"]
+[ext_resource type="Script" path="res://scripts/drone/jet.gd" id="2_kg77u"]
+[ext_resource type="Texture2D" uid="uid://3vymtehojg31" path="res://data/textures/panel3m2.png" id="3_72yqs"]
+[ext_resource type="Texture2D" uid="uid://dyfa3nhf0isbg" path="res://data/textures/panel3n.png" id="4_caorm"]
+[ext_resource type="Texture2D" uid="uid://bnqhb4a63in5n" path="res://data/textures/flare1.png" id="7_n7g2i"]
+
+[sub_resource type="Shader" id="Shader_bdtay"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.0.1.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_disabled,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
+uniform float point_size : hint_range(0,128);
+uniform float roughness : hint_range(0,1);
+uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_g,filter_linear_mipmap,repeat_enable;
+uniform float specular;
+uniform float metallic;
+uniform sampler2D texture_normal : hint_roughness_normal,filter_linear_mipmap,repeat_enable;
+uniform float normal_scale : hint_range(-16,16);
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+}
+
+
+
+
+
+
+void fragment() {
+	vec2 base_uv = UV;
+	vec4 albedo_tex = texture(texture_albedo,base_uv);
+	albedo_tex *= COLOR;
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	vec4 roughness_texture_channel = vec4(0.0,1.0,0.0,0.0);
+	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	SPECULAR = specular;
+	NORMAL_MAP = texture(texture_normal,base_uv).rgb;
+	NORMAL_MAP_DEPTH = normal_scale;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ko8i"]
+resource_name = "standard_plates"
+render_priority = 0
+shader = SubResource("Shader_bdtay")
+shader_parameter/albedo = Color(0.682353, 0.552941, 0.0784314, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 1.0
+shader_parameter/normal_scale = 0.5
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = ExtResource("2_kdtx7")
+shader_parameter/texture_metallic = ExtResource("3_72yqs")
+shader_parameter/texture_roughness = ExtResource("3_72yqs")
+shader_parameter/texture_normal = ExtResource("4_caorm")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4bj27"]
+material = SubResource("ShaderMaterial_1ko8i")
+radius = 0.1
+height = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rk3ic"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.996078, 0.827451, 0.682353, 1)
+albedo_texture = ExtResource("2_6duh6")
+
+[sub_resource type="QuadMesh" id="QuadMesh_hkq5h"]
+material = SubResource("StandardMaterial3D_rk3ic")
+size = Vector2(0.5, 0.2)
+center_offset = Vector3(0.25, 0, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_tdkqd"]
+material = SubResource("StandardMaterial3D_rk3ic")
+size = Vector2(0.15, 0.15)
+center_offset = Vector3(0, 0, 0.2)
+
+[sub_resource type="QuadMesh" id="QuadMesh_pnd14"]
+size = Vector2(0.3, 0.3)
+
+[sub_resource type="Shader" id="Shader_y13g8"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.1.1.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_add,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
+uniform float point_size : hint_range(0,128);
+uniform float roughness : hint_range(0,1);
+uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r,filter_linear_mipmap,repeat_enable;
+uniform float specular;
+uniform float metallic;
+uniform sampler2D texture_emission : source_color, hint_default_black,filter_linear_mipmap,repeat_enable;
+uniform vec4 emission : source_color;
+uniform float emission_energy;
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+instance uniform float phase;
+
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]);
+	MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
+}
+
+
+
+
+
+
+void fragment() {
+	float active = clamp(sin(TIME*5.0+phase),0.0,1.0);
+	vec2 base_uv = UV;
+	vec4 albedo_tex = texture(texture_albedo,base_uv)*active;
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
+	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	SPECULAR = specular;
+	vec3 emission_tex = texture(texture_emission,base_uv).rgb;
+	EMISSION = (emission.rgb+emission_tex)*emission_energy*5.*active;
+	ALPHA *= albedo.a * albedo_tex.a;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b0yc3"]
+render_priority = 0
+shader = SubResource("Shader_y13g8")
+shader_parameter/albedo = Color(1, 0.160784, 0.180392, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/emission = Color(0, 0, 0, 1)
+shader_parameter/emission_energy = 1.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = ExtResource("7_n7g2i")
+shader_parameter/texture_emission = ExtResource("7_n7g2i")
+
+[node name="drone_base" type="Node3D"]
+script = ExtResource("1_ealx0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_4bj27")
+
+[node name="jet_x_pos" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.13975, 0, 0)
+script = ExtResource("2_kg77u")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="jet_x_pos"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0144606, 0, 0)
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="jet_x_pos"]
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="jet_x_pos"]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, 4.37114e-08, 1, 4.37114e-08, -1, 4.37114e-08, -4.37114e-08, 0.094658, 0, 0)
+mesh = SubResource("QuadMesh_tdkqd")
+skeleton = NodePath("../..")
+
+[node name="jet_x_neg" type="Node3D" parent="."]
+transform = Transform3D(-1, 1.50996e-07, 6.60024e-15, 0, -4.37114e-08, 1, 1.50996e-07, 1, 4.37114e-08, -0.099705, 0, 0)
+script = ExtResource("2_kg77u")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="jet_x_neg"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0144606, 0, 0)
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="jet_x_neg"]
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="jet_x_neg"]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, 4.37114e-08, 1, 4.37114e-08, -1, 4.37114e-08, -4.37114e-08, 0.094658, 0, 0)
+mesh = SubResource("QuadMesh_tdkqd")
+skeleton = NodePath("../..")
+
+[node name="jet_z_pos" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0.0200225, 0, 0.119727)
+script = ExtResource("2_kg77u")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="jet_z_pos"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0144606, 0, 0)
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="jet_z_pos"]
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="jet_z_pos"]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, 4.37114e-08, 1, 4.37114e-08, -1, 4.37114e-08, -4.37114e-08, 0.094658, 0, 0)
+mesh = SubResource("QuadMesh_tdkqd")
+skeleton = NodePath("../..")
+
+[node name="jet_z_neg" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 4.37114e-08, 1.91069e-15, 0.0200225, 0, -0.119727)
+script = ExtResource("2_kg77u")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="jet_z_neg"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0144606, 0, 0)
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="jet_z_neg"]
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="jet_z_neg"]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, 4.37114e-08, 1, 4.37114e-08, -1, 4.37114e-08, -4.37114e-08, 0.094658, 0, 0)
+mesh = SubResource("QuadMesh_tdkqd")
+skeleton = NodePath("../..")
+
+[node name="jet_y_neg" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, -4.37114e-08, 1, 0.0200225, -0.119727, -5.23345e-09)
+script = ExtResource("2_kg77u")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="jet_y_neg"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0144606, 0, 0)
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="jet_y_neg"]
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="jet_y_neg"]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, 4.37114e-08, 1, 4.37114e-08, -1, 4.37114e-08, -4.37114e-08, 0.094658, 0, 0)
+mesh = SubResource("QuadMesh_tdkqd")
+skeleton = NodePath("../..")
+
+[node name="jet_y_pos" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, -4.37114e-08, 1, -4.37114e-08, -4.37114e-08, 4.37114e-08, -4.37114e-08, 1, 0.0200225, 0.119727, 5.23345e-09)
+script = ExtResource("2_kg77u")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="jet_y_pos"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0144606, 0, 0)
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="jet_y_pos"]
+mesh = SubResource("QuadMesh_hkq5h")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="jet_y_pos"]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, 4.37114e-08, 1, 4.37114e-08, -1, 4.37114e-08, -4.37114e-08, 0.094658, 0, 0)
+mesh = SubResource("QuadMesh_tdkqd")
+skeleton = NodePath("../..")
+
+[node name="light1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00561382, 0.134171, 0.112203)
+mesh = SubResource("QuadMesh_pnd14")
+surface_material_override/0 = SubResource("ShaderMaterial_b0yc3")

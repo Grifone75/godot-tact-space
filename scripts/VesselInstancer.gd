@@ -12,6 +12,8 @@ extends Node
 @export var smooth: Node3D
 @export var vesselcontroller: Node
 
+@export var faction : Faction = null
+
 var functionals = {
 	
 }
@@ -27,6 +29,7 @@ var col
 var col_dark
 var col_utility
 var col_complement
+var blueprint = {}
 
 
 func _get_components_by_father_and_link(father_node_name,link_name):
@@ -76,6 +79,15 @@ func _get_children_by_pattern(father_node,pattern):
 			candidates.append(child)
 	return candidates
 	
+func _set_colors_to_tree(node,colors):
+	if node.get_class() == "MeshInstance3D":
+		node.set_instance_shader_parameter("albedo", col)
+		node.set_instance_shader_parameter("tile_albedo", col_dark)
+		node.set_instance_shader_parameter("utility_albedo", col_utility)
+		node.set_instance_shader_parameter("main_color", col_complement)
+	for child in node.get_children():
+		_set_colors_to_tree(child,colors)
+	
 func _pick_model_from_blender_library(name):
 	
 	var functional_class = construction_data.functional_mapping.get(name)
@@ -105,19 +117,26 @@ func _pick_model_from_blender_library(name):
 		else:
 			functionals[functional_class] = [selected_mi]
 	#test color override here
-	if selected_mi.get_class() == "MeshInstance3D":
-		selected_mi.set_instance_shader_parameter("albedo", col)
-		selected_mi.set_instance_shader_parameter("tile_albedo", col_dark)
-		selected_mi.set_instance_shader_parameter("utility_albedo", col_utility)
-		selected_mi.set_instance_shader_parameter("main_color", col_complement)
+	var colors = {
+				"albedo": col,
+				"tile_albedo": col_dark,
+				"utility_albedo": col_utility,
+				"main_color": col_complement,
+			}
+	if selected_mi.has_method("set_material_properties"):
+		selected_mi.set_material_properties(colors)
+	else: _set_colors_to_tree(selected_mi,colors)
+	
 	return {"mi3D":selected_mi,"cs3D":collisionshape}
 	
 	
 	
-func _expand_connectors(current_node) -> Node:
+func _expand_connectors(current_node) -> Array:
 	""" given current node, cycle all links of type attach_m and expand them
 	""" 
 	#print("expanding ",current_node.name)
+	var partial_blueprint = {}
+	var partial_blueprint_components = {}
 	var links_to_expand = _get_children_by_pattern(current_node, "attach_m")
 	#print("..found links :",links_to_expand)
 	var component_name
@@ -134,12 +153,14 @@ func _expand_connectors(current_node) -> Node:
 			add_child(component_cloned.mi3D)
 			#TODO wip add colliders
 			if component_cloned.cs3D: colliders[component_cloned.mi3D.get_instance_id()] = component_cloned.cs3D
-			component_cloned.mi3D = _expand_connectors(component_cloned.mi3D)
+			var expansion_result = _expand_connectors(component_cloned.mi3D)
+			component_cloned.mi3D = expansion_result[0]
+			partial_blueprint_components[link.name] = expansion_result[1]
 			_attach_component_to_father(current_node,link,component_cloned.mi3D)
-			
 		else:
 			pass
-	return current_node
+	partial_blueprint[current_node.name] = partial_blueprint_components
+	return [current_node, partial_blueprint]
 	
 
 func _attach_component_to_father(father,father_link,component):
@@ -149,7 +170,7 @@ func _attach_component_to_father(father,father_link,component):
 	var component_attach = get_node(component_link_f.get_path())
 	
 	component.get_parent().remove_child(component)
-	father.add_child(component)
+	father.add_child(component, true)
 
 	# we need to :
 	# get the transformation from moving_t to target_t and apply it to c
@@ -177,7 +198,9 @@ func _instance_me(_p = null):
 	
 	my_mesh_attach.add_child(body.mi3D)
 	if body.cs3D: colliders[body.mi3D.get_instance_id()] = body.cs3D
-	body.mi3D = _expand_connectors(body.mi3D)
+	var expansion_results = _expand_connectors(body.mi3D) 
+	body.mi3D = expansion_results[0]
+	blueprint = expansion_results[1]
 	for mesh_instance_id in colliders.keys():
 		var mi = instance_from_id(mesh_instance_id)
 		var collider = colliders[mesh_instance_id]
@@ -223,11 +246,18 @@ func _materialize():
 	pilot.force_input.connect(vesselcontroller.update_control_force)
 	pilot.changed_target.connect(vesselcontroller.update_nav_target)
 	vesselcontroller.vessel_info.connect(smooth.get_node("VesselInfo").update_vessel_label)
-	smooth.get_node("VesselInfo").set_shipname(self.name)
+	smooth.get_node("VesselInfo").set_shipname(self.name, self.faction.name)
 	var tracer = load("res://scenes/path_trace_hud.tscn").instantiate()
 	smooth.add_child(tracer)
 	tracer.traced_vessel = smooth
-	pilot.mission_script = construction_data.initial_mission_path
+
+	var missionplayer = load("res://scenes/missionplayer.tscn").instantiate()
+	add_child(missionplayer)
+	missionplayer.mission_script = construction_data.initial_mission_path
+	missionplayer.ref_pilot = pilot
+	
+	if len(functionals.get("dockports",[]))>0:
+		add_child(load("res://scenes/traffic_manager.tscn").instantiate())
 	
 	for banner in functionals.get("banners",[]):
 		banner.update_text(self.name)
@@ -236,29 +266,42 @@ func _materialize():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	pass
+
+	
+func materialize(_faction:Faction = null):
 	randomize()
-	col = [
-		Color.from_ok_hsl(randf_range(0.0,1.0),randf_range(0.1,.5),randf_range(.6,.9)),
-		Color.from_ok_hsl(randf_range(0.0,1.0),randf_range(0.7,1.),randf_range(.1,.4))
-		].pick_random()
-	col_dark = col.darkened(.7)
-	col_complement = [
-		Color.from_hsv(fmod(col.h+randf_range(-0.1,0.1),1.),col.s*1.5,.2),
-		Color.from_hsv(fmod(col.h+.5,1.),col.s,.3),
-		Color.from_hsv(fmod(col.h+randf_range(-0.1,0.1),1.),col.s*0.5,.8)
-		].pick_random()
-	var utilities = [Color("f0b31a"),Color("ff8c1a"),Color("ffe400"),Color("e7c2d2"),Color("101010"), col_complement]
-	#col_utility = utilities[0]
-	#var opp_hue = col.h + 0.5
-	#if opp_hue > 1: opp_hue -= 1.
-	#col_utility = Color.from_ok_hsl(opp_hue,.9,.5)
-	col_utility = utilities.pick_random()
-	#for ucol in utilities:
-	#	if abs(ucol.h - opp_hue) < abs(col_utility.h - opp_hue):
-	#		col_utility = ucol
+	if _faction :
+		faction = _faction
+	elif faction == null:
+		faction = Faction.new()
+	else:
+		pass
+
+	col = faction.main_color
+	col_dark = faction.color_dark
+	col_complement = faction.color_complement
+	col_utility = faction.color_utility
 	_materialize()
 	
 	
+func hud_link(is_active:bool):
+	if is_active:
+		#thruster update
+		for thruster in functionals.get("thrusters",[]):
+			var el = load("res://scenes/ui_hud_element.tscn").instantiate()
+			$/root/base/TabContainer/SYS/UNK.add_child(el)
+			thruster.current_thrust.connect(el.update_values)
+			
+		var nav_panel = load("res://scenes/ui_hud_nav.tscn").instantiate()
+		$/root/base/TabContainer/NAV.add_child(nav_panel)
+		self.pilot.pilot_info.connect(nav_panel.update_values)
+		
+	if !is_active:
+		for el in $/root/base/TabContainer/SYS/UNK.get_children():
+			el.queue_free()
+		for el in $/root/base/TabContainer/NAV.get_children():
+			el.queue_free()
 	
 
 
@@ -268,3 +311,7 @@ func _process(delta):
 
 func get_rb():
 	return rb
+	
+func request_docking():
+	return {"dockport1":null}
+

@@ -1,82 +1,31 @@
 [gd_scene load_steps=10 format=3 uid="uid://wcbb2e6qn6j4"]
 
 [ext_resource type="Script" path="res://scripts/signal_light.gd" id="1_xym8k"]
-[ext_resource type="Texture2D" uid="uid://bnqhb4a63in5n" path="res://data/textures/flare1.png" id="3_wc67f"]
+[ext_resource type="Texture2D" uid="uid://cktg0uns8abaa" path="res://data/textures/flare2.png" id="2_5xx3k"]
+[ext_resource type="Shader" path="res://shaders/signal_light.gdshader" id="2_nv85u"]
 [ext_resource type="Texture2D" uid="uid://d20dywkexhn5f" path="res://data/textures/signal_1d.png" id="4_ewaih"]
 [ext_resource type="Texture2D" uid="uid://uu63wp5trj6f" path="res://data/textures/signal_1n.png" id="5_0na5q"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_7l3uf"]
-size = Vector2(0.6, 0.6)
-
-[sub_resource type="Shader" id="Shader_y13g8"]
-code = "// NOTE: Shader automatically converted from Godot Engine 4.1.1.stable's StandardMaterial3D.
-
-shader_type spatial;
-render_mode blend_add,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
-uniform vec4 albedo : source_color;
-uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
-uniform float point_size : hint_range(0,128);
-uniform float roughness : hint_range(0,1);
-uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
-uniform vec4 metallic_texture_channel;
-uniform sampler2D texture_roughness : hint_roughness_r,filter_linear_mipmap,repeat_enable;
-uniform float specular;
-uniform float metallic;
-uniform sampler2D texture_emission : source_color, hint_default_black,filter_linear_mipmap,repeat_enable;
-uniform vec4 emission : source_color;
-uniform float emission_energy;
-uniform vec3 uv1_scale;
-uniform vec3 uv1_offset;
-uniform vec3 uv2_scale;
-uniform vec3 uv2_offset;
-instance uniform float phase;
-
-
-void vertex() {
-	UV=UV*uv1_scale.xy+uv1_offset.xy;
-	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]);
-	MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
-}
-
-
-
-
-
-
-void fragment() {
-	float active = clamp(sin(TIME*5.0+phase),0.0,1.0);
-	vec2 base_uv = UV;
-	vec4 albedo_tex = texture(texture_albedo,base_uv)*active;
-	ALBEDO = albedo.rgb * albedo_tex.rgb;
-	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
-	METALLIC = metallic_tex * metallic;
-	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
-	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
-	ROUGHNESS = roughness_tex * roughness;
-	SPECULAR = specular;
-	vec3 emission_tex = texture(texture_emission,base_uv).rgb;
-	EMISSION = (emission.rgb+emission_tex)*emission_energy*5.*active;
-	ALPHA *= albedo.a * albedo_tex.a;
-}
-"
+size = Vector2(0.2, 0.2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dyg2c"]
 render_priority = 0
-shader = SubResource("Shader_y13g8")
+shader = ExtResource("2_nv85u")
 shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/point_size = 1.0
 shader_parameter/roughness = 1.0
 shader_parameter/metallic_texture_channel = null
 shader_parameter/specular = 0.5
 shader_parameter/metallic = 0.0
-shader_parameter/emission = Color(0, 0, 0, 1)
-shader_parameter/emission_energy = 1.0
+shader_parameter/emission = Color(1, 1, 1, 1)
+shader_parameter/emission_energy = 10.0
 shader_parameter/uv1_scale = Vector3(1, 1, 1)
 shader_parameter/uv1_offset = Vector3(0, 0, 0)
 shader_parameter/uv2_scale = Vector3(1, 1, 1)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
-shader_parameter/texture_albedo = ExtResource("3_wc67f")
-shader_parameter/texture_emission = ExtResource("3_wc67f")
+shader_parameter/texture_albedo = ExtResource("2_5xx3k")
+shader_parameter/texture_emission = ExtResource("2_5xx3k")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gj6gc"]
 transparency = 1
@@ -95,12 +44,12 @@ script = ExtResource("1_xym8k")
 transform = Transform3D(-1, -8.74228e-08, 0, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 0, 0)
 
 [node name="light1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000349998, 0.0716429, 0.0825569)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000349998, 0.0576819, 0.0825569)
 mesh = SubResource("QuadMesh_7l3uf")
 surface_material_override/0 = SubResource("ShaderMaterial_dyg2c")
 
 [node name="light2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000349998, 0.0836131, -0.0850992)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000349998, 0.0696521, -0.0850992)
 mesh = SubResource("QuadMesh_7l3uf")
 surface_material_override/0 = SubResource("ShaderMaterial_dyg2c")
 

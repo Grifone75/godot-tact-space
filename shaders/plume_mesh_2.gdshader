@@ -6,7 +6,7 @@ uniform sampler2D _NoiseMap;
 uniform sampler2D _FlameColors : repeat_disable;
 uniform float _ColorSelector;
 instance uniform float _Seed = 0.5;
-instance uniform float _Throttle = 0.9;
+instance uniform float _Throttle = 0.8;
 uniform float plume_width_factor = 1.0;
 
 void vertex(){
@@ -54,6 +54,8 @@ void fragment() {
     float flame_presence = smoothstep(_Throttle-.1,_Throttle+.1,perturbed_uv_h.y*vertical_v_scaler)-smoothstep(_Throttle,_Throttle+.4,perturbed_uv_h.y);
     float final_presence = flame_presence*flame_spikes+perturbed_throttled_presence;
     vec3 flame_color = texture(_FlameColors, vec2(throttled_v*.5*vertical_v_scaler,_ColorSelector)).rgb;
+	
+	flame_color = mix(vec3(.5,.2,0),flame_color,smoothstep(.1,.3,1.0 - UV.y));
 	
 // ColorConstant:2
 	vec4 n_out2p0 = vec4(0.337461, 0.656338, 0.900241, 1.000000);

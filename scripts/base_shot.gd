@@ -42,7 +42,7 @@ func _physics_process(delta):
 		exp.global_transform = exp.global_transform.looking_at(result["normal"])
 		
 		var splat = load("res://scenes/bolt_decal.tscn").instantiate()
-		result["collider"].add_child(splat)
+		result["collider"].get_node("Smoothing").add_child(splat)
 		splat.global_position = result["position"]
 		splat.global_transform = splat.global_transform.looking_at(result["normal"])
 		

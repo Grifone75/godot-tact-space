@@ -10,8 +10,16 @@ var trace_length = 40
 func _ready():
 	var color_start = Color.AQUAMARINE
 	var color_stop = Color.BLACK
-	for c in range(40):
-		vcolors.push_back(lerp(color_stop,color_start, c/40.0))
+	color_stop.a = 0.0
+	
+	for c in range(35):
+		vcolors.push_back(lerp(color_stop,color_start, c/34.0))
+	
+	for c in range(3):
+		vcolors.push_back(lerp(color_start,color_stop,c/2.0))
+	vcolors.push_back(color_stop)
+	vcolors.push_back(color_stop)
+	
 	_sample_position()
 
 func _sample_position():

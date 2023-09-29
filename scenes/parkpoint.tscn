@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://cnjfmch7y5tih"]
+
+[ext_resource type="Script" path="res://scripts/navpoint.gd" id="1_jxpje"]
+[ext_resource type="Material" uid="uid://ofjeat0qm8l5" path="res://materials/navpoint.tres" id="2_cepu2"]
+[ext_resource type="Script" path="res://addons/draw3d/draw_3d.gd" id="3_athl8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ef84j"]
+material = ExtResource("2_cepu2")
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_fqipl"]
+
+[node name="ParkPoint" type="Node3D" groups=["local_objects", "navpoints"]]
+script = ExtResource("1_jxpje")
+
+[node name="NavPointMesh" type="MeshInstance3D" parent="."]
+visible = false
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("BoxMesh_ef84j")
+
+[node name="Label3D" type="Label3D" parent="."]
+visibility_range_begin = 10.0
+visibility_range_begin_margin = 20.0
+visibility_range_end = 30.0
+visibility_range_end_margin = 60.0
+visibility_range_fade_mode = 1
+pixel_size = 0.0005
+offset = Vector2(0, 80)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+alpha_scissor_threshold = 0.365
+alpha_hash_scale = 0.67
+alpha_antialiasing_mode = 2
+alpha_antialiasing_edge = 0.32
+texture_filter = 5
+modulate = Color(0.501961, 0.709804, 0.682353, 0.678431)
+outline_modulate = Color(0.152941, 0.133333, 0.0509804, 1)
+text = "This is a test"
+font_size = 30
+outline_size = 2
+
+[node name="Draw3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+visibility_range_begin = 10.0
+visibility_range_begin_margin = 20.0
+visibility_range_end = 30.0
+visibility_range_end_margin = 60.0
+visibility_range_fade_mode = 1
+mesh = SubResource("ImmediateMesh_fqipl")
+script = ExtResource("3_athl8")
+default_color = Color(0.254902, 0.482353, 0.380392, 0.517647)

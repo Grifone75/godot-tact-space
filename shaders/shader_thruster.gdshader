@@ -46,6 +46,6 @@ void fragment() {
 	NORMAL_MAP = texture(texture_normal,base_uv).rgb;
 	NORMAL_MAP_DEPTH = normal_scale;
 	EMISSION = final_color.rgb * em_mult;
-	ALPHA = aoch_tex.a;
+	ALPHA = aoch_tex.a * smoothstep(.1,.2,_Thrust);;
 	AO = 1.-aoch_tex.r;
 }

@@ -2,6 +2,7 @@ extends Node
 
 signal force_input
 signal torque_input
+signal special_commands
 
 
 # Called when the node enters the scene tree for the first time.
@@ -57,5 +58,8 @@ func _input(event):
 		if (event.axis == 1):
 			base_torque = Vector3(0,event.axis_value*10,0)
 		
+		
+	if event.is_action_pressed("drone_test"):
+		special_commands.emit("drone_test")
 		#force_input.emit(base_force)
 		#torque_input.emit(base_torque)

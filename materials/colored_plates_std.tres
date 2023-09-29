@@ -1,28 +1,39 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cgsic767togkf"]
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://cgsic767togkf"]
 
-[ext_resource type="Texture2D" uid="uid://dejh5lj4x6fhc" path="res://data/textures/texture_06.png" id="1_5xu0l"]
+[ext_resource type="Texture2D" uid="uid://cjobk1fkavjqg" path="res://data/textures/new_paneling_2_ao.png" id="1_hcgi2"]
+[ext_resource type="Texture2D" uid="uid://o2i76uqf5rtx" path="res://data/textures/new_paneling_2_metalness.png" id="2_xf7l7"]
+[ext_resource type="Texture2D" uid="uid://bxg0i34br4248" path="res://data/textures/new_paneling_2_normal.png" id="3_fd15c"]
+[ext_resource type="Texture2D" uid="uid://csqatq4packox" path="res://data/textures/new_paneling_2_roughness2.png" id="3_i1pbm"]
+[ext_resource type="Texture2D" uid="uid://bqj3w0s3ctpew" path="res://data/textures/new_paneling_2_paint.png" id="3_i7ifh"]
 
 [sub_resource type="Shader" id="Shader_1r5bt"]
 code = "shader_type spatial;
 instance uniform vec4 main_color : instance_index(3), source_color = vec4(0.000001, 0.356668, 0.021336, 1.000000);
-uniform sampler2D tex_frg_3;
+uniform sampler2D paint;
+uniform sampler2D metal;
+uniform sampler2D tex_norm;
+uniform sampler2D ao;
+uniform sampler2D color_conversion;
+uniform sampler2D roughness;
 
 
 
 void fragment() {
-// ColorParameter:4
-	vec4 n_out4p0 = main_color;
-
 
 // Texture2D:3
-	vec4 n_out3p0 = texture(tex_frg_3, UV);
-
+	vec4 metalness = texture(metal, UV);
+	float _roughness = texture(roughness, UV).r;
+	float composition = texture(color_conversion, UV).r;
+	vec3 color_washed = mix(main_color.rgb, vec3(.4,.4,.4),.0);
+	vec3 color_metal = mix(main_color.rgb, vec3(.2,.2,.2),.7);
+	vec4 _paint = texture(paint, UV);
 
 // Output:0
-	ALBEDO = vec3(n_out4p0.xyz);
-	METALLIC = n_out3p0.x;
-	ROUGHNESS = n_out3p0.x;
-
+	ALBEDO =  mix(mix(color_washed,color_metal,composition*1.5), _paint.rgb, _paint.a);
+	METALLIC = composition+.5;
+	ROUGHNESS = _roughness;
+	NORMAL_MAP = texture(tex_norm, UV).rgb;
+	AO = texture(ao, UV).r;
 
 }
 "
@@ -30,4 +41,8 @@ void fragment() {
 [resource]
 render_priority = 0
 shader = SubResource("Shader_1r5bt")
-shader_parameter/tex_frg_3 = ExtResource("1_5xu0l")
+shader_parameter/paint = ExtResource("3_i7ifh")
+shader_parameter/tex_norm = ExtResource("3_fd15c")
+shader_parameter/ao = ExtResource("1_hcgi2")
+shader_parameter/color_conversion = ExtResource("2_xf7l7")
+shader_parameter/roughness = ExtResource("3_i1pbm")

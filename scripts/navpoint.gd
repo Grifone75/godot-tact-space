@@ -8,6 +8,8 @@ func update_label(value):
 
 
 func _ready():
-	global_position = initial_position
+	if initial_position:
+		global_position = initial_position
 	$Draw3D.circle_XZ()
 	$Draw3D.cube()
+	$Label3D.text = str(self.name)

@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://dse1jp7pejd2i"]
+
+[ext_resource type="Texture2D" uid="uid://cy780o88jtu85" path="res://data/textures/hud_sprites/test_icon64.png" id="1_gjyba"]
+[ext_resource type="Script" path="res://scripts/ui_hud_element.gd" id="1_ie3w7"]
+
+[node name="HBoxContainer" type="HBoxContainer"]
+offset_right = 268.0
+offset_bottom = 64.0
+script = ExtResource("1_ie3w7")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("1_gjyba")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "text1 and description"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "text1 and description"
+clip_text = true
+text_overrun_behavior = 3

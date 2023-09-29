@@ -1,0 +1,23 @@
+[gd_scene load_steps=6 format=3 uid="uid://hk8r3thlafcn"]
+
+[ext_resource type="Shader" path="res://shaders/raymarching_simple.gdshader" id="1_bfwij"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_660mm"]
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_ocmrq"]
+noise = SubResource("FastNoiseLite_660mm")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4twiy"]
+render_priority = 0
+shader = ExtResource("1_bfwij")
+shader_parameter/NUMBER_OF_STEPS = 32
+shader_parameter/noise = SubResource("NoiseTexture3D_ocmrq")
+
+[sub_resource type="BoxMesh" id="BoxMesh_wudjg"]
+material = SubResource("ShaderMaterial_4twiy")
+size = Vector3(10, 10, 10)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_wudjg")

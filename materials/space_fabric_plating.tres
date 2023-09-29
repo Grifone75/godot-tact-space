@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://gk1v521ivqj1"]
+
+[ext_resource type="Texture2D" uid="uid://cx5j1vo2iwf6o" path="res://data/textures/fabric_space1_ao.png" id="1_i4msq"]
+[ext_resource type="Texture2D" uid="uid://bej61146rvl2p" path="res://data/textures/fabric_space1_normal.png" id="2_u254r"]
+
+[resource]
+normal_enabled = true
+normal_texture = ExtResource("2_u254r")
+ao_enabled = true
+ao_light_affect = 0.34
+ao_texture = ExtResource("1_i4msq")
