@@ -40,26 +40,21 @@ func _physics_process(delta):
 	
 	force_input.emit(Vector3(-ax_x,-ax_y,fplus-fminus))
 	
+	
+	
 func _input(event):
 	if event is InputEventJoypadMotion:
 		print(
 				"Device: %s. Joypad Axis Index: %s. Strength: %s."
 				% [event.device, event.axis, event.axis_value]
 		)
-		var base_torque = Vector3.ZERO
-		var base_force = Vector3.ZERO
 		
-		if (event.axis == 4):
-			base_force = Vector3(0,0,event.axis_value)
-		if (event.axis == 5):
-			base_force = Vector3(0,0,-event.axis_value)
-		if (event.axis == 0):
-			base_torque = Vector3(event.axis_value*10,0,0)
-		if (event.axis == 1):
-			base_torque = Vector3(0,event.axis_value*10,0)
-		
+	if event.is_action_pressed("warp_mode"):
+		special_commands.emit("warp_mode")
+
 		
 	if event.is_action_pressed("drone_test"):
 		special_commands.emit("drone_test")
 		#force_input.emit(base_force)
 		#torque_input.emit(base_torque)
+		

@@ -15,7 +15,7 @@ func _process(delta):
 		if targeting.current_target != null:
 			var velocity = focus_node.linear_velocity - targeting.get_wvel()
 			wprojpos = focus_node.global_position + velocity*100.0
-			$Velocity.text = "v: {} m/s".format(["%0.2f" % (velocity.length()*10.0)],"{}")
+			$Velocity.text = Metric.vel2str(velocity.length())
 			var screen_pos = focus_node.get_viewport().get_camera_3d().unproject_position(wprojpos)
 			if (focus_node.get_viewport().get_camera_3d().is_position_behind(wprojpos)):
 				$full_circle.hide()

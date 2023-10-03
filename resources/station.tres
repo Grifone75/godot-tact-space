@@ -9,7 +9,7 @@ root_pattern = "station_hub[0-9]"
 matches = {
 "station_hub[0-9]": {
 "attach_m_main_text": ["res://scenes/test_dynamic_label.tscn"],
-"attach_m_stationjoint": ["station_joint1", "station_module1", "station_module5"],
+"attach_m_stationjoint": ["station_joint1", "station_module1", "station_module5", "large_module_1"],
 "attach_m_windows": ["res://scenes/windows_4.tscn"]
 },
 "station_joint[0-9]": {

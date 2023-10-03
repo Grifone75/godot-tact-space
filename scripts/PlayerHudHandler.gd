@@ -19,3 +19,5 @@ func set_active(is_active):
 			hud_panel.visible = true
 		else:
 			hud_panel.visible = false
+
+

@@ -128,3 +128,8 @@ func _on_line_edit_text_submitted(new_text):
 		"focustgt": followed_vessel.pilot.set_drone_focus(followed_vessel.pilot.targeting_manager.get_wpos())
 		"destroy": followed_vessel.pilot.set_drone_destroy()
 		_: pass
+
+
+func _on_warp_test_toggled(button_pressed):
+	if followed_vessel:
+		followed_vessel.pilot.set_warp(button_pressed)

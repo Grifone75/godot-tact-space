@@ -51,16 +51,16 @@ func _get_components_by_father_and_link(father_node_name,link_name):
 		if regex.search(link_name):
 			result_component_list = match_subset[base_name]
 			break
-	print(typeof(result_component_list))
+	#print(typeof(result_component_list))
 	if typeof(result_component_list) == TYPE_DICTIONARY:
 		var variant_fixed = result_component_list.get("novarying") 
-		print("variant fixed ",variant_fixed)
+		#print("variant fixed ",variant_fixed)
 		if variant_fixed != null:
 			var variant = fixed_choices.get(variant_fixed)
 			if variant == null:
 				#let's pick it
 				variant = result_component_list.get("list").pick_random()
-				print("setting up variant to ", variant)
+				#print("setting up variant to ", variant)
 				fixed_choices[variant_fixed] = variant
 			result_component_list = [variant]
 	return result_component_list
@@ -108,6 +108,7 @@ func _pick_model_from_blender_library(name):
 			#extract shape and delete staticbody node
 			var sb = selected_mi.get_node("StaticBody3D")
 			collisionshape = selected_mi.get_node("StaticBody3D/CollisionShape3D")
+
 			sb.remove_child(collisionshape)
 			selected_mi.remove_child(sb)
 
@@ -284,6 +285,23 @@ func materialize(_faction:Faction = null):
 	col_utility = faction.color_utility
 	_materialize()
 	
+func dematerialize():
+	# temporary implementation
+	# somewhere here we should also put the serialization 
+	if rb:
+		rb.queue_free()
+		rb = null
+	if pilot:
+		pilot.queue_free()
+		pilot = null
+	if vesselcontroller:
+		vesselcontroller.queue_free()
+		vesselcontroller = null
+	if smooth:
+		smooth.queue_free()
+		smooth = null
+			
+
 	
 func hud_link(is_active:bool):
 	if is_active:

@@ -7,7 +7,7 @@
 [sub_resource type="BoxMesh" id="BoxMesh_ef84j"]
 material = ExtResource("1_payao")
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_y2l3n"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_4iuyk"]
 
 [node name="NavPoint" type="Node3D" groups=["local_objects", "navpoints"]]
 script = ExtResource("1_yxlle")
@@ -43,7 +43,6 @@ cast_shadow = 0
 visibility_range_end = 50.0
 visibility_range_end_margin = 100.0
 visibility_range_fade_mode = 1
-mesh = SubResource("ImmediateMesh_y2l3n")
+mesh = SubResource("ImmediateMesh_4iuyk")
 script = ExtResource("3_voxcc")
-MATERIAL_POINT_SIZE = 2
 default_color = Color(0.85098, 0.917647, 0, 1)

@@ -8,7 +8,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if ship:
+	if ship and ship.rb:
 		ship.rb.rotate(Vector3.UP,0.01)
 	
 
@@ -68,3 +68,6 @@ func set_random_new_faction():
 	$faction_display/main_col.color = faction.main_color
 	$faction_display/second_col.color = faction.color_complement
 	$faction_display/util_col.color = faction.color_utility
+	
+func test_stuff():
+	ship.dematerialize()

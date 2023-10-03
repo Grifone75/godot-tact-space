@@ -23,7 +23,8 @@ func play():
 
 
 func _play_mission():
-	await linked_pilot.get_tree().create_timer(2.).timeout
+	if !(await _safe_await_timer(2.)):
+		return null
 	var max_cycles = 3
 	var counter = max_cycles
 	while counter > 0:
@@ -38,13 +39,20 @@ func _play_mission():
 			linked_pilot.set_translation_mode('approach').set_orientation_mode('face_target')
 			linked_pilot.mission_details = 'mission1'
 			counter -= 1
-		await linked_pilot.get_tree().create_timer(2.).timeout
+			if !(await _safe_await_timer(2.)):
+				return null
 	linked_pilot.mission_details = 'mission1 last step'
 	while linked_nav_metrics.l_translation_to_target.length() > 50:
-		await linked_pilot.get_tree().create_timer(2.).timeout	
+		if !(await _safe_await_timer(2.)):
+			return null
 		linked_pilot.set_translation_mode('stop').set_orientation_mode('face_fixed')
 	linked_pilot.mission_details = 'mission1 ended - stabilize'
 
-
+func _safe_await_timer(t:float):
+	await linked_pilot.get_tree().create_timer(t).timeout
+	if linked_pilot != null:
+		return true
+	else: 
+		return false
 	
 

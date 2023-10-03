@@ -38,14 +38,12 @@ func _ready():
 
 	_update_contact_list()
 
-		
-		
 	#todo add logic for sequencing missions when the first finishes
 
 func _update_contact_list():
 	#wip
 	while true:
-		contact_list = get_tree().get_nodes_in_group("vessels").filter(func(x): return x != self.get_parent())
+		contact_list = get_tree().get_nodes_in_group("vessels").filter(func(x): return x != self.get_parent()) + get_tree().get_nodes_in_group("wide_area_nodes")
 		await get_tree().create_timer(2.).timeout
 		
 
@@ -93,10 +91,10 @@ func _physics_process(delta):
 	
 	_pilot_info["nav mode"] = _or_mode_name + ' - ' + _tr_mode_name
 	if nav_target: _pilot_info["nav tgt"] = nav_target.name
-	_pilot_info["tgt dst"] = nav_metrics.l_translation_to_target.length()
-	_pilot_info["tgt vel to"] = nav_metrics.l_vtt_sag_pos_len
-	_pilot_info["tgt vel sag"] = nav_metrics.l_vtt_sag.length()
-	_pilot_info["tgt vel tan"] = nav_metrics.l_vtt_tan.length()
+	_pilot_info["tgt dst"] = Metric.dst2str(nav_metrics.l_translation_to_target.length())
+	_pilot_info["tgt vel to"] = Metric.vel2str(nav_metrics.l_vtt_sag_pos_len)
+	_pilot_info["tgt vel sag"] = Metric.vel2str(nav_metrics.l_vtt_sag.length())
+	_pilot_info["tgt vel tan"] = Metric.vel2str(nav_metrics.l_vtt_tan.length())
 	_pilot_info["details"] = nav_details
 	_pilot_info["mission"] = mission_details
 	pilot_info.emit(_pilot_info)
@@ -356,6 +354,9 @@ func process_command(ev):
 		if drone_manager != null:
 			#drone_manager.set_distance(20)
 			drone_manager.set_focus(targeting_manager.get_wpos())
+	if ev == "warp_mode":
+		get_parent().get_node("VesselController").toggle_warp_mode()
+		
 		
 
 
@@ -399,3 +400,10 @@ func set_orientation_mode(param:String):
 			_orientation_mode = Callable()		
 	return self
 	
+func set_warp(do_warp:bool):
+	if do_warp:
+		ref_rb.freeze = true
+		ref_rb.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
+	else:
+		ref_rb.freeze = false
+		ref_rb.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC

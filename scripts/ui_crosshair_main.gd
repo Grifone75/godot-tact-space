@@ -15,8 +15,8 @@ func _process(delta):
 		if targeting.current_target != null:
 					
 			distance = (focus_node.global_position - targeting.get_wpos()).length()
-			$Distance.text = "d: {} m".format(["%0.2f" % (distance*10.0)],"{}")
-			if distance > 6000:
+			$Distance.text = Metric.dst2str(distance)
+			if distance > 99999996000:
 				self.hide()
 			else:
 				self.show()
