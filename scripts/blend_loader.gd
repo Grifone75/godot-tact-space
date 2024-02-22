@@ -33,7 +33,7 @@ func _instance_me(yes: bool):
 	var row = 0
 	for el in all_models.get_children():
 		if _match_patterns(el.name,patterns):
-			print("now processing ",el.name)
+			#print("now processing ",el.name)
 			el.get_parent().remove_child(el)
 			self.add_child(el)
 			el.set_owner(get_tree().get_edited_scene_root())

@@ -24,13 +24,13 @@ void fragment() {
 	vec4 metalness = texture(metal, UV);
 	float _roughness = texture(roughness, UV).r;
 	float composition = texture(color_conversion, UV).r;
-	vec3 color_washed = mix(main_color.rgb, vec3(.4,.4,.4),.0);
-	vec3 color_metal = mix(main_color.rgb, vec3(.2,.2,.2),.7);
+	vec3 color_washed = mix(main_color.rgb, vec3(.2,.2,.2),.1);
+	vec3 color_metal = mix(main_color.rgb, vec3(.1,.1,.1),.5);
 	vec4 _paint = texture(paint, UV);
 
 // Output:0
 	ALBEDO =  mix(mix(color_washed,color_metal,composition*1.5), _paint.rgb, _paint.a);
-	METALLIC = composition+.5;
+	METALLIC = composition+.2;
 	ROUGHNESS = _roughness;
 	NORMAL_MAP = texture(tex_norm, UV).rgb;
 	AO = texture(ao, UV).r;

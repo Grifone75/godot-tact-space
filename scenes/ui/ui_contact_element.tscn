@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://c3d1nuca3erfc"]
+
+[ext_resource type="Script" path="res://scenes/ui/ui_contact_element.gd" id="1_uq1dh"]
+[ext_resource type="Texture2D" uid="uid://cy780o88jtu85" path="res://data/textures/hud_sprites/test_icon64.png" id="2_n6e0k"]
+[ext_resource type="Theme" uid="uid://dc8gbjy78j8gx" path="res://Themes/ship_ui_theme.tres" id="3_c81qq"]
+
+[node name="contact_line" type="Button"]
+custom_minimum_size = Vector2(300, 16)
+offset_right = 274.0
+offset_bottom = 17.0
+theme = ExtResource("3_c81qq")
+toggle_mode = true
+script = ExtResource("1_uq1dh")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+offset_right = 16.0
+offset_bottom = 19.0
+texture = ExtResource("2_n6e0k")
+expand_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+offset_left = 20.0
+offset_right = 328.0
+offset_bottom = 19.0
+
+[node name="class" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme = ExtResource("3_c81qq")
+text = "class"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="name" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme = ExtResource("3_c81qq")
+text = "text1 and description"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="distance" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme = ExtResource("3_c81qq")
+text = "12345"
+clip_text = true
+text_overrun_behavior = 3
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

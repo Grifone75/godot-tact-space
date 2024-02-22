@@ -3,6 +3,7 @@ extends Node3D
 @export var model_scene : Resource
 @export var cube_size : int
 @export var direct_transforms : bool = false
+@export var faction_random : bool = false
 
 @export var delta:float = 15.
 
@@ -14,6 +15,8 @@ func _ready():
 		for j in range(cube_size):
 			for k in range(cube_size):
 				var a = model_scene.instantiate()
+				if faction_random:
+					faction = Faction.new()
 				if "vessels" in a.get_groups():
 					a.faction = faction
 				get_parent().add_child.call_deferred(a) # get_tree().get_root()

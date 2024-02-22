@@ -14,16 +14,24 @@ func _init():
 	randomize()
 	#chose faction colours
 	main_color = [
+		#low saturated, light tone (pastel)
 		Color.from_ok_hsl(randf_range(0.0,1.0),randf_range(0.1,.5),randf_range(.6,.9)),
-		Color.from_ok_hsl(randf_range(0.0,1.0),randf_range(0.7,1.),randf_range(.1,.4))
+		#high saturated, dark
+		Color.from_ok_hsl(randf_range(0.0,1.0),randf_range(0.7,1.),randf_range(.1,.4)),
+		# hi saturated, vivid
+		Color.from_ok_hsl(randf_range(0.0,1.0),randf_range(0.7,1.),randf_range(.5,.8))
 		].pick_random()
 	color_dark = main_color.darkened(.7)
 	color_complement = [
-		Color.from_hsv(fmod(main_color.h+randf_range(-0.1,0.1),1.),main_color.s*1.5,.2),
+		#hue variant of main 120 degrees, 150% more saturated, light
+		Color.from_hsv(fmod(main_color.h+.333,1.),main_color.s*1.5,.2),
+		Color.from_hsv(fmod(main_color.h-.333,1.),main_color.s*1.5,.2),
+		#opposite hue than main, same sat, light - nice
 		Color.from_hsv(fmod(main_color.h+.5,1.),main_color.s,.3),
+		#hue variant of main, 50% as saturated, dark - nice
 		Color.from_hsv(fmod(main_color.h+randf_range(-0.1,0.1),1.),main_color.s*0.5,.8)
 		].pick_random()
-	var utilities = [Color("f0b31a"),Color("ff8c1a"),Color("ffe400"),Color("e7c2d2"),Color("101010"), color_complement]
+	var utilities = [Color("f0b31a"),Color("ff8c1a"),Color("ffe400"),Color("e7c2d2"),Color("101010"), Color.from_hsv(fmod(main_color.h+.5,1.),.9,.7)]
 	#col_utility = utilities[0]
 	#var opp_hue = col.h + 0.5
 	#if opp_hue > 1: opp_hue -= 1.

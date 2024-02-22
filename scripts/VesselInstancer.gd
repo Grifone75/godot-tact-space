@@ -13,6 +13,8 @@ extends Node
 @export var vesselcontroller: Node
 
 @export var faction : Faction = null
+@export var vessel_class = ""
+
 
 var functionals = {
 	
@@ -253,15 +255,17 @@ func _materialize():
 	tracer.traced_vessel = smooth
 
 	var missionplayer = load("res://scenes/missionplayer.tscn").instantiate()
-	add_child(missionplayer)
-	missionplayer.mission_script = construction_data.initial_mission_path
 	missionplayer.ref_pilot = pilot
+	missionplayer.load_mission(construction_data.initial_mission_path.instantiate())
+	add_child(missionplayer)
 	
 	if len(functionals.get("dockports",[]))>0:
 		add_child(load("res://scenes/traffic_manager.tscn").instantiate())
 	
 	for banner in functionals.get("banners",[]):
 		banner.update_text(self.name)
+
+	vessel_class = construction_data.vessel_class
 
 
 
@@ -306,19 +310,22 @@ func dematerialize():
 func hud_link(is_active:bool):
 	if is_active:
 		#thruster update
+		#TODO this should be handled the other way around : 
+		# the MFD is rsponsible for its elements. We should only populate it and clear it by sending it a list of
+		#the thrusters
 		for thruster in functionals.get("thrusters",[]):
-			var el = load("res://scenes/ui_hud_element.tscn").instantiate()
-			$/root/base/TabContainer/SYS/UNK.add_child(el)
+			var el = load("res://scenes/ui/ui_hud_element.tscn").instantiate()
+			$/root/base/PlayerUI/MFD/SYS/UNK.add_child(el)
 			thruster.current_thrust.connect(el.update_values)
 			
-		var nav_panel = load("res://scenes/ui_hud_nav.tscn").instantiate()
-		$/root/base/TabContainer/NAV.add_child(nav_panel)
+		var nav_panel = load("res://scenes/ui/ui_hud_nav.tscn").instantiate()
+		$/root/base/PlayerUI/MFD/NAV.add_child(nav_panel)
 		self.pilot.pilot_info.connect(nav_panel.update_values)
 		
 	if !is_active:
-		for el in $/root/base/TabContainer/SYS/UNK.get_children():
+		for el in $/root/base/PlayerUI/MFD/SYS/UNK.get_children():
 			el.queue_free()
-		for el in $/root/base/TabContainer/NAV.get_children():
+		for el in $/root/base/PlayerUI/MFD/NAV.get_children():
 			el.queue_free()
 	
 

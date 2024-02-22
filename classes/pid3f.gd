@@ -18,5 +18,14 @@ func update(dt,current_value:Vector3, target_value:Vector3):
 	)
 	
 
+func tune_derivative_gain(factor):
+	x.derivative_gain = factor
+	y.derivative_gain = factor
+	z.derivative_gain = factor
 
+
+func tune_proportional_gain(factor):
+	x.proportional_gain = factor
+	y.proportional_gain = factor
+	z.proportional_gain = factor
 

@@ -6,6 +6,7 @@ extends Node3D
 @export var focus : Node
 
 var _mouse_position = Vector2.ZERO
+var _mouse_position_abs = Vector2.ZERO
 var _joy_position = Vector2.ZERO
 var sensitivity = 0.01
 var zoom = 1.0
@@ -15,7 +16,7 @@ var _hold_global_basis
 
 signal tracked_updated
 signal focus_updated #TODO not used?
-
+signal clicked_object
 
 
 func update_tracked(vessel):
@@ -33,7 +34,7 @@ func update_focus(vessel):
 
 
 func reset_origin():
-	print("cam resetting")
+	#print("cam resetting")
 	#var delta_current = self.current_cam_pos - self.global_position
 	#var delta_tracked = self.current_tracked_pos - self.global_position
 	self.global_position = Vector3.ZERO
@@ -46,12 +47,15 @@ func _input(event):
 	# Receives mouse motion
 	if event is InputEventMouseMotion:
 		_mouse_position = event.relative
+		_mouse_position_abs = event.position
 	
 	# Receives mouse button input
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_RIGHT: # Only allows rotation if right click down
 				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if event.pressed else Input.MOUSE_MODE_VISIBLE)
+			MOUSE_BUTTON_LEFT:
+				clicked_object.emit(get_selection())
 			MOUSE_BUTTON_WHEEL_DOWN: # zoom out
 				zoom = clamp(zoom +1.0, -20, 20)
 			MOUSE_BUTTON_WHEEL_UP: # zoom in
@@ -98,8 +102,8 @@ func _process(delta):
 	_update_mouselook()
 	
 	if tracked:
-		var new_basis = Basis($BasePivot.transform.basis.get_rotation_quaternion() * delta_rotation ).orthonormalized()
-		$BasePivot.transform.basis = $BasePivot.transform.basis.slerp(new_basis,0.1)
+		var new_basis = Basis($BasePivot.transform.basis.get_rotation_quaternion() * delta_rotation )
+		$BasePivot.transform.basis = $BasePivot.transform.basis.slerp(new_basis,0.1).orthonormalized()
 
 		
 		$BasePivot/CameraArm.transform.origin.z += zoom
@@ -123,7 +127,18 @@ func _notification(what):
 			_hold_global_basis = $BasePivot.global_transform.basis
 
 
-
+func get_selection():
+	var worldspace = get_world_3d().direct_space_state
+	var start = $BasePivot/CameraArm/cam_track.project_ray_origin(_mouse_position_abs)
+	var end = $BasePivot/CameraArm/cam_track.project_position(_mouse_position_abs, 1000)
+	var query = PhysicsRayQueryParameters3D.create(start, end)
+	var result = worldspace.intersect_ray(query)
+	var coll = result.get("collider")
+	if coll:
+		return coll.get_parent().get_parent()
+	else: 
+		return null
+	
 
 
 

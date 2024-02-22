@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://sgpnhf61o5u2"]
+
+[ext_resource type="Script" path="res://scripts/VesselInstancer.gd" id="1_ywjtk"]
+[ext_resource type="Resource" uid="uid://dtipo2psbxrdh" path="res://resources/vessel_alt.tres" id="2_72sqv"]
+[ext_resource type="Script" path="res://scripts/Faction.gd" id="3_vi4uc"]
+
+[sub_resource type="Resource" id="Resource_nklx4"]
+script = ExtResource("3_vi4uc")
+name = "The Night Lancers"
+main_color = Color(0.617051, 0.682053, 0.546033, 1)
+color_dark = Color(0.185115, 0.204616, 0.16381, 1)
+color_utility = Color(0.143137, 0.2, 0.140172, 1)
+color_complement = Color(0.143137, 0.2, 0.140172, 1)
+
+[node name="Eastern Scarf" type="Node" groups=["local_objects", "vessels"]]
+script = ExtResource("1_ywjtk")
+construction_data = ExtResource("2_72sqv")
+faction = SubResource("Resource_nklx4")

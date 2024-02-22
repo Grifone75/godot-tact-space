@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Space_construction_class" load_steps=3 format=3 uid="uid://ob3dey3yjg18"]
 
-[ext_resource type="Script" path="res://scripts/missions/dock_generic.gd" id="1_xfx85"]
+[ext_resource type="PackedScene" uid="uid://cld72sjyh0sup" path="res://scenes/missions/DockMission.tscn" id="1_h8cho"]
 [ext_resource type="Script" path="res://scripts/space_construction_class.gd" id="2_mc4ta"]
 
 [resource]
@@ -15,7 +15,7 @@ matches = {
 },
 "center_[0-9]": {
 "attach_m.back": ["^engine1", "enginehub", "enginehub2", "enginehub3"],
-"attach_m_front": ["front4_h", "front5_h", "front3_h", "front2_h", "front1"],
+"attach_m_front": ["front4_h", "front5_h", "front6_h", "front3_h", "front7_h", "front2_h", "front1"],
 "attach_m_module_small": ["ship_module_scanner", "ship_module_omnisensor"],
 "attach_m_rcs": ["res://scenes/thruster_small.tscn"],
 "attach_m_side": ["side_2", "side_1", "side_5", "side_6", "side_4", "side_7"],
@@ -30,16 +30,28 @@ matches = {
 }
 },
 "fr_section": {
-"attach_m_module_small": ["ship_module_omnisensor"],
+"attach_m_module_small": ["ship_module_omnisensor", "ship_module_bidone1", "ship_module_front_radar1", "ship_module_front_radar2", "ship_module_observation_dome"],
 "attach_m_rcs": ["res://scenes/thruster_small.tscn"],
 "attach_m_windows": ["res://scenes/windows_4.tscn"]
 },
-"front[0-9](_h)*": {
+"front[0-5,7](_h)*": {
 "attach_m_cabin01": ["res://scenes/cabin_01.tscn"],
 "attach_m_dockport": ["res://scenes/dock_port/dockport.tscn", "res://scenes/dock_port/dockport2.tscn"],
-"attach_m_module_small": ["ship_module_scanner"],
+"attach_m_module_small": ["ship_module_scanner", "ship_module_bidone1", "ship_module_front_radar1", "ship_module_front_radar2", "ship_module_observation_dome"],
 "attach_m_rcs": ["res://scenes/thruster_small.tscn"],
 "attach_m_side": ["fr_section2_h", "fr_section3_h", "fr_section4_h"],
+"attach_m_signal_light": ["res://scenes/signal_light.tscn"],
+"attach_m_windows": ["res://scenes/windows_4.tscn"]
+},
+"front[6](_h)*": {
+"attach_m_cabin01": ["res://scenes/cabin_01.tscn"],
+"attach_m_dockport": ["res://scenes/dock_port/dockport.tscn", "res://scenes/dock_port/dockport2.tscn"],
+"attach_m_module_small": ["ship_module_scanner", "ship_module_bidone1", "ship_module_front_radar1", "ship_module_front_radar2", "ship_module_observation_dome"],
+"attach_m_rcs": ["res://scenes/thruster_small.tscn"],
+"attach_m_side": {
+"list": ["fr_section2_h", "fr_section3_h", "fr_section4_h", "fr_section5_h"],
+"novarying": "front"
+},
 "attach_m_signal_light": ["res://scenes/signal_light.tscn"],
 "attach_m_windows": ["res://scenes/windows_4.tscn"]
 },
@@ -55,6 +67,8 @@ matches = {
 }
 functional_mapping = {
 "res://scenes/cabin_01.tscn": "cabins",
+"res://scenes/dock_port/dockport.tscn": "ship_dockport",
+"res://scenes/dock_port/dockport2.tscn": "ship_dockport",
 "res://scenes/gun_1.tscn": "turrets",
 "res://scenes/thruster/thruster.tscn": "thrusters",
 "res://scenes/thruster_small.tscn": "thrusters",
@@ -73,4 +87,5 @@ names = [{
 }, {
 "n1": ["Ambystoma", "Scorpaenidae", "Squalus", "Alcelaphinae Major", "Scorpaenidae Major", "Violet Sheep", "Black Trout", "Eastern Scarf", "Western Horn", "Western Robe", "Papilionoidea", "Sarcophilus", "Simia", "Oniscidea Borealis", "Anguis Occidentalis", "Amethyst Rat", "Vermilion Trout", "Eastern Arrow", "Large Telescope", "Small Ship", "Achatina", "Dermaptera", "Ramphastos", "Dromaius Occidentalis", "Enhydra Major", "Harlequin Porcupine", "Red Goose", "Big Brush", "Small Airplane", "Large Couldron", "Cichlidae", "Chelonioidea", "Rhinoceros", "Caeli Orientalis", "Dynastes Australis", "Emerald Starfish", "Violet Kangaroo", "Northern Fountain", "Eastern Spade", "Big Wrench"]
 }]
-initial_mission_path = ExtResource("1_xfx85")
+vessel_class = "vessel"
+initial_mission_path = ExtResource("1_h8cho")

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="Space_construction_class" load_steps=2 format=3 uid="uid://lcm47f6qqlqe"]
+[gd_resource type="Resource" script_class="Space_construction_class" load_steps=3 format=3 uid="uid://lcm47f6qqlqe"]
 
 [ext_resource type="Script" path="res://scripts/space_construction_class.gd" id="1_2nyn2"]
+[ext_resource type="PackedScene" uid="uid://b5im0tvnesrah" path="res://scenes/missions/StationMission.tscn" id="1_yoatx"]
 
 [resource]
 script = ExtResource("1_2nyn2")
@@ -22,6 +23,7 @@ matches = {
 "attach_m_dockport": ["res://scenes/dock_port/dockport.tscn"]
 },
 "station_module[0235]": {
+"attach_m_dockport": ["res://scenes/dock_port/dockport.tscn"],
 "attach_m_stationjoint": ["station_module1", "station_module2", "station_module3", "station_module4"]
 }
 }
@@ -30,6 +32,7 @@ functional_mapping = {
 "res://scenes/dock_port/dockport.tscn": "dockports",
 "res://scenes/dock_port/dockport2.tscn": "dockports",
 "res://scenes/gun_1.tscn": "turrets",
+"res://scenes/test_dynamic_label.tscn": "banners",
 "res://scenes/thruster/thruster.tscn": "thrusters",
 "res://scenes/thruster_small.tscn": "thrusters",
 "res://scenes/windows_4.tscn": "cabins"
@@ -44,3 +47,5 @@ names = [{
 }, {
 "n1": ["Ambystoma", "Scorpaenidae", "Squalus", "Alcelaphinae Major", "Scorpaenidae Major", "Violet Sheep", "Black Trout", "Eastern Scarf", "Western Horn", "Western Robe", "Papilionoidea", "Sarcophilus", "Simia", "Oniscidea Borealis", "Anguis Occidentalis", "Amethyst Rat", "Vermilion Trout", "Eastern Arrow", "Large Telescope", "Small Ship", "Achatina", "Dermaptera", "Ramphastos", "Dromaius Occidentalis", "Enhydra Major", "Harlequin Porcupine", "Red Goose", "Big Brush", "Small Airplane", "Large Couldron", "Cichlidae", "Chelonioidea", "Rhinoceros", "Caeli Orientalis", "Dynastes Australis", "Emerald Starfish", "Violet Kangaroo", "Northern Fountain", "Eastern Spade", "Big Wrench"]
 }]
+vessel_class = "station"
+initial_mission_path = ExtResource("1_yoatx")

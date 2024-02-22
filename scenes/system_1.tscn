@@ -1,0 +1,324 @@
+[gd_scene load_steps=21 format=3 uid="uid://koc4vfwsfbwj"]
+
+[ext_resource type="PackedScene" uid="uid://xhg4bqu6m3jl" path="res://scenes/gas_giant.tscn" id="1_j0ayg"]
+[ext_resource type="PackedScene" uid="uid://duxcgy6lm37ml" path="res://contactable.tscn" id="2_5aofi"]
+[ext_resource type="PackedScene" uid="uid://do4q6s3wnifis" path="res://scenes/wide_area_node.tscn" id="2_k2vcq"]
+[ext_resource type="Script" path="res://scenes/system_star_light.gd" id="4_dfyrv"]
+[ext_resource type="PackedScene" uid="uid://hfom1pg401dc" path="res://scenes/star_01.tscn" id="5_c12gw"]
+
+[sub_resource type="Shader" id="Shader_u2l1l"]
+code = "// Uniforms
+shader_type spatial;
+
+//
+// Description : Array and textureless GLSL 2D/3D/4D simplex 
+//               noise functions.
+//      Author : Ian McEwan, Ashima Arts.
+//  Maintainer : stegu
+//     Lastmod : 20201014 (stegu)
+//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
+//               Distributed under the MIT License. See LICENSE file.
+//               https://github.com/ashima/webgl-noise
+//               https://github.com/stegu/webgl-noise
+// 
+
+vec3 mod289_3(vec3 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec4 mod289(vec4 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec4 permute(vec4 x) {
+     return mod289(((x*34.0)+10.0)*x);
+}
+
+vec4 taylorInvSqrt(vec4 r)
+{
+  return 1.79284291400159 - 0.85373472095314 * r;
+}
+
+float snoise(vec3 v)
+  { 
+  const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+  const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+
+// First corner
+  vec3 i  = floor(v + dot(v, C.yyy) );
+  vec3 x0 =   v - i + dot(i, C.xxx) ;
+
+// Other corners
+  vec3 g = step(x0.yzx, x0.xyz);
+  vec3 l = 1.0 - g;
+  vec3 i1 = min( g.xyz, l.zxy );
+  vec3 i2 = max( g.xyz, l.zxy );
+
+  //   x0 = x0 - 0.0 + 0.0 * C.xxx;
+  //   x1 = x0 - i1  + 1.0 * C.xxx;
+  //   x2 = x0 - i2  + 2.0 * C.xxx;
+  //   x3 = x0 - 1.0 + 3.0 * C.xxx;
+  vec3 x1 = x0 - i1 + C.xxx;
+  vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
+  vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
+
+// Permutations
+  i = mod289_3(i); 
+  vec4 p = permute( permute( permute( 
+             i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+           + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
+           + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+
+// Gradients: 7x7 points over a square, mapped onto an octahedron.
+// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
+  float n_ = 0.142857142857; // 1.0/7.0
+  vec3  ns = n_ * D.wyz - D.xzx;
+
+  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)
+
+  vec4 x_ = floor(j * ns.z);
+  vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
+
+  vec4 x = x_ *ns.x + ns.yyyy;
+  vec4 y = y_ *ns.x + ns.yyyy;
+  vec4 h = 1.0 - abs(x) - abs(y);
+
+  vec4 b0 = vec4( x.xy, y.xy );
+  vec4 b1 = vec4( x.zw, y.zw );
+
+  //vec4 s0 = vec4(lessThan(b0,0.0))*2.0 - 1.0;
+  //vec4 s1 = vec4(lessThan(b1,0.0))*2.0 - 1.0;
+  vec4 s0 = floor(b0)*2.0 + 1.0;
+  vec4 s1 = floor(b1)*2.0 + 1.0;
+  vec4 sh = -step(h, vec4(0.0));
+
+  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+
+  vec3 p0 = vec3(a0.xy,h.x);
+  vec3 p1 = vec3(a0.zw,h.y);
+  vec3 p2 = vec3(a1.xy,h.z);
+  vec3 p3 = vec3(a1.zw,h.w);
+
+//Normalise gradients
+  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+  p0 *= norm.x;
+  p1 *= norm.y;
+  p2 *= norm.z;
+  p3 *= norm.w;
+
+// Mix final noise value
+  vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+  m = m * m;
+  return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+                                dot(p2,x2), dot(p3,x3) ) );
+  }
+
+
+ float noise(vec3 position, int octaves, float frequency, float persistence) {
+    float total = 0.0; // Total value so far
+    float maxAmplitude = 0.0; // Accumulates highest theoretical amplitude
+    float amplitude = 1.0;
+    for (int i = 0; i < octaves; i++) {
+
+        // Get the noise sample
+        total += snoise(position * frequency) * amplitude;
+
+        // Make the wavelength twice as small
+        frequency *= 2.0;
+
+        // Add to our maximum possible amplitude
+        maxAmplitude += amplitude;
+
+        // Reduce amplitude according to persistence for the next octave
+        amplitude *= persistence;
+    }
+
+    // Scale the result by the maximum amplitude
+    return total / maxAmplitude;
+}
+
+uniform sampler2D unColorLookup: repeat_enable;
+uniform vec3 unLightDir;   
+
+// Inputs
+//in vec3 fNormal;
+//in float fTexCoord;  
+
+void vertex(){
+	COLOR = vec4(NORMAL,1.);
+}
+
+void fragment() {
+	float bands = 1.;//smoothstep(-.5,.5,sin(UV.y*30.))*2.-1.;
+    // Preturb texture coordinate with noise
+    float n = noise(COLOR.xyz*10.+TIME*.1*bands,6,0.1,0.8)*.1;
+    vec2 newTexCoord = vec2(UV.y*2. + n,UV.x);
+
+    // Lookup the texture
+    vec3 texColor = texture(unColorLookup, newTexCoord).rgb;
+
+    // Output color to pixel
+    ALBEDO = texColor;
+}"
+
+[sub_resource type="Gradient" id="Gradient_ooymf"]
+offsets = PackedFloat32Array(0.167263, 0.423018, 0.502302, 0.635294, 0.735038, 0.970333)
+colors = PackedColorArray(0.124755, 0.583361, 0.767029, 1, 0.205682, 0.184784, 0.165887, 1, 0.223146, 0.133384, 0.0583953, 1, 0.457424, 0.590589, 0.285479, 1, 0.600112, 0.71424, 0.573801, 1, 0.209589, 0.585204, 0.644229, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3r0ox"]
+gradient = SubResource("Gradient_ooymf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i4uu0"]
+render_priority = 0
+shader = SubResource("Shader_u2l1l")
+shader_parameter/unLightDir = null
+shader_parameter/unColorLookup = SubResource("GradientTexture1D_3r0ox")
+
+[sub_resource type="SphereMesh" id="SphereMesh_1etrc"]
+material = SubResource("ShaderMaterial_i4uu0")
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ks5ks"]
+input_name = "normal"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_3kt5o"]
+input_name = "view"
+
+[sub_resource type="VisualShaderNodeDotProduct" id="VisualShaderNodeDotProduct_stjtb"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_jikis"]
+default_input_values = [0, 1.0, 1, 0.0]
+operator = 1
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_wk4cv"]
+default_input_values = [0, 0.0, 1, 10.0]
+operator = 5
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_xh64f"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_is07f"]
+parameter_name = "ColorParameter"
+default_value_enabled = true
+default_value = Color(0.928047, 0.707148, 0.923194, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_e514i"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 ColorParameter : source_color = vec4(0.928047, 0.707148, 0.923194, 1.000000);
+
+
+
+void fragment() {
+// ColorParameter:8
+	vec4 n_out8p0 = ColorParameter;
+
+
+// Input:2
+	vec3 n_out2p0 = NORMAL;
+
+
+// Input:3
+	vec3 n_out3p0 = VIEW;
+
+
+// DotProduct:4
+	float n_out4p0 = dot(n_out2p0, n_out3p0);
+
+
+// FloatOp:5
+	float n_in5p0 = 1.00000;
+	float n_out5p0 = n_in5p0 - n_out4p0;
+
+
+// FloatOp:6
+	float n_in6p1 = 10.00000;
+	float n_out6p0 = pow(n_out5p0, n_in6p1);
+
+
+// FloatConstant:7
+	float n_out7p0 = 0.000000;
+
+
+// Output:0
+	ALBEDO = vec3(n_out8p0.xyz);
+	ALPHA = n_out6p0;
+	METALLIC = n_out7p0;
+
+
+}
+"
+graph_offset = Vector2(52.2222, -4.44444)
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(760, 20)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_ks5ks")
+nodes/fragment/2/position = Vector2(20, 80)
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_3kt5o")
+nodes/fragment/3/position = Vector2(20, 160)
+nodes/fragment/4/node = SubResource("VisualShaderNodeDotProduct_stjtb")
+nodes/fragment/4/position = Vector2(300, 100)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_jikis")
+nodes/fragment/5/position = Vector2(440, 60)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatOp_wk4cv")
+nodes/fragment/6/position = Vector2(520, 240)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatConstant_xh64f")
+nodes/fragment/7/position = Vector2(260, 240)
+nodes/fragment/8/node = SubResource("VisualShaderNodeColorParameter_is07f")
+nodes/fragment/8/position = Vector2(160, 340)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 0, 3, 0, 4, 1, 4, 0, 5, 1, 5, 0, 6, 0, 6, 0, 0, 1, 7, 0, 0, 2, 8, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ifkb1"]
+render_priority = 0
+shader = SubResource("VisualShader_e514i")
+shader_parameter/ColorParameter = Color(0.172549, 0.694118, 0.666667, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_6pcjy"]
+material = SubResource("ShaderMaterial_ifkb1")
+radius = 0.501
+height = 1.002
+
+[node name="system1" type="Node3D"]
+
+[node name="Altair" parent="." instance=ExtResource("1_j0ayg")]
+transform = Transform3D(128, 0, 0, 0, 128, 0, 0, 0, 128, 3898.39, 0, -2108.68)
+
+[node name="contactable" parent="Altair" instance=ExtResource("2_5aofi")]
+
+[node name="Nimrod" parent="." instance=ExtResource("1_j0ayg")]
+transform = Transform3D(36, 0, 0, 0, 36, 0, 0, 0, 36, 3900, 5, 20)
+
+[node name="planet" parent="Nimrod" index="0"]
+mesh = SubResource("SphereMesh_1etrc")
+
+[node name="atmosphere" parent="Nimrod" index="1"]
+mesh = SubResource("SphereMesh_6pcjy")
+
+[node name="contactable" parent="Nimrod" instance=ExtResource("2_5aofi")]
+
+[node name="test-earth-moon" parent="." instance=ExtResource("2_k2vcq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3908.72, 0, 0)
+x = 3.9e+07
+y = 50000.0
+z = 200000.0
+
+[node name="home" parent="." instance=ExtResource("2_k2vcq")]
+
+[node name="star area" parent="." node_paths=PackedStringArray("hud_marker") instance=ExtResource("2_k2vcq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2670.61)
+hud_marker = NodePath("../home/marker")
+
+[node name="star01" type="Node3D" parent="." node_paths=PackedStringArray("visual") groups=["far_objects"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2667.33)
+script = ExtResource("4_dfyrv")
+visual = NodePath("star01_visual")
+
+[node name="star01_visual" parent="star01" instance=ExtResource("5_c12gw")]
+
+[node name="MeshInstance3D" parent="star01/star01_visual" index="0"]
+layers = 2
+
+[node name="contactable" parent="star01" instance=ExtResource("2_5aofi")]
+
+[editable path="Altair"]
+[editable path="Nimrod"]
+[editable path="star01/star01_visual"]

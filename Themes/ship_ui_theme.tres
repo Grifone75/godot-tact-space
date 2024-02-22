@@ -1,7 +1,20 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dc8gbjy78j8gx"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://dc8gbjy78j8gx"]
 
-[ext_resource type="FontFile" uid="uid://d222eno48e1u1" path="res://data/fonts/Nova_Mono/NovaMono-Regular.ttf" id="1_04qrx"]
+[ext_resource type="FontFile" uid="uid://ddwe7b8fm8fjm" path="res://data/fonts/Titillium_Web/TitilliumWeb-Regular.ttf" id="1_sht5s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_654e1"]
+bg_color = Color(0.176471, 0.65098, 0.854902, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7y31h"]
+bg_color = Color(0.231373, 0.698039, 0.482353, 0.678431)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iairn"]
+bg_color = Color(0.129412, 0.658824, 0.827451, 0.643137)
 
 [resource]
-default_font = ExtResource("1_04qrx")
+default_font = ExtResource("1_sht5s")
 default_font_size = 12
+Button/styles/hover = SubResource("StyleBoxFlat_654e1")
+Button/styles/pressed = SubResource("StyleBoxFlat_7y31h")
+HBoxContainer/constants/separation = 4
+Panel/styles/hover = SubResource("StyleBoxFlat_iairn")

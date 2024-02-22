@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://dac103gvrbxg2"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jkehn"]
+emission_shape = 2
+emission_sphere_radius = 4.56
+direction = Vector3(0, 1, 0)
+radial_velocity_min = 10.0
+radial_velocity_max = 10.0
+gravity = Vector3(0, -2, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_511kb"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+emission_enabled = true
+emission = Color(1, 0.286275, 0.223529, 1)
+use_particle_trails = true
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_xfc51"]
+material = SubResource("StandardMaterial3D_511kb")
+size = 0.1
+sections = 4
+section_length = 0.5
+section_segments = 2
+
+[node name="Node3D" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+amount = 200
+lifetime = 6.86
+visibility_aabb = AABB(-3.54836, -4, -4, 7.09671, 8, 8)
+trail_enabled = true
+trail_lifetime = 4.49
+process_material = SubResource("ParticleProcessMaterial_jkehn")
+draw_pass_1 = SubResource("RibbonTrailMesh_xfc51")

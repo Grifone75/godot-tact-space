@@ -1,0 +1,26 @@
+[gd_scene load_steps=6 format=3 uid="uid://dcy57tkl2sela"]
+
+[ext_resource type="Shader" path="res://shaders/base_refraction_shader.gdshader" id="1_y5w20"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_y5mom"]
+radius = 20.0
+height = 40.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_niuda"]
+frequency = 0.0264
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_obmhj"]
+noise = SubResource("FastNoiseLite_niuda")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pnbgg"]
+render_priority = 0
+shader = ExtResource("1_y5w20")
+shader_parameter/distortion_size = 0.02
+shader_parameter/glass = SubResource("NoiseTexture2D_obmhj")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_y5mom")
+surface_material_override/0 = SubResource("ShaderMaterial_pnbgg")

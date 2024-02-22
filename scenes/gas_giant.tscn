@@ -29,6 +29,7 @@ material = SubResource("ShaderMaterial_shd8m")
 radius = 0.51
 
 [node name="Node3D" type="Node3D" groups=["far_objects"]]
+transform = Transform3D(128, 0, 0, 0, 128, 0, 0, 0, 128, 0, 0, 0)
 
 [node name="planet" type="MeshInstance3D" parent="."]
 layers = 2

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cld72sjyh0sup"]
+
+[ext_resource type="Script" path="res://scenes/missions/DockMission.gd" id="1_i7iqw"]
+
+[node name="DockMission" type="Node"]
+script = ExtResource("1_i7iqw")

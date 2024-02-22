@@ -1,0 +1,44 @@
+[gd_scene load_steps=9 format=3 uid="uid://sj58uu3iimgo"]
+
+[ext_resource type="Script" path="res://scenes/tests/test_saver.gd" id="1_3u60u"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_vj5yv"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_663bx"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_l350g"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4pdw1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tedwb"]
+
+[sub_resource type="Sky" id="Sky_1bnhf"]
+sky_material = SubResource("ProceduralSkyMaterial_tedwb")
+
+[sub_resource type="Environment" id="Environment_rja4l"]
+background_mode = 2
+sky = SubResource("Sky_1bnhf")
+
+[node name="root" type="Node3D"]
+script = ExtResource("1_3u60u")
+
+[node name="to_save" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.58721, 0, 0)
+mesh = SubResource("PrismMesh_vj5yv")
+
+[node name="m1" type="MeshInstance3D" parent="to_save"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.537481, 0, 0)
+mesh = SubResource("SphereMesh_663bx")
+skeleton = NodePath("../m2")
+
+[node name="m2" type="MeshInstance3D" parent="to_save"]
+transform = Transform3D(0.513586, -0.858038, 0, 0.858038, 0.513586, 0, 0, 0, 1, -0.729121, 0.309073, 0)
+mesh = SubResource("CapsuleMesh_l350g")
+
+[node name="m3" type="MeshInstance3D" parent="to_save"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.44591, 0)
+mesh = SubResource("CylinderMesh_4pdw1")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.38904)
+environment = SubResource("Environment_rja4l")

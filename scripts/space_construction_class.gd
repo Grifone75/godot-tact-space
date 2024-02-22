@@ -76,7 +76,9 @@ class_name Space_construction_class extends Resource
 	}
 ]
 
-@export var initial_mission_path :Script = null
+@export var vessel_class : String = "vessel"
+
+@export var initial_mission_path : PackedScene = null
 
 func get_construction_name():
 	randomize()

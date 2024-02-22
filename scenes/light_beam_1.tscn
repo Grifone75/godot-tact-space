@@ -1,0 +1,61 @@
+[gd_scene load_steps=7 format=3 uid="uid://c8j5tl1sctp26"]
+
+[ext_resource type="Texture2D" uid="uid://doxd4njti02j6" path="res://data/textures/plume01.png" id="1_q6bd6"]
+[ext_resource type="Texture2D" uid="uid://cktg0uns8abaa" path="res://data/textures/flare2.png" id="1_xi3w0"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_6dy3s"]
+size = Vector2(5, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pssjw"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(0, 0.843137, 0.745098, 0.564706)
+albedo_texture = ExtResource("1_q6bd6")
+disable_receive_shadows = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_5jpyj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8rypb"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0, 0.843137, 0.745098, 0.0588235)
+albedo_texture = ExtResource("1_xi3w0")
+disable_receive_shadows = true
+
+[node name="light_beam_1" type="Node3D"]
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.74228e-08, -4.37114e-08, -4.37114e-08, 1.91069e-15, 1, 8.74228e-08, 1, 1.91069e-15, -2.47817, 0, 0)
+mesh = SubResource("QuadMesh_6dy3s")
+surface_material_override/0 = SubResource("StandardMaterial3D_pssjw")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.74228e-08, -4.37114e-08, 8.74228e-08, 1, -4.37114e-08, 4.37114e-08, -4.37114e-08, -1, -2.47817, 0, 0)
+mesh = SubResource("QuadMesh_6dy3s")
+surface_material_override/0 = SubResource("StandardMaterial3D_pssjw")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.0321949, 0, 0)
+mesh = SubResource("QuadMesh_5jpyj")
+surface_material_override/0 = SubResource("StandardMaterial3D_8rypb")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.365491, 0, 0)
+mesh = SubResource("QuadMesh_5jpyj")
+surface_material_override/0 = SubResource("StandardMaterial3D_8rypb")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.93403e-08, 0, 1, 0, 0.9, 0, -0.9, 0, -4.37114e-08, -0.785142, 0, 0)
+mesh = SubResource("QuadMesh_5jpyj")
+surface_material_override/0 = SubResource("StandardMaterial3D_8rypb")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.49691e-08, 0, 1, 0, 0.8, 0, -0.8, 0, -4.37114e-08, -1.08086, 0, 0)
+mesh = SubResource("QuadMesh_5jpyj")
+surface_material_override/0 = SubResource("StandardMaterial3D_8rypb")

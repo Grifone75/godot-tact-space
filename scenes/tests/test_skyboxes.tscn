@@ -1,0 +1,110 @@
+[gd_scene load_steps=18 format=3 uid="uid://xdlth2y6x6jf"]
+
+[ext_resource type="Texture2D" uid="uid://camkujepjwpyc" path="res://resources/ydokRNc.jpeg" id="1_1c7uv"]
+[ext_resource type="Script" path="res://scripts/FreeLookCamera.gd" id="1_63ld7"]
+[ext_resource type="PackedScene" uid="uid://cf7nnrojg23f6" path="res://scenes/ui/generic_hud_marker.tscn" id="3_nrjbl"]
+[ext_resource type="Shader" path="res://shaders/raymarched_nebula.gdshader" id="3_wuw8i"]
+[ext_resource type="Texture2D" uid="uid://7dslb81w0pwq" path="res://data/gradient1.png" id="4_42rd7"]
+[ext_resource type="CompressedTexture3D" uid="uid://cek2mqcisakgg" path="res://data/nebula_dense_8192x8192.png" id="4_xga2r"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_bl4yi"]
+panorama = ExtResource("1_1c7uv")
+
+[sub_resource type="Sky" id="Sky_donef"]
+sky_material = SubResource("PanoramaSkyMaterial_bl4yi")
+
+[sub_resource type="Environment" id="Environment_shr0k"]
+background_mode = 2
+sky = SubResource("Sky_donef")
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cwepc"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_oykcu"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_pxfd2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_175tl"]
+render_priority = 0
+shader = ExtResource("3_wuw8i")
+shader_parameter/_totalBrightness = 0.215
+shader_parameter/_maxSteps = 150
+shader_parameter/_stepSize = 0.01
+shader_parameter/_rdRotation = null
+shader_parameter/_lightDir = Vector3(1, -3, 1)
+shader_parameter/_maxLightDistance = 0.01
+shader_parameter/_transmissionThreshhold = 0.4
+shader_parameter/_lightStepSize = 0.12
+shader_parameter/_lightDensityScale = 0.125
+shader_parameter/_maxLightSteps = 2
+shader_parameter/_volumeOffset = null
+shader_parameter/_volumeRotation = null
+shader_parameter/_volumeScale = Vector3(1, 1, 1)
+shader_parameter/_densityScale = 3.0
+shader_parameter/_darknessThreshhold = 0.045
+shader_parameter/_transmittance = 0.875
+shader_parameter/_lightAbsorb = 0.85
+shader_parameter/_epsilon = null
+shader_parameter/_gradientTex_ST = Vector4(0, 0.76, 0, 0.525)
+shader_parameter/_gradientTex = ExtResource("4_42rd7")
+shader_parameter/_volumeTex = ExtResource("4_xga2r")
+
+[sub_resource type="Gradient" id="Gradient_v2umc"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0au8g"]
+frequency = 0.0355
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_m6akg"]
+seamless = true
+color_ramp = SubResource("Gradient_v2umc")
+noise = SubResource("FastNoiseLite_0au8g")
+
+[sub_resource type="FogMaterial" id="FogMaterial_pgguv"]
+density = 0.5
+albedo = Color(0.121569, 0.431373, 0.290196, 1)
+edge_fade = 0.627668
+density_texture = SubResource("NoiseTexture3D_m6akg")
+
+[node name="TestSkyboxes" type="Node3D"]
+
+[node name="FreeLookCamera" type="Camera3D" parent="."]
+environment = SubResource("Environment_shr0k")
+script = ExtResource("1_63ld7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.74326, 0, -5.61399)
+mesh = SubResource("CylinderMesh_cwepc")
+
+[node name="marker" parent="MeshInstance3D" instance=ExtResource("3_nrjbl")]
+
+[node name="MeshInstance3D3-far" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 500, -5.614)
+mesh = SubResource("CylinderMesh_cwepc")
+
+[node name="marker" parent="MeshInstance3D3-far" instance=ExtResource("3_nrjbl")]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.648, 0, -0.76164, 0.322786, 0.905754, 0.274625, 0.689858, -0.423804, 0.586929, 1.8885, 0, -5.61399)
+mesh = SubResource("BoxMesh_oykcu")
+
+[node name="Nebula" type="MeshInstance3D" parent="."]
+transform = Transform3D(6.48, 1.49012e-07, -7.6164, 3.22786, 9.05754, 2.74625, 6.89858, -4.23804, 5.86929, 9.87139, 0, -5.37062)
+custom_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+ignore_occlusion_culling = true
+mesh = SubResource("BoxMesh_pxfd2")
+surface_material_override/0 = SubResource("ShaderMaterial_175tl")
+
+[node name="FogVolume" type="FogVolume" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.706701, 0, -7.01417)
+size = Vector3(10, 10, 10)
+shape = 0
+material = SubResource("FogMaterial_pgguv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.952868, 0.112269, -0.281847, 0, 0.92901, 0.370055, 0.303385, -0.352614, 0.885224, -7.50172, 2.15547, 3.39329)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.33452, 0, -9.75503)
+shadow_enabled = true
+omni_range = 40.0

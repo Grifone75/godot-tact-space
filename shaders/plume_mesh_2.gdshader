@@ -55,7 +55,8 @@ void fragment() {
     float final_presence = flame_presence*flame_spikes+perturbed_throttled_presence;
     vec3 flame_color = texture(_FlameColors, vec2(throttled_v*.5*vertical_v_scaler,_ColorSelector)).rgb;
 	
-	flame_color = mix(vec3(.5,.2,0),flame_color,smoothstep(.1,.3,1.0 - UV.y));
+	//flame_color = mix(vec3(.9,.3,0),flame_color,smoothstep(.1,.3,1.0 - UV.y));
+	flame_color = mix(vec3(.9,.3,0),flame_color,_Throttle);
 	
 // ColorConstant:2
 	vec4 n_out2p0 = vec4(0.337461, 0.656338, 0.900241, 1.000000);

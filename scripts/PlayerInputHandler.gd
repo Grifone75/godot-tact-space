@@ -4,6 +4,8 @@ signal force_input
 signal torque_input
 signal special_commands
 
+var base_ai_force = Vector3.ZERO
+var base_ai_torque = Vector3.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -26,7 +28,7 @@ func _physics_process(delta):
 	if not ax:
 		var tx = signf(tx_raw) * ease(absf(tx_raw),3) * MAX_TORQUE
 		var ty = signf(ty_raw) * ease(absf(ty_raw),3) * MAX_TORQUE
-		torque_input.emit(Vector3(-ty,-tx,0.0))
+		torque_input.emit(base_ai_torque + Vector3(-ty,-tx,0.0))
 
 	else:
 		ax_x = signf(tx_raw) * ease(absf(tx_raw),3) * MAX_FORCE
@@ -38,16 +40,16 @@ func _physics_process(delta):
 	var fplus = signf(fplus_raw) * ease(absf(fplus_raw),3) * MAX_FORCE
 	var fminus = signf(fminus_raw) * ease(absf(fminus_raw),3) * MAX_FORCE
 	
-	force_input.emit(Vector3(-ax_x,-ax_y,fplus-fminus))
+	force_input.emit(base_ai_force + Vector3(-ax_x,-ax_y,fplus-fminus))
 	
 	
 	
 func _input(event):
-	if event is InputEventJoypadMotion:
-		print(
-				"Device: %s. Joypad Axis Index: %s. Strength: %s."
-				% [event.device, event.axis, event.axis_value]
-		)
+	#if event is InputEventJoypadMotion:
+		#print(
+		#		"Device: %s. Joypad Axis Index: %s. Strength: %s."
+		#		% [event.device, event.axis, event.axis_value]
+		#)
 		
 	if event.is_action_pressed("warp_mode"):
 		special_commands.emit("warp_mode")
@@ -58,3 +60,12 @@ func _input(event):
 		#force_input.emit(base_force)
 		#torque_input.emit(base_torque)
 		
+func base_ai_force_input(sig):
+	base_ai_force = sig
+	
+func base_ai_torque_input(sig):
+	base_ai_torque = sig
+
+func reset_base_ai_inputs():
+	base_ai_force = Vector3.ZERO
+	base_ai_torque = Vector3.ZERO

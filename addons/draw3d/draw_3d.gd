@@ -50,6 +50,7 @@ func _setup_materials() -> void:
 
 	_default_material = StandardMaterial3D.new()
 	_default_material.vertex_color_use_as_albedo = true
+	_default_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_default_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 
 	_default_points_material = _default_material.duplicate()

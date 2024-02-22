@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://cf7nnrojg23f6"]
+
+[ext_resource type="Script" path="res://scenes/ui/generic_hud_marker.gd" id="1_iqjco"]
+[ext_resource type="Texture2D" uid="uid://cj1x567snl70b" path="res://data/textures/ring_0_light.png" id="2_trele"]
+[ext_resource type="Theme" uid="uid://dc8gbjy78j8gx" path="res://Themes/ship_ui_theme.tres" id="3_m218e"]
+
+[node name="marker" type="Node2D"]
+script = ExtResource("1_iqjco")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.870588, 0.733333, 0.972549, 1)
+position = Vector2(1, 1)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_trele")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -48.0
+offset_top = 42.0
+offset_right = 51.0
+offset_bottom = 65.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_m218e")
+theme_override_colors/font_color = Color(0.698039, 0.403922, 1, 1)
+text = "generic label"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true

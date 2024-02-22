@@ -11,6 +11,7 @@ func _ready():
 	var color_start = Color.AQUAMARINE
 	var color_stop = Color.BLACK
 	color_stop.a = 0.0
+	color_start.a = 0.02
 	
 	for c in range(35):
 		vcolors.push_back(lerp(color_stop,color_start, c/34.0))

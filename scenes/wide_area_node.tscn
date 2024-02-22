@@ -1,17 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://do4q6s3wnifis"]
+[gd_scene load_steps=5 format=3 uid="uid://do4q6s3wnifis"]
 
 [ext_resource type="Script" path="res://scripts/wide_area_node.gd" id="1_ocbdo"]
 [ext_resource type="Script" path="res://addons/draw3d/draw_3d.gd" id="2_lb8xn"]
+[ext_resource type="PackedScene" uid="uid://cf7nnrojg23f6" path="res://scenes/ui/generic_hud_marker.tscn" id="3_hoajf"]
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_1wf4d"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_c47ue"]
 
-[node name="WideAreaNode" type="Node" groups=["wide_area_nodes"]]
+[node name="WideAreaNode" type="Node3D" node_paths=PackedStringArray("hud_marker") groups=["far_objects", "wide_area_nodes"]]
 script = ExtResource("1_ocbdo")
+hud_marker = NodePath("marker")
 
-[node name="debug_gizmo" type="Node3D" parent="." groups=["far_objects"]]
+[node name="debug_gizmo" type="Node3D" parent="."]
 
 [node name="Draw3D" type="MeshInstance3D" parent="debug_gizmo"]
 layers = 2
-mesh = SubResource("ImmediateMesh_1wf4d")
+mesh = SubResource("ImmediateMesh_c47ue")
 script = ExtResource("2_lb8xn")
-default_color = Color(0.768627, 0.160784, 0.764706, 0.788235)
+default_color = Color(0.768627, 0.160784, 0.764706, 0.109804)
+
+[node name="marker" parent="." node_paths=PackedStringArray("marked_node") instance=ExtResource("3_hoajf")]
+marked_node = NodePath("../debug_gizmo")

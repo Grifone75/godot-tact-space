@@ -9,10 +9,10 @@ var l_vtt_tan: Vector3 = Vector3.ZERO
 var base_rigidbody = null
 var target_rigidbody: RigidBody3D = null
 var target_object: Node3D = null
-
+var reference: Node3D = null
 var targeting_manager: Targeting_manager
 
-enum ORIENTATION_BASE {TO_TGT, TO_VEL, AG_TGT, AG_VEL}
+enum ORIENTATION_BASE {TO_TGT, TO_VEL, AG_TGT, AG_VEL, FACING_DIR}
 var _orientation_base : ORIENTATION_BASE = ORIENTATION_BASE.TO_TGT
 
 var _approach_safe_distance = 0.0
@@ -29,7 +29,12 @@ func update_metrics():
 	if (base_rigidbody != null):
 		var tgt_wpos = targeting_manager.get_wpos()
 		if tgt_wpos != null:
-			w_translation = targeting_manager.get_wpos() - base_rigidbody.global_position
+			if reference:
+				#DebugDraw.draw_sphere(reference.global_position, 1.0 , Color(0, 1, 0))
+				w_translation = targeting_manager.get_wpos() - reference.global_position
+			else:
+				#DebugDraw.draw_sphere(base_rigidbody.global_position, 1.0 , Color(0, 1, 0))
+				w_translation = targeting_manager.get_wpos() - base_rigidbody.global_position
 		else:
 			w_translation = Vector3.ZERO
 
@@ -53,6 +58,8 @@ func get_orientation_pointer():
 		return targeting_manager.get_wpos()
 	if _orientation_base == ORIENTATION_BASE.AG_VEL:
 		return base_rigidbody.global_position - (base_rigidbody.linear_velocity - targeting_manager.get_wvel())*100.0
+	if _orientation_base == ORIENTATION_BASE.FACING_DIR:
+		return base_rigidbody.global_position + base_rigidbody.global_transform.basis.z * 100.0
 		
 func set_orientation_mode(mode:ORIENTATION_BASE):
 	_orientation_base = mode
@@ -63,3 +70,8 @@ func set_approach_distance(d):
 func get_approach_distance():
 	return _approach_safe_distance
 
+func set_reference(ref:Node3D):
+	reference = ref
+
+func clear_reference():
+	reference = null

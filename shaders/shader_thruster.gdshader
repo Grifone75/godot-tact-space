@@ -28,8 +28,8 @@ void vertex() {
 
 
 void fragment() {
-	float color_mixer1 = smoothstep(0.05,0.09, _Thrust);
-	float color_mixer2 = smoothstep(0.09,0.2, _Thrust);
+	float color_mixer1 = smoothstep(0.0,0.2, _Thrust);
+	float color_mixer2 = smoothstep(0.2,0.4, _Thrust);
 	vec4 final_color = mix(vec4(0.2,0.02,0.0,1.0),mix(vec4(0.5,0.2,0.0,1.0),em_color,color_mixer2),color_mixer1);
 	vec2 base_uv = UV;
 	vec4 albedo_tex = texture(texture_albedo,base_uv);
@@ -46,6 +46,6 @@ void fragment() {
 	NORMAL_MAP = texture(texture_normal,base_uv).rgb;
 	NORMAL_MAP_DEPTH = normal_scale;
 	EMISSION = final_color.rgb * em_mult;
-	ALPHA = aoch_tex.a * smoothstep(.1,.2,_Thrust);;
+	ALPHA = aoch_tex.a * smoothstep(.01,.2,_Thrust);;
 	AO = 1.-aoch_tex.r;
 }

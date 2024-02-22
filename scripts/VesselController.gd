@@ -12,6 +12,8 @@ var ref_rb:RigidBody3D
 var current_local_force_input : Vector3 = Vector3.ZERO
 var current_local_torque_input : Vector3 = Vector3.ZERO
 var warp_mode: bool = false
+var warp_set:bool = false
+var warp_speed = 0.1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -44,7 +46,7 @@ func _init_rb():
 func _physics_process(delta):
 	if ref_rb:
 		# update physics
-		if !warp_mode:
+		if !warp_set:
 			#first cap the local force according to thrusters (TEMP)
 			local_force_input = local_force_input.clamp(Vector3(-1.,-1.,-1.),Vector3(1.,1.,10.))
 			
@@ -111,10 +113,18 @@ func _physics_process(delta):
 				thruster._calculate_force_from_torque(local_torque_input)
 		else:
 			pass
-			ref_rb.global_position += ref_rb.global_transform.basis.z * 1000.0
+			ref_rb.global_position += ref_rb.global_transform.basis.z * warp_speed
 		local_force_input = Vector3.ZERO
 		local_torque_input = Vector3.ZERO
 
+		if warp_mode and warp_speed < 100000.0:
+			warp_set = true
+			warp_speed = warp_speed * 1.1
+		if !warp_mode: 
+			if warp_speed > 0.1:
+				warp_speed = warp_speed*0.9
+			else:
+				warp_set = false
 
 func update_control_torque(v3):
 	local_torque_input = v3
@@ -127,3 +137,8 @@ func update_nav_target(n3):
 	
 func toggle_warp_mode():
 	warp_mode = !warp_mode
+
+
+func get_docking_port():
+	if functionals.get("dockports"):
+		return functionals.get("dockports")[0]

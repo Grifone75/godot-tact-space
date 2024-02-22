@@ -19,6 +19,10 @@ func _on_pressed():
 		print(el, '--', el_id)
 		add_item(el.name, el_id)
 		var idx = get_item_index(el_id)
-		set_item_metadata(idx, el)
+
+		if el.has_node("VesselController"):
+			set_item_metadata(idx, el.rb)
+		else:
+			set_item_metadata(idx, el)
 	
 	

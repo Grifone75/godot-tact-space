@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://cohgv1pjyodh5"]
+
+[ext_resource type="Shader" path="res://scenes/tests/test_interiors.gdshader" id="1_x4om6"]
+[ext_resource type="Texture2D" uid="uid://bil8e5spy4f3g" path="res://data/textures/rooms_emit.png" id="2_dxhr2"]
+[ext_resource type="Texture2D" uid="uid://bb7jen5f6qhbv" path="res://data/textures/rooms_depth.png" id="3_52vme"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_7xx7l"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ohhtr"]
+render_priority = 0
+shader = ExtResource("1_x4om6")
+shader_parameter/rooms = Vector2(2, 2)
+shader_parameter/room_seed = 6.0
+shader_parameter/atlas_rooms = Vector2(3, 2)
+shader_parameter/depth = 0.5
+shader_parameter/emission_cutoff = 0.519
+shader_parameter/emission_strength = 2.121
+shader_parameter/room_texture = ExtResource("3_52vme")
+shader_parameter/room_emit_texture = ExtResource("2_dxhr2")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.102168, 0, 0.994767, 0, 1, 0, -0.994767, 0, 0.102168, 0, 0, 0)
+mesh = SubResource("QuadMesh_7xx7l")
+surface_material_override/0 = SubResource("ShaderMaterial_ohhtr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.454861, -0.509659, 0.730307, -4.11813e-08, 0.820052, 0.572289, -0.890562, 0.260312, -0.37301, -3.53797, 0, 8.2714)
+light_energy = 0.5

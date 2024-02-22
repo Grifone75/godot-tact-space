@@ -12,13 +12,13 @@ config_version=5
 
 config/name="Tact-space"
 run/main_scene="res://base.tscn"
-config/features=PackedStringArray("4.1", "Forward Plus")
+config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/image="res://data/textures/tact-space-splash1.png"
 config/icon="res://icon.svg"
 
 [editor]
 
-movie_writer/movie_file="C:/Users/fabri/Documents/Godot_movies/ships2.avi"
+movie_writer/movie_file="C:/Users/fabri/Documents/Godot_movies/ships_showcase.avi"
 
 [editor_plugins]
 
@@ -50,6 +50,7 @@ warp_mode={
 [physics]
 
 3d/run_on_separate_thread=true
+3d/physics_engine="JoltPhysics3D"
 3d/default_gravity=0.0
 3d/default_linear_damp=0.0
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dkie2n4viccl0"]
 
 [ext_resource type="Script" path="res://scripts/VesselInstancer.gd" id="1_wl206"]
-[ext_resource type="Resource" uid="uid://ob3dey3yjg18" path="res://resources/vessel.tres" id="2_b0f40"]
+[ext_resource type="Resource" uid="uid://ob3dey3yjg18" path="res://resources/vessel.tres" id="2_g54pe"]
 [ext_resource type="Script" path="res://scripts/Faction.gd" id="3_grqb0"]
 
 [sub_resource type="Resource" id="Resource_nklx4"]
@@ -12,8 +12,8 @@ color_dark = Color(0.185115, 0.204616, 0.16381, 1)
 color_utility = Color(0.143137, 0.2, 0.140172, 1)
 color_complement = Color(0.143137, 0.2, 0.140172, 1)
 
-[node name="Eastern Scarf" type="Node" node_paths=PackedStringArray("vesselcontroller") groups=["local_objects", "vessels"]]
+[node name="Eastern Scarf" type="Node" groups=["local_objects", "vessels"]]
 script = ExtResource("1_wl206")
-construction_data = ExtResource("2_b0f40")
-vesselcontroller = NodePath("VesselController")
+construction_data = ExtResource("2_g54pe")
 faction = SubResource("Resource_nklx4")
+vessel_class = null
