@@ -1,14 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://cnjfmch7y5tih"]
+[gd_scene load_steps=8 format=3 uid="uid://cnjfmch7y5tih"]
 
 [ext_resource type="Script" path="res://scripts/navpoint.gd" id="1_jxpje"]
 [ext_resource type="Script" path="res://scripts/parkpoint.gd" id="1_qean2"]
 [ext_resource type="Material" uid="uid://ofjeat0qm8l5" path="res://materials/navpoint.tres" id="2_cepu2"]
 [ext_resource type="Script" path="res://addons/draw3d/draw_3d.gd" id="3_athl8"]
+[ext_resource type="PackedScene" uid="uid://b3bdv5v8emn5v" path="res://origin_shiftable.tscn" id="5_gbli3"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ef84j"]
 material = ExtResource("2_cepu2")
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_se1wm"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_m2l34"]
 
 [node name="ParkPoint" type="Node3D" groups=["local_objects", "navpoints"]]
 script = ExtResource("1_qean2")
@@ -51,6 +52,9 @@ visibility_range_begin_margin = 20.0
 visibility_range_end = 30.0
 visibility_range_end_margin = 60.0
 visibility_range_fade_mode = 1
-mesh = SubResource("ImmediateMesh_se1wm")
+mesh = SubResource("ImmediateMesh_m2l34")
 script = ExtResource("3_athl8")
 default_color = Color(0.254902, 0.482353, 0.380392, 0.517647)
+
+[node name="origin_shiftable" parent="." node_paths=PackedStringArray("connected_shiftable") instance=ExtResource("5_gbli3")]
+connected_shiftable = NodePath("..")

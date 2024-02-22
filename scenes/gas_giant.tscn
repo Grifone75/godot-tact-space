@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://xhg4bqu6m3jl"]
+[gd_scene load_steps=10 format=3 uid="uid://xhg4bqu6m3jl"]
 
 [ext_resource type="Shader" path="res://shaders/planet_gas_simple.gdshader" id="1_6ni7y"]
 [ext_resource type="Shader" uid="uid://d14ie3da81au0" path="res://shaders/planet_atmosphere.tres" id="2_dlv4l"]
+[ext_resource type="PackedScene" uid="uid://b3bdv5v8emn5v" path="res://origin_shiftable.tscn" id="3_etjun"]
 
 [sub_resource type="Gradient" id="Gradient_6p4ea"]
 offsets = PackedFloat32Array(0, 0.216733, 0.376096, 0.443825, 0.535458, 0.623108, 0.730677, 0.826295, 1)
@@ -38,3 +39,7 @@ mesh = SubResource("SphereMesh_32t6c")
 [node name="atmosphere" type="MeshInstance3D" parent="."]
 layers = 2
 mesh = SubResource("SphereMesh_7t5bb")
+
+[node name="origin_shiftable" parent="." node_paths=PackedStringArray("connected_shiftable") instance=ExtResource("3_etjun")]
+shift_scale = 10000.0
+connected_shiftable = NodePath("..")

@@ -18,7 +18,7 @@ func _ready():
 			var pos = load("res://scenes/parkpoint.tscn").instantiate()
 			ref.add_child(pos)
 			pos.name = "parking"
-			pos.remove_from_group("local_objects")
+			pos.get_node("origin_shiftable").set_active(false)
 			pos.global_transform.origin = ref.global_position + Vector3(dx*15,dy*15,50)
 			parking_points[pos] = "free"
 

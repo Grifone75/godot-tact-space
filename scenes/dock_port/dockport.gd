@@ -6,8 +6,7 @@ extends Node3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$alignment_point.remove_from_group('local_objects')
-
+	$alignment_point/origin_shiftable.set_active(false)
 
 func set_taken():
 	docking_port._open_arm()

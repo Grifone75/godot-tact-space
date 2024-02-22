@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://scripts/origin_shiftable.gd" id="1_6kvdj"]
 
-[node name="origin_shiftable" type="Node"]
+[node name="origin_shiftable" type="Node" groups=["origin_shiftables"]]
 script = ExtResource("1_6kvdj")

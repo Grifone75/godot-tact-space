@@ -36,19 +36,8 @@ func _origin_shift():
 	moving_origin = true
 	var shift = cam.global_position
 	print("*** calling OShift, delta: ",shift)
-	for obj in get_tree().get_nodes_in_group("local_objects"):
-		if obj.is_in_group("vessels"):
-			obj.rb.global_position -= shift
-			obj.smooth.teleport()
-		elif obj.has_method("manage_origin_shift"):
-			obj.manage_origin_shift(shift)
-		else:
-			obj.global_position -= shift
-	for obj in get_tree().get_nodes_in_group("far_objects"):
-		if obj.has_method("manage_origin_shift"):
-			obj.manage_origin_shift(shift/10000.0)
-		else:
-			obj.global_position -= shift/10000.0
+	for obj in get_tree().get_nodes_in_group("origin_shiftables"):
+		obj.do_origin_shift(shift)
 	#cam.reset_origin() #not necessary anymore as the camera is on a object which is already shifted
 	moving_origin = false
 	
@@ -193,7 +182,9 @@ func _instance_system_object(record, player_pos_asr_mkm):
 			record['coords'][1]*10000,
 			record['coords'][2]*10000) - Vector3(player_pos_asr_mkm)*10000
 		var object = load("res://scenes/gas_giant.tscn").instantiate()
-		object.add_child(load("res://contactable.tscn").instantiate())
+		var contactable = load("res://contactable.tscn").instantiate()
+		contactable.object_space_scale = 10000.0
+		object.add_child(contactable)
 		var wide_area = load("res://scenes/wide_area_node.tscn").instantiate()
 		wide_area.global_position = far_pos
 		object.global_position = far_pos

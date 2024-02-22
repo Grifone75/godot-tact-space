@@ -254,6 +254,8 @@ func _materialize():
 	smooth.add_child(tracer)
 	tracer.traced_vessel = smooth
 
+	add_child(load("res://origin_shiftable.tscn").instantiate())
+	
 	var missionplayer = load("res://scenes/missionplayer.tscn").instantiate()
 	missionplayer.ref_pilot = pilot
 	missionplayer.load_mission(construction_data.initial_mission_path.instantiate())
@@ -329,14 +331,13 @@ func hud_link(is_active:bool):
 			el.queue_free()
 	
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
 func get_rb():
 	return rb
 	
 func request_docking():
 	return {"dockport1":null}
 
+
+func manage_origin_shift(shift_value):
+	rb.global_position -= shift_value
+	smooth.teleport()
