@@ -13,9 +13,9 @@ func play():
 			if counter != 1:
 				t1 = pilot.get_tree().get_nodes_in_group("navpoints").pick_random() #to be replaced with picking target from the pilot contact list
 			else:
-				t1 = pilot.get_tree().get_nodes_in_group("stations").pick_random().rb 
+				t1 = pilot.get_tree().get_nodes_in_group("stations").pick_random()
 				pilot.nav_metrics.set_approach_distance(50)
-			pilot.update_navtarget(t1)
+			pilot.update_navtarget(t1.get_node("contactable"))
 			pilot.set_translation_mode('approach').set_orientation_mode('face_target')
 			pilot.mission_details = 'mission1'
 			counter -= 1

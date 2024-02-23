@@ -48,12 +48,12 @@ func _update_contact_list():
 		contact_list = get_tree().get_nodes_in_group("vessels").filter(func(x): return x != self.get_parent()) + get_tree().get_nodes_in_group("wide_area_nodes")
 		await get_tree().create_timer(2.).timeout
 		
-
+#TODO rework
 func update_navtarget(n):
 	nav_target = n
 	changed_target.emit(nav_target)
 	targeting_manager.set_target(nav_target)
-	print("** switched to target : "+nav_target.name)
+	print("** switched to target : "+nav_target.get_linked_object().name)
 	
 func update_navmode(index):
 	if index == 0:
@@ -72,6 +72,8 @@ func update_navmode(index):
 		self.set_translation_mode('match_velocity').set_orientation_mode('anti_velocity')
 	if index == 7:
 		self.set_translation_mode('idle').set_orientation_mode('kill_rotation')
+	if index == 8:
+		self.set_translation_mode('warp').set_orientation_mode('kill_rotation')
 
 
 
@@ -94,7 +96,7 @@ func _physics_process(delta):
 
 	
 	_pilot_info["nav mode"] = _or_mode_name + ' - ' + _tr_mode_name
-	if nav_target: _pilot_info["nav tgt"] = nav_target.name
+	if nav_target: _pilot_info["nav tgt"] = nav_target.get_linked_object().name
 	_pilot_info["tgt dst"] = Metric.dst2str(nav_metrics.l_translation_to_target.length())
 	_pilot_info["tgt vel to"] = Metric.vel2str(nav_metrics.l_vtt_sag_pos_len)
 	_pilot_info["tgt vel sag"] = Metric.vel2str(nav_metrics.l_vtt_sag.length())
@@ -113,7 +115,7 @@ func _apply_axial_translation():
 	var nav_target_linear_velocity = targeting_manager.get_wvel()
 	if nav_target_linear_velocity != null:
 		var dt = get_physics_process_delta_time()
-		var l_translation_to_target = ((reference_pos - nav_target.global_position)) * ref_rb.global_transform.basis
+		var l_translation_to_target = ((reference_pos - targeting_manager.get_wpos())) * ref_rb.global_transform.basis
 		l_translation_to_target = l_translation_to_target - l_translation_to_target.normalized()*nav_metrics.get_approach_distance()
 		var l_velocity_to_target = (ref_rb.linear_velocity - nav_target_linear_velocity) * ref_rb.global_transform.basis
 		var cumulated_thust = pid_pos.update(dt,l_translation_to_target,Vector3.ZERO) +	pid_vel.update(dt,l_velocity_to_target,Vector3.ZERO)
@@ -391,6 +393,8 @@ func set_translation_mode(param:String):
 	_tr_mode_name = param
 	pid_vel.tune_derivative_gain(0.3)
 	pid_vel.tune_proportional_gain(5)
+	ref_vessel.warp_mode = false
+	set_warp(false)
 	match param:
 		'idle':
 			_translation_mode = Callable()
@@ -406,10 +410,34 @@ func set_translation_mode(param:String):
 			_translation_mode = _kill_relative_velocity
 		'stop':
 			_translation_mode = _kill_all_velocity
+		'warp':
+			_translation_mode = _warp
 		_:
 			_tr_mode_name = "unk"
 			_translation_mode = Callable()
 	return self
+
+
+func _warp():
+	if nav_metrics.l_translation_to_target.length() > targeting_manager.get_safe_distance():
+		if nav_metrics.alignment_to_target<.9:
+			ref_vessel.warp_mode = false
+			set_warp(false)
+			set_orientation_mode('face_target')
+			print('orienting... ' + str(nav_metrics.alignment_to_target))
+		elif nav_metrics.alignment_to_target<.999 and not ref_vessel.warp_mode:
+			set_orientation_mode('face_target')
+			print('orienting... ' + str(nav_metrics.alignment_to_target))
+		else:
+			set_orientation_mode('kill_rotation')
+			print("d is : " + str(nav_metrics.l_translation_to_target.length()) + " mspeed is " +  str(min(ref_vessel.max_warp_speed,500000.0)))
+			ref_vessel.max_warp_speed = nav_metrics.l_translation_to_target.length() / 20.0
+			ref_vessel.warp_mode = true
+			set_warp(true)
+	else:
+		ref_vessel.warp_mode = false
+		set_warp(false)
+		set_translation_mode('idle')
 
 func set_rototranslation_reference(param:Node3D):
 	self.local_rototranslation_node = param
@@ -497,33 +525,13 @@ func update_contact_list():
 	var raw_list = get_tree().get_nodes_in_group("contactables")
 	var output_list = []
 	for el in raw_list:
-		var output_element = Contact.new()
-		output_element._pointer = el.get_linked_object()
-		output_element.contact_type = el.get_contact_type()
-		output_element.get_distance = func(): return (el.get_local_space_position() - self.ref_rb.global_position).length()
-		output_element.get_targetable = func(): return el.linked_rb
-		output_list.append(output_element)
-
-
-	"""
-	var raw_list = get_tree().get_nodes_in_group("vessels")
-	var output_list = []
-	for el in raw_list:
-		var output_element = Contact.new()
-		output_element._pointer = el
-		output_element.contact_type = el.vessel_class
-		output_element.get_distance = func(): return (el.rb.global_position - self.ref_rb.global_position).length()
-		output_element.get_targetable = func(): return el.rb
-		output_list.append(output_element)
-	for el in get_tree().get_nodes_in_group("far_objects"):
-		if el.has_node("contactable"):
+		if el.get_linked_object() != get_parent():
 			var output_element = Contact.new()
-			output_element._pointer = el
-			output_element.contact_type = "planet"
-			output_element.get_distance = func(): return (el.get_node("contactable").get_local_space_position() - self.ref_rb.global_position).length()
-			output_element.get_targetable = func(): return el
+			output_element.contact = el
+			output_element.contact_type = el.get_contact_type()
+			output_element.get_distance = func(): return (el.get_local_space_position() - self.ref_rb.global_position).length()
+			output_element.get_targetable = func(): return el.linked_rb
 			output_list.append(output_element)
-	"""		
 
 	return output_list
 

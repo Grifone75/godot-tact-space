@@ -12,7 +12,7 @@ func play():
 			if parking:
 				var station_rb = station.rb 
 				pilot.mission_details = 'park target set to ' + station.name + ' ' + parking.name
-				pilot.update_navtarget(parking)
+				pilot.update_navtarget(parking.get_node("contactable"))
 				pilot.nav_metrics.set_approach_distance(0)
 				pilot.set_translation_mode('approach').set_orientation_mode('face_target')
 				while nav_metrics.l_translation_to_target.length() > 10:
@@ -33,7 +33,7 @@ func play():
 					var align_point = dock.get_alignment_point()
 					pilot.nav_metrics.set_approach_distance(0)
 					pilot.mission_details = 'aligning to ' + station.name + ' ' + parking.name
-					pilot.update_navtarget(align_point)
+					pilot.update_navtarget(align_point.get_node("contactable"))
 					var target_dock_ref = dock.get_dockport_reference()
 					if pilot.set_docking_mode(target_dock_ref):
 						#TODO : when we use a local rototraslation node, also the nav metrics distances should take it into account. So we need to rewrite the
@@ -41,7 +41,7 @@ func play():
 						mplayer.critical_timer(10)
 						while nav_metrics.l_translation_to_target.length() > 0.5:
 							await get_tree().create_timer(2.).timeout
-						pilot.update_navtarget(target_dock_ref)
+						pilot.update_navtarget(target_dock_ref.get_node("contactable"))
 						while nav_metrics.l_translation_to_target.length() > 0.1:
 							await get_tree().create_timer(2.).timeout
 

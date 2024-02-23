@@ -125,6 +125,7 @@ func _pick_model_from_blender_library(name):
 				"tile_albedo": col_dark,
 				"utility_albedo": col_utility,
 				"main_color": col_complement,
+				"pj_color": col_complement,
 			}
 	if selected_mi.has_method("set_material_properties"):
 		selected_mi.set_material_properties(colors)

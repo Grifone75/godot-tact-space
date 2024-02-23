@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://addons/draw3d/draw_3d.gd" id="2_0mapw"]
 [ext_resource type="PackedScene" uid="uid://b3bdv5v8emn5v" path="res://origin_shiftable.tscn" id="3_ienpl"]
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_2g8ku"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_ld4f8"]
 
 [node name="Tracer" type="Node3D" groups=["local_objects"]]
 top_level = true
@@ -13,7 +13,7 @@ script = ExtResource("1_uu4un")
 [node name="Draw3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
 visibility_range_fade_mode = 1
-mesh = SubResource("ImmediateMesh_2g8ku")
+mesh = SubResource("ImmediateMesh_ld4f8")
 script = ExtResource("2_0mapw")
 
 [node name="origin_shiftable" parent="." node_paths=PackedStringArray("connected_shiftable") instance=ExtResource("3_ienpl")]

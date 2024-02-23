@@ -14,15 +14,12 @@ func _process(delta):
 
 func _on_pressed():
 	clear()
-	for el in $/root/base.followed_vessel.pilot.contact_list:
+	for el in $/root/base.followed_vessel.pilot.update_contact_list():
 		var el_id = el.get_instance_id()
 		print(el, '--', el_id)
-		add_item(el.name, el_id)
+		add_item(el.contact.get_linked_object().name, el_id)
 		var idx = get_item_index(el_id)
+		set_item_metadata(idx, el.contact)
 
-		if el.has_node("VesselController"):
-			set_item_metadata(idx, el.rb)
-		else:
-			set_item_metadata(idx, el)
 	
 	

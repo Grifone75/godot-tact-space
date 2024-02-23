@@ -35,7 +35,7 @@ func _update_followed_relationships():
 func _origin_shift():
 	moving_origin = true
 	var shift = cam.global_position
-	print("*** calling OShift, delta: ",shift)
+	#print("*** calling OShift, delta: ",shift)
 	for obj in get_tree().get_nodes_in_group("origin_shiftables"):
 		obj.do_origin_shift(shift)
 	#cam.reset_origin() #not necessary anymore as the camera is on a object which is already shifted
@@ -63,7 +63,7 @@ func _process(delta):
 
 
 func _on_button_pressed():
-	var nav = get_tree().get_nodes_in_group("navpoints").pick_random()
+	var nav = get_tree().get_nodes_in_group("contactables").pick_random()
 	followed_vessel_change_nav_target(nav)
 
 
@@ -125,8 +125,8 @@ func _on_option_button_item_selected(index):
 	followed_vessel_change_nav_target(selected_target)
 
 
-func followed_vessel_change_nav_target(navtarget):
-	followed_vessel.pilot.update_navtarget(navtarget)
+func followed_vessel_change_nav_target(_contact):
+	followed_vessel.pilot.update_navtarget(_contact)
 
 
 func _on_custom_button_pressed():

@@ -5,6 +5,7 @@ var l_velocity_to_target: Vector3 = Vector3.ZERO
 var l_vtt_sag: Vector3 = Vector3.ZERO
 var l_vtt_sag_pos_len: float = 0.0 
 var l_vtt_tan: Vector3 = Vector3.ZERO
+var alignment_to_target:float
 
 var base_rigidbody = null
 var target_rigidbody: RigidBody3D = null
@@ -45,6 +46,7 @@ func update_metrics():
 		l_vtt_sag = l_velocity_to_target.project(l_translation_to_target.normalized())
 		l_vtt_sag_pos_len = clamp(l_velocity_to_target.dot(l_translation_to_target.normalized()),0.0,9999999.0)
 		l_vtt_tan = l_velocity_to_target - l_vtt_sag
+		alignment_to_target = w_translation.normalized().dot(base_rigidbody.global_transform.basis.z)
 		
 
 func _change_target(target):

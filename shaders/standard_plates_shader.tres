@@ -6,7 +6,7 @@ code = "// NOTE: Shader automatically converted from Godot Engine 4.0.1.stable's
 shader_type spatial;
 render_mode blend_mix,depth_draw_opaque,cull_disabled,diffuse_burley,specular_schlick_ggx;
 instance uniform vec4 albedo : instance_index(0);
-instance uniform vec4 main_color : instance_index(3);
+instance uniform vec4 pj_color : instance_index(4);
 uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
 uniform sampler2D texture_paintjob : source_color,filter_linear_mipmap,repeat_enable;
 uniform float point_size : hint_range(0,128);
@@ -36,7 +36,7 @@ void fragment() {
 	vec4 albedo_tex = texture(texture_albedo,base_uv);
 	vec4 pj_tex = texture(texture_paintjob,base_uv2);
 	albedo_tex *= COLOR;
-	ALBEDO = (1.-pj_tex.r) * albedo.rgb * albedo_tex.rgb + pj_tex.r * main_color.rgb;
+	ALBEDO = (1.-pj_tex.r) * albedo.rgb * albedo_tex.rgb + pj_tex.r * pj_color.rgb;
 	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
 	METALLIC = metallic_tex * metallic;
 	vec4 roughness_texture_channel = vec4(0.0,1.0,0.0,0.0);

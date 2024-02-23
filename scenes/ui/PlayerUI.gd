@@ -23,8 +23,8 @@ func set_active(is_active):
 
 func refresh_contact_list():
 	while is_active:
-		$ContactList.clear()
+		$ContactListScroll/ContactList.clear()
 		if $/root/base.followed_vessel and $/root/base.followed_vessel.pilot:
 			var contacts = $/root/base.followed_vessel.pilot.update_contact_list()
-			$ContactList.populate(contacts)
+			$ContactListScroll/ContactList.populate(contacts)
 		await get_tree().create_timer(2.).timeout

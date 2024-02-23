@@ -10,7 +10,7 @@ script = ExtResource("1_iqjco")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.870588, 0.733333, 0.972549, 1)
 position = Vector2(1, 1)
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.15, 0.15)
 texture = ExtResource("2_trele")
 
 [node name="Label" type="Label" parent="."]
@@ -18,9 +18,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -48.0
-offset_top = 42.0
+offset_top = 31.0
 offset_right = 51.0
-offset_bottom = 65.0
+offset_bottom = 54.0
 grow_horizontal = 2
 size_flags_horizontal = 4
 theme = ExtResource("3_m218e")

@@ -14,6 +14,7 @@ var current_local_torque_input : Vector3 = Vector3.ZERO
 var warp_mode: bool = false
 var warp_set:bool = false
 var warp_speed = 0.1
+var max_warp_speed = 100000.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -27,8 +28,8 @@ func _delayed_init():
 func set_aggressive(yes_flag):
 	for turret in functionals.get("turrets",[]):
 		if yes_flag:
-			if "vessels" in nav_target.get_parent().get_parent().get_groups():
-				turret.set_target(nav_target)
+			if "vessels" in nav_target.get_linked_object().get_groups():
+				turret.set_target(nav_target.get_rb())
 			else:
 				turret.set_target(get_tree().get_nodes_in_group("vessels").pick_random().get_rb())
 		else:
@@ -77,11 +78,11 @@ func _physics_process(delta):
 			# 	Color(0, .2, 0)
 			# )		
 
-			# DebugDraw.draw_line(
-			# 	ref_rb.global_transform.origin, 
-			# 	ref_rb.global_transform.origin + gforce * 10, 
+			#DebugDraw.draw_line(
+			#	ref_rb.global_transform.origin, 
+			# 	ref_rb.global_transform.origin - ref_rb.global_transform.basis.z * 10, 
 			# 	Color(1, 1, 1)
-			# )
+			#)
 			
 			# DebugDraw.draw_line(
 			# 	ref_rb.global_transform.origin, 
@@ -113,13 +114,28 @@ func _physics_process(delta):
 				thruster._calculate_force_from_torque(local_torque_input)
 		else:
 			pass
+			
+			#ref_rb.look_at(-nav_target.get_best_linked_node3d().global_position)
+
+
+
+			var new_transform=ref_rb.global_transform.looking_at(- nav_target.get_best_linked_node3d().global_position, 
+				ref_rb.transform.basis.y)
+			ref_rb.global_transform = ref_rb.global_transform.interpolate_with(new_transform, 0.1)
 			ref_rb.global_position += ref_rb.global_transform.basis.z * warp_speed
+
 		local_force_input = Vector3.ZERO
 		local_torque_input = Vector3.ZERO
 
-		if warp_mode and warp_speed < 100000.0:
-			warp_set = true
-			warp_speed = warp_speed * 1.1
+		if warp_mode:
+			if warp_speed < min(max_warp_speed,500000.0) : #100000.0:
+				warp_set = true
+				warp_speed = warp_speed * 1.1
+			elif warp_speed > min(max_warp_speed,500000.0)*1.001 : #100000.0:
+				warp_set = true
+				warp_speed = warp_speed * 0.85
+			else:
+				warp_set = true
 		if !warp_mode: 
 			if warp_speed > 0.1:
 				warp_speed = warp_speed*0.9

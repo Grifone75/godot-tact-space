@@ -1,4 +1,4 @@
-extends Node
+class_name Contactable extends Node
 
 @export var linked_object: Node
 @export var linked_rb: Node
@@ -8,6 +8,7 @@ extends Node
 func _ready():
 	if not linked_object:
 		linked_object = get_parent()
+	#$marker.transform_function = func(): return get_local_space_position()
 
 func set_linked_object(obj):
 	linked_object = obj
@@ -30,7 +31,20 @@ func get_local_space_position():
 		return linked_rb.global_position * object_space_scale
 	return linked_object.global_position * object_space_scale
 
+func get_local_space_velocity():
+	if linked_rb: 
+		return linked_rb.linear_velocity * object_space_scale
+	return Vector3.ZERO
+
 func get_linked_object():
+	return linked_object
+
+func get_linked_rb():
+	return linked_rb
+
+func get_best_linked_node3d():
+	if linked_rb: 
+		return linked_rb
 	return linked_object
 	
 func get_contact_type():
