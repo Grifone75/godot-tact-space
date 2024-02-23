@@ -494,6 +494,18 @@ func update_contact_list():
 	initially is a very simple implementation, then to be evolved.
 	"""
 	#let's start simply with ships
+	var raw_list = get_tree().get_nodes_in_group("contactables")
+	var output_list = []
+	for el in raw_list:
+		var output_element = Contact.new()
+		output_element._pointer = el.get_linked_object()
+		output_element.contact_type = el.get_contact_type()
+		output_element.get_distance = func(): return (el.get_local_space_position() - self.ref_rb.global_position).length()
+		output_element.get_targetable = func(): return el.linked_rb
+		output_list.append(output_element)
+
+
+	"""
 	var raw_list = get_tree().get_nodes_in_group("vessels")
 	var output_list = []
 	for el in raw_list:
@@ -511,7 +523,7 @@ func update_contact_list():
 			output_element.get_distance = func(): return (el.get_node("contactable").get_local_space_position() - self.ref_rb.global_position).length()
 			output_element.get_targetable = func(): return el
 			output_list.append(output_element)
-			
+	"""		
 
 	return output_list
 

@@ -182,9 +182,7 @@ func _instance_system_object(record, player_pos_asr_mkm):
 			record['coords'][1]*10000,
 			record['coords'][2]*10000) - Vector3(player_pos_asr_mkm)*10000
 		var object = load("res://scenes/gas_giant.tscn").instantiate()
-		var contactable = load("res://contactable.tscn").instantiate()
-		contactable.object_space_scale = 10000.0
-		object.add_child(contactable)
+		#add_child(load("res://contactable.tscn").instantiate().set_space_scale(10000.0).set_type("planet"))
 		var wide_area = load("res://scenes/wide_area_node.tscn").instantiate()
 		wide_area.global_position = far_pos
 		object.global_position = far_pos

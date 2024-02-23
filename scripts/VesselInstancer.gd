@@ -225,8 +225,10 @@ func _materialize():
 	vesselcontroller.functionals = functionals
 	rb = self.get_node("VesselController/RigidBody3D")
 	smooth = self.get_node("VesselController/RigidBody3D/Smoothing")
-
+	vessel_class = construction_data.vessel_class
+	
 	_instance_me()
+	
 	rb.global_transform.origin = initial_position
 	
 	pilot = load("res://scenes/AIPilot.tscn").instantiate()
@@ -255,7 +257,9 @@ func _materialize():
 	tracer.traced_vessel = smooth
 
 	add_child(load("res://origin_shiftable.tscn").instantiate())
-	
+
+	add_child(load("res://contactable.tscn").instantiate().set_linked_rb(rb).set_type(vessel_class))
+
 	var missionplayer = load("res://scenes/missionplayer.tscn").instantiate()
 	missionplayer.ref_pilot = pilot
 	missionplayer.load_mission(construction_data.initial_mission_path.instantiate())
@@ -267,7 +271,7 @@ func _materialize():
 	for banner in functionals.get("banners",[]):
 		banner.update_text(self.name)
 
-	vessel_class = construction_data.vessel_class
+	
 
 
 

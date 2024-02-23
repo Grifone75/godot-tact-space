@@ -1,7 +1,6 @@
-[gd_scene load_steps=21 format=3 uid="uid://koc4vfwsfbwj"]
+[gd_scene load_steps=20 format=3 uid="uid://koc4vfwsfbwj"]
 
 [ext_resource type="PackedScene" uid="uid://xhg4bqu6m3jl" path="res://scenes/gas_giant.tscn" id="1_j0ayg"]
-[ext_resource type="PackedScene" uid="uid://duxcgy6lm37ml" path="res://contactable.tscn" id="2_5aofi"]
 [ext_resource type="PackedScene" uid="uid://do4q6s3wnifis" path="res://scenes/wide_area_node.tscn" id="2_k2vcq"]
 [ext_resource type="Script" path="res://scenes/system_star_light.gd" id="4_dfyrv"]
 [ext_resource type="PackedScene" uid="uid://hfom1pg401dc" path="res://scenes/star_01.tscn" id="5_c12gw"]
@@ -282,8 +281,6 @@ height = 1.002
 [node name="Altair" parent="." instance=ExtResource("1_j0ayg")]
 transform = Transform3D(128, 0, 0, 0, 128, 0, 0, 0, 128, 3898.39, 0, -2108.68)
 
-[node name="contactable" parent="Altair" instance=ExtResource("2_5aofi")]
-
 [node name="Nimrod" parent="." instance=ExtResource("1_j0ayg")]
 transform = Transform3D(36, 0, 0, 0, 36, 0, 0, 0, 36, 3900, 5, 20)
 
@@ -292,8 +289,6 @@ mesh = SubResource("SphereMesh_1etrc")
 
 [node name="atmosphere" parent="Nimrod" index="1"]
 mesh = SubResource("SphereMesh_6pcjy")
-
-[node name="contactable" parent="Nimrod" instance=ExtResource("2_5aofi")]
 
 [node name="test-earth-moon" parent="." instance=ExtResource("2_k2vcq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3908.72, 0, 0)
@@ -316,8 +311,6 @@ visual = NodePath("star01_visual")
 
 [node name="MeshInstance3D" parent="star01/star01_visual" index="0"]
 layers = 2
-
-[node name="contactable" parent="star01" instance=ExtResource("2_5aofi")]
 
 [editable path="Altair"]
 [editable path="Nimrod"]
