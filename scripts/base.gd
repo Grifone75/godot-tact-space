@@ -18,7 +18,7 @@ func _ready():
 func _on_viewport_resize():
 	print_debug("*** SIZE CHANGED")
 	print_debug($SubViewportContainer/SubViewport_objects.size)
-	$SubViewport_UI.size = $SubViewportContainer/SubViewport_objects.size
+	#$SubViewport_UI.size = $SubViewportContainer/SubViewport_objects.size
 	$SubViewport_planets.size = $SubViewportContainer/SubViewport_objects.size
 	
 
@@ -181,24 +181,28 @@ func _instance_system_object(record, player_pos_asr_mkm):
 			record['coords'][0]*10000,#factor is 1M (base uom) * 1k (km to m) /10 (sim factor) / 10000 (far factor)
 			record['coords'][1]*10000,
 			record['coords'][2]*10000) - Vector3(player_pos_asr_mkm)*10000
-		var object = load("res://scenes/gas_giant.tscn").instantiate()
-		#add_child(load("res://contactable.tscn").instantiate().set_space_scale(10000.0).set_type("planet"))
-		var wide_area = load("res://scenes/wide_area_node.tscn").instantiate()
-		wide_area.global_position = far_pos
+		var object = load(record['template']).instantiate()
+		
+		#var wide_area = load("res://scenes/wide_area_node.tscn").instantiate()
+		#wide_area.global_position = far_pos
 		object.global_position = far_pos
 		object.name = record['name']
-		wide_area.name = object.name + ' area'
+		#wide_area.name = object.name + ' area'
+		if record['template'] == 'res://scenes/wide_area_node.tscn':
+			object.add_child(load("res://contactable.tscn").instantiate().set_space_scale(10000.0))
+		if record['template'] == 'res://scenes/gas_giant.tscn':
+			object.scale = Vector3(128,128,128)
 		$/root/base/SubViewport_planets.add_child(object)
-		object.scale = Vector3(128,128,128)
-		$/root/base/SubViewport_planets.add_child(wide_area)
+		#$/root/base/SubViewport_planets.add_child(wide_area)
 		
 	
 func _star_system_loader():
 	var player_pos_asr_mkm = Vector3(.5,.5,.5)
 	var system = [
-		{'name':'planet1','template':'gas_giant.tscn','coords':[2,0,0],'ref':null},
-		{'name':'planet2','template':'planet','coords':[1,0,0],'ref':null},
-		{'name':'planet3','template':'planet','coords':[2,2,0],'ref':null},
+		{'name':'planet1','template':'res://scenes/gas_giant.tscn','coords':[2,0,0],'ref':null},
+		{'name':'planet2','template':'res://scenes/gas_giant.tscn','coords':[1,0,0],'ref':null},
+		{'name':'planet3','template':'res://scenes/gas_giant.tscn','coords':[2,2,0],'ref':null},
+		{'name':'zone1','template':'res://scenes/wide_area_node.tscn','coords':[3,2,-1],'ref':null},
 	]
 	for el in system:
 		_instance_system_object(el,player_pos_asr_mkm)

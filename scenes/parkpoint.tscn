@@ -10,7 +10,7 @@
 [sub_resource type="BoxMesh" id="BoxMesh_ef84j"]
 material = ExtResource("2_cepu2")
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_lnemo"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_8rquc"]
 
 [node name="ParkPoint" type="Node3D" groups=["local_objects", "navpoints"]]
 script = ExtResource("1_qean2")
@@ -53,7 +53,7 @@ visibility_range_begin_margin = 20.0
 visibility_range_end = 30.0
 visibility_range_end_margin = 60.0
 visibility_range_fade_mode = 1
-mesh = SubResource("ImmediateMesh_lnemo")
+mesh = SubResource("ImmediateMesh_8rquc")
 script = ExtResource("3_athl8")
 default_color = Color(0.254902, 0.482353, 0.380392, 0.517647)
 
@@ -62,3 +62,4 @@ connected_shiftable = NodePath("..")
 
 [node name="contactable" parent="." instance=ExtResource("6_2wbjw")]
 contact_type = "park point"
+discoverable = false

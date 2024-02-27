@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://b6u330ts5tq2v"]
+[gd_scene load_steps=28 format=3 uid="uid://b6u330ts5tq2v"]
 
 [ext_resource type="Script" path="res://scenes/dock_port/dockport_t1.gd" id="1_8ffa1"]
 [ext_resource type="Script" path="res://scenes/dock_port/dockport.gd" id="1_afyqm"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/signal_light.gd" id="3_oobho"]
 [ext_resource type="Shader" path="res://shaders/signal_light.gdshader" id="4_uab6o"]
 [ext_resource type="PackedScene" uid="uid://cnhotw0s7wl50" path="res://scenes/navpoint.tscn" id="5_vdgs6"]
+[ext_resource type="PackedScene" uid="uid://duxcgy6lm37ml" path="res://contactable.tscn" id="6_tnkd1"]
 [ext_resource type="PackedScene" uid="uid://c8j5tl1sctp26" path="res://scenes/light_beam_1.tscn" id="7_sisfi"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y2p42"]
@@ -213,6 +214,8 @@ shader_parameter/uv2_offset = Vector3(0, 0, 0)
 shader_parameter/texture_albedo = SubResource("CompressedTexture2D_l11ec")
 shader_parameter/texture_emission = SubResource("CompressedTexture2D_tiwtq")
 
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_4ma5v"]
+
 [node name="dockport" type="Node3D" node_paths=PackedStringArray("docking_port", "dock_alignment_reference", "dock_alignment_reference_anti")]
 script = ExtResource("1_afyqm")
 docking_port = NodePath("dockport_type1")
@@ -277,8 +280,14 @@ surface_material_override/0 = SubResource("ShaderMaterial_gj7ps")
 
 [node name="dock_alignement_reference" type="Node3D" parent="dockport_type1/shoulder/shjoint0/arm1/eljoint1/elbow/eljoint2/arm2/connector"]
 
+[node name="contactable" parent="dockport_type1/shoulder/shjoint0/arm1/eljoint1/elbow/eljoint2/arm2/connector/dock_alignement_reference" instance=ExtResource("6_tnkd1")]
+discoverable = false
+
 [node name="dock_alignement_reference_anti" type="Node3D" parent="dockport_type1/shoulder/shjoint0/arm1/eljoint1/elbow/eljoint2/arm2/connector"]
 transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0)
+
+[node name="contactable" parent="dockport_type1/shoulder/shjoint0/arm1/eljoint1/elbow/eljoint2/arm2/connector/dock_alignement_reference_anti" instance=ExtResource("6_tnkd1")]
+discoverable = false
 
 [node name="attach_f" type="Node3D" parent="."]
 transform = Transform3D(1, 7.10543e-15, 0, -3.82137e-15, 4.37114e-08, -1, -1.42109e-14, 1, 4.37114e-08, -2.76101e-30, -0.111742, 4.88441e-09)
@@ -287,5 +296,16 @@ transform = Transform3D(1, 7.10543e-15, 0, -3.82137e-15, 4.37114e-08, -1, -1.421
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 10, 0)
 visible = false
 
+[node name="Label3D" parent="alignment_point" index="1"]
+text = "alignment_point"
+
+[node name="Draw3D" parent="alignment_point" index="2"]
+mesh = SubResource("ImmediateMesh_4ma5v")
+
+[node name="contactable" parent="alignment_point" index="4"]
+discoverable = false
+
 [node name="light_beam_1" parent="." instance=ExtResource("7_sisfi")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.00271204, 0.210396, 0.149157)
+
+[editable path="alignment_point"]

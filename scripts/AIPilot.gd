@@ -477,6 +477,7 @@ func set_orientation_mode(param:String):
 			_orientation_mode = Callable()		
 	return self
 	
+
 func set_warp(do_warp:bool):
 	if do_warp:
 		ref_rb.freeze = true
@@ -484,6 +485,7 @@ func set_warp(do_warp:bool):
 	else:
 		ref_rb.freeze = false
 		ref_rb.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
+
 
 func set_local_rototranslation_node(node):
 	# set the node
@@ -525,7 +527,7 @@ func update_contact_list():
 	var raw_list = get_tree().get_nodes_in_group("contactables")
 	var output_list = []
 	for el in raw_list:
-		if el.get_linked_object() != get_parent():
+		if (el.get_linked_object() != get_parent()) and (el.discoverable):
 			var output_element = Contact.new()
 			output_element.contact = el
 			output_element.contact_type = el.get_contact_type()

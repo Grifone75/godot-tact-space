@@ -29,7 +29,7 @@ func set_aggressive(yes_flag):
 	for turret in functionals.get("turrets",[]):
 		if yes_flag:
 			if "vessels" in nav_target.get_linked_object().get_groups():
-				turret.set_target(nav_target.get_rb())
+				turret.set_target(nav_target.get_linked_rb())
 			else:
 				turret.set_target(get_tree().get_nodes_in_group("vessels").pick_random().get_rb())
 		else:
@@ -43,7 +43,7 @@ func _init_rb():
 		thruster.init_placement(ref_rb)
 		
 
-
+var saved_velocity
 func _physics_process(delta):
 	if ref_rb:
 		# update physics
@@ -116,13 +116,27 @@ func _physics_process(delta):
 			pass
 			
 			#ref_rb.look_at(-nav_target.get_best_linked_node3d().global_position)
-
-
-
-			var new_transform=ref_rb.global_transform.looking_at(- nav_target.get_best_linked_node3d().global_position, 
+			
+			var new_transform=ref_rb.global_transform.looking_at(
+				- nav_target.get_best_linked_node3d().global_position, 
 				ref_rb.transform.basis.y)
-			ref_rb.global_transform = ref_rb.global_transform.interpolate_with(new_transform, 0.1)
+			
+			
+			ref_rb.global_transform.basis = ref_rb.global_transform.basis.slerp(new_transform.basis, 0.1)
 			ref_rb.global_position += ref_rb.global_transform.basis.z * warp_speed
+
+			# DebugDraw.draw_line(
+			# 	ref_rb.global_transform.origin, 
+			# 		ref_rb.global_transform.origin - ref_rb.global_transform.basis.z * 10, 
+			# 		Color(1, 1, 1)
+			# )
+
+			# DebugDraw.draw_line(
+			# 	new_transform.origin, 
+			# 		new_transform.origin - new_transform.basis.z * 10, 
+			# 		Color(0, .5, 1)
+			# )
+			
 
 		local_force_input = Vector3.ZERO
 		local_torque_input = Vector3.ZERO

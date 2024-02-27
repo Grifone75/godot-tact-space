@@ -4,7 +4,7 @@ uniform sampler2D background_planets;
 uniform sampler2D equirect_nebula;
 uniform sampler3D noise_stars;
 uniform sampler3D noise_stars_filter2;
-uniform sampler2D ui;
+//uniform sampler2D ui;
 
 void sky() {
 	// Place fragment code here.
@@ -24,11 +24,9 @@ void sky() {
 	
 	vec3 cbackground = (1.0 - cnebula.a) * stars0 + cnebula.a * cnebula.rgb;
 	
-	vec4 ui_col = texture(ui,SCREEN_UV);
-	//(1.-cplanets.a) * cbackground + cplanets.a * cplanets.rgb;
-	// vec3(cplanets.a,.0,.0);
-	// cnebula.rgb;
+	//vec4 ui_col = texture(ui,SCREEN_UV);
+	
 	float scanline = abs(sin(SCREEN_UV.y*600.0+TIME*2.0))+0.3;
-	COLOR = (1.-cplanets.a) * cbackground + cplanets.a * cplanets.rgb + ui_col.rgb*3.0*ui_col.a*scanline;
+	COLOR = (1.-cplanets.a) * cbackground + cplanets.a * cplanets.rgb;// + ui_col.rgb*3.0*ui_col.a*scanline;
 	
 }

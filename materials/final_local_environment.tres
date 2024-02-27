@@ -1,4 +1,4 @@
-[gd_resource type="Environment" load_steps=12 format=3 uid="uid://bnyjssjuothnq"]
+[gd_resource type="Environment" load_steps=11 format=3 uid="uid://bnyjssjuothnq"]
 
 [ext_resource type="Shader" path="res://shaders/far_plane_background.gdshader" id="1_i2fnh"]
 
@@ -40,9 +40,6 @@ seamless = true
 color_ramp = SubResource("Gradient_2lcls")
 noise = SubResource("FastNoiseLite_88rmi")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_somgu"]
-viewport_path = NodePath("SubViewport_UI")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gfrww"]
 resource_local_to_scene = true
 shader = ExtResource("1_i2fnh")
@@ -50,7 +47,6 @@ shader_parameter/background_planets = SubResource("ViewportTexture_173y6")
 shader_parameter/equirect_nebula = SubResource("ViewportTexture_je0kr")
 shader_parameter/noise_stars = SubResource("NoiseTexture3D_8xcm4")
 shader_parameter/noise_stars_filter2 = SubResource("NoiseTexture3D_w6i25")
-shader_parameter/ui = SubResource("ViewportTexture_somgu")
 
 [sub_resource type="Sky" id="Sky_5jsfi"]
 resource_local_to_scene = true

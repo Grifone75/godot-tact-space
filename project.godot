@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/image="res://data/textures/tact-space-splash1.png"
 config/icon="res://icon.svg"
 
+[autoload]
+
+Globals="*res://scripts/globals.gd"
+
 [editor]
 
 movie_writer/movie_file="C:/Users/fabri/Documents/Godot_movies/ships_showcase.avi"

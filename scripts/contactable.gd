@@ -1,9 +1,12 @@
+@icon("res://data/icons/contactable.svg") 
 class_name Contactable extends Node
+
 
 @export var linked_object: Node
 @export var linked_rb: Node
 @export var object_space_scale = 1.0
 @export var contact_type = "unknown"
+@export var discoverable = true
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if not linked_object:

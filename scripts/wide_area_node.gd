@@ -62,7 +62,7 @@ func on_player_inside():
 		var faction = Faction.new()
 		if "vessels" in a.get_groups():
 			a.faction = faction
-		get_parent().add_child.call_deferred(a) # get_tree().get_root()
+		$/root/base/SubViewportContainer/SubViewport_objects.add_child.call_deferred(a) # get_tree().get_root()
 		a.initial_position = self.approx_position + Vector3(randf_range(100,2000),randf_range(100,2000),randf_range(100,2000))
 		if a.has_method("update_label"): a.update_label("station test")
 		if a.has_method("materialize"): a.call_deferred("materialize")
